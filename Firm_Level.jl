@@ -8,7 +8,9 @@ function Firm_Level(DataDate, smeEcon = [1 3 9 10])
     ##      Firm_Level(20180629,[1 3 15]) for other Econ portfolios
 
     mpath = pwd()
-    idx = glob()
+    idx = find(mpath, "ProdCode")
+    
+
 
 
 end
