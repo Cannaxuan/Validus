@@ -1,5 +1,4 @@
- using ToolCK, Statistics
- function generate_data_PD(folders, econs, dataEndMth, mths = [] )
+ function generate_data_PD(folders, econs, dataEndMth, mths = [])
      ## This function is to generate the valid data matrices of PDs and POEs.
      ## Inputs:
      ##        econs:       economy code(s) (could be a row vector)
@@ -47,8 +46,8 @@
          econPDAll = PD_all_forward[:, (mths .+3), :]
          econFirmInfo = firmlist
          invalidIdx = sum(.!isnan.(econPDAll[:, 1, :]), dims = 1) .== 0
-         econFirmInfo = econFirmInfo[vec(.!invalidIdx),:]
-         econPDAll = econPDAll[:,:,vec(.!invalidIdx)]
+         econFirmInfo = econFirmInfo[deepcopy(vec(.!invalidIdx)),:]
+         econPDAll = econPDAll[:,:,deepcopy(vec(.!invalidIdx))]
 
          ## Sequentially construct data that include PDs from valid firms in groupArray at each month
 

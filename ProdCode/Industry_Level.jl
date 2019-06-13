@@ -1,15 +1,14 @@
-include("./Industry_Level/main_Validus.jl")
-include("./Industry_Level/generate_factors.jl")
 include("./Industry_Level/load_data_PD.jl")
 include("./Industry_Level/generate_data_PD.jl")
 include("./Industry_Level/date_yyyymm_add.jl")
 include("./Industry_Level/get_country_param.jl")
 include("./Industry_Level/cal_country_PD_forward.jl")
-
-
-include("./Industry_Level/get_country_param.jl")
-include("./Industry_Level/get_country_param.jl")
-include("./Industry_Level/get_country_param.jl")
+include("./validus_path_define.jl")
+include("./Industry_Level/get_country_PD_forward.jl")
+include("./Industry_Level/cust_data.jl")
+include("./Industry_Level/trans_func.jl")
+include("./Industry_Level/extract_industry_factors.jl")
+include("./Industry_Level/generate_factors.jl")
 
 
 function Industry_Level(DataDate, smeEcon = [1 3 9 10])

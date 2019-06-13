@@ -42,8 +42,9 @@ function get_country_PD_forward(countryCode, dataEndMth, folders, nHorizon=60)
          path = loadPath_para*"current_smc\\sb\\"*string(countryCode)*"\\"
          key = "para_both_smc_"*string(countryCode)
          SBPara = searchdir(path, key)
-         DefBeta_HorzinByCovByTime = matread(path*SBPara[1])["DefBeta_HorzinByCovByTime"]
-         OthBeta_HorzinByCovByTime = matread(path*SBPara[1])["OthBeta_HorzinByCovByTime"]
+         HorzinByCovByTime = matread(path*SBPara[1])
+         DefBeta_HorzinByCovByTime = HorzinByCovByTime["DefBeta_HorzinByCovByTime"]
+         OthBeta_HorzinByCovByTime = HorzinByCovByTime["OthBeta_HorzinByCovByTime"]
          ## Pre-check: the months amount of firmlist firmmonth & firmspecific should be exactly the same
          ## DefBeta_HorzinByCovByTime
          ## OthBeta_HorzinByCovByTime
@@ -74,11 +75,11 @@ function get_country_PD_forward(countryCode, dataEndMth, folders, nHorizon=60)
 
          nObs, nVar, nFirm = size(firmspecific)
          firmspecific = permutedims(firmspecific, [2, 3, 1])
-         firmspecific = reshape(firmspecific, (nVar, nFirm*nObs))
+         firmspecific = deepcopy(reshape(firmspecific, (nVar, nFirm*nObs)))
 
          ## Calculate the cumulative probabilities of default and other exit
          PD_all_forward = cal_country_PD_forward(firmspecific, paraDef, paraOther, nHorizon)[1]
-         PD_all_forward = reshape(PD_all_forward, (:, nFirm, nObs))
+         PD_all_forward = deepcopy(reshape(PD_all_forward, (:, nFirm, nObs)))
      end
      ## Combine the firm codes and the date to the cumulative PD and POE
      PD_all_forward = permutedims(PD_all_forward, [3, 1, 2])
