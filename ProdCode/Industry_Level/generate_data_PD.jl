@@ -20,17 +20,13 @@
             try
                  firmlist = matread(loadFolder*"firmlist_with_comp_num_"*string(Int(iEcon))*".mat" )
                  PD_all_forward = matread(loadFolder*"PD_all_forward_"*string(Int(iEcon))*".mat" )
-                 PD_all_forward
+                 firmlist, PD_all_forward
             catch
                  println("-- No stored data for Econ $iEcon !  Generate the new data ..." )
                  firmlist, PD_all_forward = get_country_PD_forward(iEcon, dataEndMth, folders)
                  firmlist, PD_all_forward
             end
-         if length(temp) == 2
-             firmlist, PD_all_forward = temp
-         else
-             PD_all_forward = temp
-         end
+         firmlist, PD_all_forward = temp
 
          temp_year = nanMean_CK(PD_all_forward[:, 2, :], 2)
          temp_year[temp_year .== 0] .= NaN

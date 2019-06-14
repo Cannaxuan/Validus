@@ -8,10 +8,10 @@ function  extract_industry_factors(transDataMtrxPD, firmInfo, industryCodes, qtI
 
      ## Take the median PD of all firms in each industry of each month for each horizon
      for iIndu = 1:nIndus
-         iInduFirmldx = in.(industryCodes[:, iIndu], firmInfo[:, 5])
+         iInduFirmIdx = in.(industryCodes[:, iIndu], firmInfo[:, 5])
          for iMths = 1: nMths
              for iHorizon = 1:60
-                 PDtemp = transDataMtrxPD[iMths, iInduFirmldx, iHorizon]
+                 PDtemp = transDataMtrxPD[iMths, iInduFirmIdx, iHorizon]
                  industryFacsPD[iMths, iIndu, iHorizon] = quantile(PDtemp[.!isnan.(PDtemp)], qtIndustryFac)
              end
          end

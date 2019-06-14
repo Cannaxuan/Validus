@@ -21,7 +21,7 @@ function get_country_sizeInfo(iEcon, dateStart, dataEndDate, folders, options)
 
      println("- Construct Month End salvs_rev_turn data for Economy $iEcon ...")
      salesRevTurnMth = construct_mth_data(sales_rev_turn_clean, iEcon, dataEndDate, options, folders)
-
+     salesRevTurnMth = Dict("salesRevTurnMth" => salesRevTurnMth)
      matwrite(turnOverFolder*"salesRevTurnMth_"*string(iEcon)*".mat", salesRevTurnMth)
 
      return salesRevTurnMth

@@ -25,7 +25,7 @@ function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
      nMonths = size(firmmonth, 1)
      nFirms = size(firmmonth, 3)
      dataFlatMth = fill(NaN,(nMonths + 12,4,nFirms))
-     time = start()
+     start = time()
      for iFirm = 1:nFirms
          compNum = floor(Int, firmlist[iFirm, 1]/1000)
          tempDataFlat = dataFlat[dataFlat[:,1] .== compNum,:]
@@ -37,17 +37,18 @@ function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
          tempYearData = fill(NaN, (length(uniqueYear),1))
 
          for iYear = 1:length(uniqueYear)
-         year = uniqueYear[iYear]
-         temp_data = tempDataFlat[tempDataFlat[:, colUpdateYear] .== year, 4]
-         tempYearData[iYear, 1] = mean(temp_data[.~isnan.(temp_data)][:])
+             year = uniqueYear[iYear]
+             temp_data = tempDataFlat[tempDataFlat[:, colUpdateYear] .== year, 4]
+             tempYearData[iYear, 1] = mean(temp_data[.~isnan.(temp_data)][:])
          end
 
          tempYearData = cat(uniqueYear, tempYearData, dims = 2)
          tempDataFlat[:,colUpdateYear], tempYearData[:, 1]
 
-         rowInTDF = indexin(tempDataFlat[:,colUpdateYear], tempYearData[:, 1]) .!== nothing
+         rowInTDF = in.(tempDataFlat[:,colUpdateYear], tempYearData[:, 1])
          rowInTYD = indexin(tempDataFlat[:,colUpdateYear], tempYearData[:, 1])
-         rowInTYD[rowInTYD .== nothing] .= 0
+         rowInTYD = rowInTYD[rowInTDF[:]]
+         rowInTYD = convert(Array{Int64}, rowInTYD)
 
          tempDataFlat[rowInTDF, colFieldValue] = tempYearData[rowInTYD, 2]
          dataFlatMth[Int64.(tempDataFlat[:, colUpdateMth]), :, iFirm] =
@@ -60,37 +61,25 @@ function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
          for iRow in nanRowsToFill
              if iRow >= firmStartMth && iRow <= firmEndMth
                  rowRefIdx = findlast(x -> x <= iRow, tempDataFlat[:, colUpdateMth])
-                 if ~isempty(rowRefIdx)
+                 if rowRefIdx != nothing
                      dataFlatMth[iRow, :, iFirm] =
                      tempDataFlat[rowRefIdx, [colCompNum, colFieldValue, colUpdateDate, colPeriodEnd]]
                  end
              end
          end
-         fill!(NaN, dataFlatMth[push!(collect(1:(firmStartMth - 1)), collect((firmEndMth + 1):end))), :, iFirm])
+         fill!(dataFlatMth[vcat(collect(1:(firmStartMth - 1)), collect((firmEndMth + 1):size(dataFlatMth,1))), :, iFirm], NaN)
+     end
+     dataFlatMth = dataFlatMth[13:end, :, :]
+     dataFlatMth = cust_data(dataFlatMth, dataEndMth, options["startMth"])[1]
 
-
-
-
-
-
-
-
-
-
-
+     ## classify size
+     nSize = options["nSize"]
+     dataFlatMth = cat(dataFlatMth, zeros(size(dataFlatMth,1), 1, size(dataFlatMth,3)), dims=2)
+     for iSize = 1:size(nSize, 1)
+          dataFlatMth[:, 5, :] +=
+          ((dataFlatMth[:, 2, :] .>= nSize[iSize, 1]) .& (dataFlatMth[:, 2, :] .< nSize[iSize, 2])) .* iSize
+     end
      elapsed = time() - start
-
-
-
-
-
-
-
-
-
-
-
-
-
+     println("Elapsed time is $elapsed seconds.")
      return dataFlatMth
 end
