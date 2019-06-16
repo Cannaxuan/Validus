@@ -17,10 +17,6 @@ include("./Industry_Level/construct_mth_data.jl")
 include("./Industry_Level/get_country_sizeInfo.jl")
 include("./Industry_Level/generate_SME_info.jl")
 
-
-
-
-
 function Industry_Level(DataDate, smeEcon = [1 3 9 10])
      ##  Modified by Yao Xuan 20190531
 

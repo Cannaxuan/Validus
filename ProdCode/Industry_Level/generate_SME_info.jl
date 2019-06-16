@@ -33,7 +33,7 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
              salesRevTurnMth
          catch
              println("# No stored size data for Economy $iSmeEconCode ! Generate the new data ...")
-             salesRevTurnMth = get_country_sizeInfo(iSmeEconCode, dateStart, dataEndDate, folders, options)
+             salesRevTurnMth = get_country_sizeInfo(iSmeEconCode, dateStart, dataEndDate, folders, options)["salesRevTurnMth"]
              salesRevTurnMth
          end
          salesRevTurnMth = temp

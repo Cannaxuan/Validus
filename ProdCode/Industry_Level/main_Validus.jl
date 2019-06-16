@@ -1,5 +1,7 @@
 using Printf, MAT, ToolCK, Statistics, DataFrames
 function main_Validus(dataEndDate, PathStruct, smeEcon = [1 3 9 10])
+    # dataEndDate = DataDate
+
      ## ------------------------------------------------------------------------
      ## Step0: Preparation1:  Define the nargins
      ## ------------------------------------------------------------------------
@@ -40,18 +42,18 @@ function main_Validus(dataEndDate, PathStruct, smeEcon = [1 3 9 10])
      #### Step2: Load/Generate SME portfolio information
      #### ----------------------------------------------------------------------
      println("Generate the SME's information up to $dataEndMth ...")
-     if loadSMEInfo && isfile(PathStruct["SMEinfoFolder"]*"smeInfo.mat")
-         SmeInfo = matread(PathStruct["SMEinfoFolder"]*"smeInfo.mat")
+     if loadSMEInfo && isfile(PathStruct["SMEinfoFolder"]*"smeInfo.jld")
+         SmeInfo = load(PathStruct["SMEinfoFolder"]*"smeInfo.jld")
          smeInfo = SmeInfo["smeInfo"]
          smeEcon = SmeInfo["smeEcon"]
      else
          ctyInfo, smeInfo =
             generate_SME_info(smeEcon, PathStruct["DATE_START_DATA"], dataEndDate, facs["dateVctr"], options, PathStruct)
-         save(PathStruct["SMEinfoFolder"]*"smeInfo.jld", "smeInfo", smeInfo)
+         save(PathStruct["SMEinfoFolder"]*"smeInfo.jld", "smeInfo", smeInfo, "smeEcon", smeEcon)
          save(PathStruct["SMEinfoFolder"]*"ctyInfo.jld", "ctyInfo", ctyInfo)
      end
      #### ----------------------------------------------------------------------
-     #### Step3: Load/Establish the factor model specific to the porfolio(according to size,industry)
+     #### Step3: Load/Establish the factor model specific to the porfolio(according to size, industry)
      #### ----------------------------------------------------------------------
      println("Establish the factor model specific to the SME porfolio ... ")
      if isfile(PathStruct["Industry_FactorModel"]*"smeModel.mat")

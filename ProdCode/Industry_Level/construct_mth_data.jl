@@ -1,5 +1,6 @@
 function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
-## input
+    # dataFlat, iEcon, dataEndDate, options, folders = sales_rev_turn_clean, iEcon, dataEndDate, options, folders
+     ## input
      #### output 3-D demension
      ## 1-D months; 2-D col1:company number, col2: filed update date, col3: field value; 3-D firms
 
@@ -20,11 +21,11 @@ function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
      colPeriodEnd = 5
      mthEnum = convert_date_to_mthEnum(dataFlat[:,colUpdateDate], dataEndDate, firmlist)
      dataFlat = cat(dataFlat, mthEnum .+ 12, dims = 2) ## add one more year to find data more previous
-     dataFlat = dataFlat[dataFlat[:,colUpdateMth].>0,:]  ## remove the very early data
+     dataFlat = dataFlat[dataFlat[:,colUpdateMth] .> 0, :]  ## remove the very early data
 
      nMonths = size(firmmonth, 1)
      nFirms = size(firmmonth, 3)
-     dataFlatMth = fill(NaN,(nMonths + 12,4,nFirms))
+     dataFlatMth = fill(NaN, (nMonths + 12, 4, nFirms))
      start = time()
      for iFirm = 1:nFirms
          compNum = floor(Int, firmlist[iFirm, 1]/1000)
@@ -45,7 +46,7 @@ function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
          tempYearData = cat(uniqueYear, tempYearData, dims = 2)
          tempDataFlat[:,colUpdateYear], tempYearData[:, 1]
 
-         rowInTDF = in.(tempDataFlat[:,colUpdateYear], tempYearData[:, 1])
+         rowInTDF = in.(tempDataFlat[:,colUpdateYear], [tempYearData[:, 1]])
          rowInTYD = indexin(tempDataFlat[:,colUpdateYear], tempYearData[:, 1])
          rowInTYD = rowInTYD[rowInTDF[:]]
          rowInTYD = convert(Array{Int64}, rowInTYD)

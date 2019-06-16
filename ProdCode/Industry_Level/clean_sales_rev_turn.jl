@@ -16,9 +16,9 @@ function clean_sales_rev_turn(sales_rev_turn_raw)
           validIdx = sales_rev_turn_raw[:, colFiscalPeriod] .== orderPriority[i]
           ## change 1->101, 31->102... 24->111
           sales_rev_turn_raw[validIdx, colFiscalPeriod] .= i + 100
-          if  in([orderPriority[i]], [21 22 23 24])
+          if  in(orderPriority[i], [21 22 23 24])
               sales_rev_turn_raw[validIdx, colFieldValue] = sales_rev_turn_raw[validIdx, colFieldValue] * 4
-          elseif in([orderPriority[i]], [11 12])
+          elseif in(orderPriority[i], [11 12])
               sales_rev_turn_raw[validIdx, colFieldValue] = sales_rev_turn_raw[validIdx, colFieldValue] * 2
           elseif orderPriority[i] == 31
               sales_rev_turn_raw[validIdx, colFieldValue] = sales_rev_turn_raw[validIdx, colFieldValue] * 4
