@@ -36,7 +36,7 @@ function generate_factors(EconCodes, dataEndMth, options, folders)
      facs = Dict()
      facs["industryFacsPD"] = industryFacsPD
      facs["dateVctr"] = dateVctr
-     elapsed = time() - start
-     println( "# Elapsed time = $elapsed seconds.")
+     s =  @sprintf "# Elapsed time = %3.2f seconds." (time()-start)
+     println(s)
      return facs
 end

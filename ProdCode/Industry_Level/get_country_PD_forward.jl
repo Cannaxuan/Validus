@@ -1,6 +1,6 @@
-using JLD
 
 function get_country_PD_forward(countryCode, dataEndMth, folders, nHorizon=60)
+     # countryCode = iSmeEconCode
 
      ## This function is to extract the (cumulative) probability of survival (PS) for a specified economy/country.
      ## [Only valid if the calibrationDate >= 20130607.
@@ -18,7 +18,7 @@ function get_country_PD_forward(countryCode, dataEndMth, folders, nHorizon=60)
                                   string(countryCode)*".mat")["firmSpecific_final"]
      firmMonth = matread(loadPath*"FinalDataForCalibration\\firmMonth_"*string(countryCode)*".mat")["firmMonth"]
 
-     firmlist=firmList_withCompNum
+     firmlist = firmList_withCompNum
      idx_finance = firmlist[:, 5] .== 10008
      firmSpecific_final[:, [8, 9], idx_finance] .= 0     ##convert CA_Over_CL   to 0 for Finance
      firmSpecific_final[:, [16, 17], .!idx_finance] .= 0 ##convert Cash_Over_TA to 0 for non-Finance

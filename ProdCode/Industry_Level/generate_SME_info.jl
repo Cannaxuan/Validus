@@ -12,10 +12,11 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
      nSize = options["nSize"]
      industryCodes = options["industryCodes"]
      fwdPDFolder = folders["forwardPDFolder"]
+     ##
      turnOverFolder = folders["SMEinfoFolder"]
      CleanDataFolder = folders["dataSource"]*"\\IDMTData\\CleanData\\"
 
-     ##  Load the Selected Countries PD data
+     ##  Load the Selected Countries PD data  ##
      nEcons = length(smeEconCodes)
      println("* The SME's information comes from $nEcons economy(s)!")
      ctyInfo = Dict()
@@ -50,6 +51,8 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
              firmlist, PD_all_forward
          end
          firmlist, PD_all_forward = temp
+
+
          ## Extend the date length of PD
          k_year = PD_all_forward[:, 2, :]
          mid_year = map(i -> try mean(k_year[i, .~isnan.(k_year[i, :])]) catch; NaN end, 1:size(k_year, 1))
@@ -84,6 +87,7 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
          ctyInfo["SalesRevTurn"] = cat(ctyInfo["SalesRevTurn"], ctySalesRevTurn, dims = 2)
      end
 
+
      ## Generate the smeInfo
      ## calculate smeCumPD accross size and industry
      println("# Generating Industry Size average PD")
@@ -114,12 +118,16 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
              smeInfo["smeIndSizeCount"][:, intCol] = sum(iInduSizeFirmIdx, dims = 2)
              iInduSizeFirmIdxHorizon = repeat(iInduSizeFirmIdx, inner = (1, 1, 60))
 
-             smeInfo["smeIndSizePD"][:,intCol,:] = sum(.!isnan.(ctyInfo["ForwardPD"] .* iInduSizeFirmIdxHorizon), dims = 2) ./ sum(iInduSizeFirmIdxHorizon, dims = 2)
+             temp = nanSum_CK(ctyInfo["ForwardPD"] .* iInduSizeFirmIdxHorizon, 2)
+             temp_1 = reshape(temp, size(temp,1), 1, size(temp, 2))
+             smeInfo["smeIndSizePD"][:,intCol,:] = temp_1 ./ sum(iInduSizeFirmIdxHorizon, dims = 2)
+
              smeInfo["smeIndSizePD"][smeInfo["smeIndSizePD"] .==0] .= NaN
              intCol += 1
          end
      end
      println("# The target portfolio contains $(size(ctyInfo["firmList"], 1)) firms in total!")
-     println("# Elapsed time = $(time()-start) seconds.")
+     s =  @sprintf "# Elapsed time = %3.2f seconds." (time()-start)
+     println(s)
      return ctyInfo, smeInfo
 end

@@ -1,6 +1,6 @@
-using Printf, MAT, ToolCK, Statistics, DataFrames
+
 function main_Validus(dataEndDate, PathStruct, smeEcon = [1 3 9 10])
-    # dataEndDate = DataDate
+        # dataEndDate = DataDate
 
      ## ------------------------------------------------------------------------
      ## Step0: Preparation1:  Define the nargins
@@ -57,19 +57,20 @@ function main_Validus(dataEndDate, PathStruct, smeEcon = [1 3 9 10])
      #### ----------------------------------------------------------------------
      println("Establish the factor model specific to the SME porfolio ... ")
      if isfile(PathStruct["Industry_FactorModel"]*"smeModel.mat")
-         smeModelResult_indSize = matread(PathStruct["Industry_FactorModel"]*"smeModel.mat")["smeModelResult_indSize"]
+         smeModelResult_indSize = matread(PathStruct["Industry_FactorModel"]*"smeModel.mat")
      else
          ## 1) Regress each industry/size PDs on industry factors
          println("* Regress SME's average PDs on the global industry PD factors ...")
-         smeModelResult_indSize =
-            regress_portfolio_factors(smeInfo, facs["industryFacsPD"], PathStruct["Industry_FactorModel"], options,"indSize")
+         smeModelResult_indSize = regress_portfolio_factors(smeInfo, facs["industryFacsPD"], PathStruct["Industry_FactorModel"], options,"indSize")
          matwrite(PathStruct["Industry_FactorModel"]*"smeModel.mat", smeModelResult_indSize)
      end
-
-
-
-
-
-
+     #### ----------------------------------------------------------------------
+     #### Step4: Generate combined PD and quantile data
+     #### ----------------------------------------------------------------------
+     calculate_quantile_industry(dataEndDate, PathStruct, smeEcon)
+     #### ----------------------------------------------------------------------
+     #### Step5: Save data
+     #### ----------------------------------------------------------------------
+     saveDataInExcel(PathStruct, smeModelResult_indSize, smeInfo, options)
 
 end

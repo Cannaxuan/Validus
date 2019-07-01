@@ -1,4 +1,5 @@
 function cust_data(data, dataEndMth, custMth, dateVctr = [])
+    # data, dataEndMth, custMth = dataFlatMth, dataEndMth, options["startMth"]
      dataendmth = Dict()
      dataendmth["year"] =  Int64(floor(dataEndMth/100))
      dataendmth["month"] =  Int64(dataEndMth - dataendmth["year"]*100)
@@ -11,5 +12,5 @@ function cust_data(data, dataEndMth, custMth, dateVctr = [])
      totalMth = size(data, 1)
      data = data[(totalMth - validMth + 1):end, :, :]
      dateVctr = dateVctr[(totalMth - validMth + 1):end, :]
-     return data, dateVctr     
+     return data, dateVctr
 end

@@ -1,11 +1,11 @@
 function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
-    # dataFlat, iEcon, dataEndDate, options, folders = sales_rev_turn_clean, iEcon, dataEndDate, options, folders
+     # dataFlat, iEcon, dataEndDate, options, folders = sales_rev_turn_clean, iEcon, dataEndDate, options, folders
      ## input
      #### output 3-D demension
      ## 1-D months; 2-D col1:company number, col2: filed update date, col3: field value; 3-D firms
 
      #### Construct the data
-     DataMonth = floor(Int, dataEndDate/100)
+     dataEndMth = floor(Int, dataEndDate/100)
      dataMthToLoad =  date_yyyymm_add(dataEndMth, 1)
      firmList_withCompNum = matread(folders["Firm_Specific"]*"firmList_withCompNum_"*string(iEcon)*".mat")["firmList_withCompNum"]
      firmMonth = matread(folders["FinalData"]*"firmMonth_"*string(iEcon)*".mat")["firmMonth"]
@@ -44,7 +44,6 @@ function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
          end
 
          tempYearData = cat(uniqueYear, tempYearData, dims = 2)
-         tempDataFlat[:,colUpdateYear], tempYearData[:, 1]
 
          rowInTDF = in.(tempDataFlat[:,colUpdateYear], [tempYearData[:, 1]])
          rowInTYD = indexin(tempDataFlat[:,colUpdateYear], tempYearData[:, 1])
@@ -68,7 +67,7 @@ function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
                  end
              end
          end
-         fill!(dataFlatMth[vcat(collect(1:(firmStartMth - 1)), collect((firmEndMth + 1):size(dataFlatMth,1))), :, iFirm], NaN)
+         dataFlatMth[vcat(collect(1:(firmStartMth - 1)), collect((firmEndMth + 1):size(dataFlatMth,1))), :, iFirm] .= NaN
      end
      dataFlatMth = dataFlatMth[13:end, :, :]
      dataFlatMth = cust_data(dataFlatMth, dataEndMth, options["startMth"])[1]
@@ -80,7 +79,7 @@ function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
           dataFlatMth[:, 5, :] +=
           ((dataFlatMth[:, 2, :] .>= nSize[iSize, 1]) .& (dataFlatMth[:, 2, :] .< nSize[iSize, 2])) .* iSize
      end
-     elapsed = time() - start
-     println("Elapsed time is $elapsed seconds.")
+     s =  @sprintf "# Elapsed time = %3.2f seconds." (time()-start)
+     println(s)
      return dataFlatMth
 end

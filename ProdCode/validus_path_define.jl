@@ -1,8 +1,8 @@
 using CSV
-Ycom = raw"\\unicorn3\TEST_ENV\DT\ProductionCode_Julia_1.0\yCommonCode"
+Ycom = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdCode\Industry_Level\YX_Code"
+include(Ycom*"\\connectDB.jl")
+include(Ycom*"\\get_data_from_DMTdatabase.jl")
 include(Ycom*"\\GCdef.jl")
-include(Ycom*"\\readConfig.jl")
-include(Ycom*"\\highest_indexin.jl")
 
 
 function validus_path_define(dataMonth, smeEcon = [1 3 9 10])
@@ -31,7 +31,7 @@ function validus_path_define(dataMonth, smeEcon = [1 3 9 10])
     PathStruct["FinalData"] = PathStruct["dataSource"]*"\\Processing\\M2_Pd\\FinalDataForCalibration\\"
     PathStruct["firmspecific_justBeforeMissingHandling"] = PathStruct["FinalData"]
     PathStruct["paramPath"] = PathStruct["dataSource"]*"\\Processing\\M2_Pd\\"
-    PathStruct["loadFolder"] = PathStruct["dataSource"]*"\\_withoutRevision\\Monthly\\Products\\P2_Pd\\" ## Full Period Data
+    PathStruct["loadFolder"] = PathStruct["Official"]*"Data\\FullPeriod\\"*string(dataMonth)*"_withoutRevision\\Monthly\\Products\\P2_Pd\\" ## Full Period Data
     PathStruct["SourcePath"] = PathStruct["PrePath"]*"Data\\Look_Up_Table\\" ## Look Up Table Source Folder
     PathStruct["SME_Titles"] = PathStruct["PrePath"]*"Data\\Firm_Calculation_User_Input\\SME_Titles\\"
 
