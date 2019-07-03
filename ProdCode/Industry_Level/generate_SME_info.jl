@@ -30,7 +30,7 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
          println(" - Collect size information from Economy $iSmeEconCode ...")
          temp =
          try
-             salesRevTurnMth = matread(turnOverFolder*"salesRevTurnMth_"*string(iSmeEconCode)*".mat")["salesRevTurnMth"]
+             salesRevTurnMth = load(turnOverFolder*"salesRevTurnMth_"*string(iSmeEconCode)*".jld")["salesRevTurnMth"]
              salesRevTurnMth
          catch
              println("# No stored size data for Economy $iSmeEconCode ! Generate the new data ...")

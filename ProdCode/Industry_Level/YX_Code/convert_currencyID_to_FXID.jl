@@ -1,5 +1,5 @@
 function convert_currencyID_to_FXID(currencyID, region)
-    ##  currencyID, region = currency, GC["REGION_OF_ECON"][iEcon]
+     # currencyID, region = currency, GC["REGION_OF_ECON"][iEcon]
     ##  This function converts currency ID into its corresponding FX ID with USD in a particualr time zone.
     global GC
     timeZone = GC["REGIONTIMEZONE"][region]
@@ -8,7 +8,8 @@ function convert_currencyID_to_FXID(currencyID, region)
     idx = uniqueidx(currencyID)[2] ## IC
     sql = "Select * from [Test].[DBO].[RETRIEVE_FX_ID]('$strID','$timeZone')"
     cnt = connectDB()
-    fxID = get_data_from_DMTdatabase(sql, cnt)
+    fxID = Int64.(Matrix(get_data_from_DMTdatabase(sql, cnt)))
+
     isIn = in.(currencyID, [fxID[:,1]])
     idx = indexin(currencyID, fxID[:,1])
 

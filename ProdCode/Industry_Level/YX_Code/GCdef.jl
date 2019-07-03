@@ -8,9 +8,10 @@ include("split_data.jl")
 include("pivot.jl")
 include("convert_currency_financial_statement.jl")
 include("get_specific_day_value.jl")
+include("get_individual_first_use_time.jl")
 
 
-function GCdef(dataDate::Int64)
+function GCdef(dataDate = 20180629)
     ####New GC in dictionary###############################################################
     config = nothing
     if VERSION < v"0.7.0"
@@ -48,7 +49,7 @@ function GCdef(dataDate::Int64)
     #    pathIdx = searchindex(uppercase(pathForGC), "CODE") - 1;
     #    PATH_PREFIX=pathForGC[1:pathIdx[1]];
     if dataDate == NaN
-        dataDate = parse(Float64,"20171229")
+        dataDate = parse(Float64,"20180629")
     end
     dataMth = fld(dataDate,100)
     #create a date array to contain calibration dates for each group
@@ -76,8 +77,8 @@ function GCdef(dataDate::Int64)
     GC["STKIDX_DATE_START"]="1988-12-01";
     GC["DATE_START_DATA"]= 19880101;
     GC["DATE_START_PD"]= 19900101;
-    GC["Data_Date"]="20171229";
-    GC["HistData_Date"]= "20171130";
+    GC["Data_Date"]="20180629";
+    GC["HistData_Date"]= "20180330";
     GC["CaliDateArray"]=CaliDateArray;
     GC["CaliDateOfNS"]=CaliDateOfNS;
     GC["AGGREGATE_MONTH"]=AGGREGATE_MONTH;
