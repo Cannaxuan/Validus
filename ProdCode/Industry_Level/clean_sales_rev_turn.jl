@@ -33,7 +33,7 @@ function clean_sales_rev_turn(sales_rev_turn_raw)
      sales_rev_turn_Sorted = Matrix(sort(DataFrame(sales_rev_turn_raw),
      (order(colCompNum), order(colUpdateDate), order(colConsolidate, rev = true), order(colFiscalPeriod), order(colFillingStatus))))
 
-     rowIndicator = uniqueidx(sales_rev_turn_Sorted[:,[colCompNum,colUpdateDate]])[1]
+     rowIndicator = uniqueidx(sales_rev_turn_Sorted[:, [colCompNum, colUpdateDate]])[1]
      sales_rev_turn_SortedUniuqe = sales_rev_turn_Sorted[rowIndicator, push!(collect(1:4), 8)]
 
      return sales_rev_turn_SortedUniuqe

@@ -29,16 +29,16 @@ function retrieve_sales_rev_turn_raw(iEcon, dateStart, dateEnd, turnOverFolder, 
      ## For both matlab and Julia:
      ##     need to split because there was a strange error that happens sometimes when trying to retrieve large amount of FS_ID
      companyList = split_data(Int64.(companyInformation[:, Int64(CompanyInformation["BBG_ID"])]), 10)
-     financialStatement =  Vector{Array{Float64, 2}}(undef, size(companyList, 1))
+     financialStatement = Vector{Array{Float64, 2}}(undef, size(companyList, 1))
+     FinancialStatement = Dict()
      # @distributed
      for i = 1:size(companyList, 1)
          println("generate FS for $i, $(size(companyList, 1)-i) left.")
          financialStatement[i], FinancialStatement2 =  retrieve_financial_statement_raw(companyList[i], dateStart, dateEnd, 127)
-         if ~isempty(FinancialStatement2)
-             FinancialStatement = FinancialStatement2
+         if !isempty(FinancialStatement2)
+            FinancialStatement = FinancialStatement2
          end
      end
-
      financialStatement = vcat(financialStatement...)
      # findall(ismissing.(financialStatement))
      financialStatement = filter_financial_statement(financialStatement, FinancialStatement, dateEnd)

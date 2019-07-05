@@ -1,6 +1,6 @@
 
 function main_Validus(dataEndDate, PathStruct, smeEcon = [1 3 9 10])
-        # dataEndDate = DataDate
+     # dataEndDate = DataDate
 
      ## ------------------------------------------------------------------------
      ## Step0: Preparation1:  Define the nargins
@@ -49,20 +49,20 @@ function main_Validus(dataEndDate, PathStruct, smeEcon = [1 3 9 10])
      else
          ctyInfo, smeInfo =
             generate_SME_info(smeEcon, PathStruct["DATE_START_DATA"], dataEndDate, facs["dateVctr"], options, PathStruct)
-         save(PathStruct["SMEinfoFolder"]*"smeInfo.jld", "smeInfo", smeInfo, "smeEcon", smeEcon)
-         save(PathStruct["SMEinfoFolder"]*"ctyInfo.jld", "ctyInfo", ctyInfo)
+         save(PathStruct["SMEinfoFolder"]*"smeInfo.jld", "smeInfo", smeInfo, "smeEcon", smeEcon, compress = true)
+         save(PathStruct["SMEinfoFolder"]*"ctyInfo.jld", "ctyInfo", ctyInfo, compress = true)
      end
      #### ----------------------------------------------------------------------
      #### Step3: Load/Establish the factor model specific to the porfolio(according to size, industry)
      #### ----------------------------------------------------------------------
      println("Establish the factor model specific to the SME porfolio ... ")
-     if isfile(PathStruct["Industry_FactorModel"]*"smeModel.mat")
-         smeModelResult_indSize = matread(PathStruct["Industry_FactorModel"]*"smeModel.mat")
+     if isfile(PathStruct["Industry_FactorModel"]*"smeModel.jld")
+         smeModelResult_indSize = load(PathStruct["Industry_FactorModel"]*"smeModel.jld")
      else
          ## 1) Regress each industry/size PDs on industry factors
          println("* Regress SME's average PDs on the global industry PD factors ...")
          smeModelResult_indSize = regress_portfolio_factors(smeInfo, facs["industryFacsPD"], PathStruct["Industry_FactorModel"], options,"indSize")
-         matwrite(PathStruct["Industry_FactorModel"]*"smeModel.mat", smeModelResult_indSize)
+         save(PathStruct["Industry_FactorModel"]*"smeModel.jld", "smeModelResult_indSize", smeModelResult_indSize, compress = true)
      end
      #### ----------------------------------------------------------------------
      #### Step4: Generate combined PD and quantile data

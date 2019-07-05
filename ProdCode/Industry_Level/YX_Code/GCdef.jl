@@ -9,6 +9,9 @@ include("pivot.jl")
 include("convert_currency_financial_statement.jl")
 include("get_specific_day_value.jl")
 include("get_individual_first_use_time.jl")
+include("filter_financial_statement.jl")
+include("convert_currencyID_to_FXID.jl")
+
 
 
 function GCdef(dataDate = 20180629)
@@ -1848,7 +1851,7 @@ function GCdef(dataDate = 20180629)
 
     GC["MinFirmForEconDtdMedian"] = 30   ## minimum amount of firms in econ to using econ Agg DTD instead of group Agg DTD
     ## define the DB numerations of variables
-    GC = global_numer_definition_current()
+    GC = global_numer_definition_current(GC)
 
     ## define the paths
     ## global_paths_definition_current(GC["PATH_PREFIX"], dataMth)
@@ -1863,7 +1866,7 @@ function GCdef(dataDate = 20180629)
     ## global_groups_definition_current()
 
     ## Extra global constants
-    GC = global_constants_extra(dataDate)
+    GC = global_constants_extra(GC, dataDate)
 
     return GC
 end

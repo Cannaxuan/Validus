@@ -32,9 +32,9 @@ function saveDataInExcel(PathStruct, smeModelResult_indSize, smeInfo, options)
     prog = PathStruct["PrePath"]*"Code\\Industry_Level\\CreateZipFiles.ps1"
     save_path = PathStruct["Industry_Results"]
     x = run(`powershell -command "& '$prog' '$save_path' '$deliveryFileName'"`)
-    mv(deliveryFileName, PathStruct["Industry_Results"] * "CRI_data_"* string(dateNum)*"_New_System.zip")
+    mv(deliveryFileName, PathStruct["Industry_Results"] * "CRI_data_"* string(dateNum)*"_New_System.zip", force = true)
 
     ##  Copy Look_Up_Table
-    cp(PathStruct["SourcePath"]*"look-up-table.xlsm", PathStruct["Industry_Results"]*"look-up-table.xlsm")
+    cp(PathStruct["SourcePath"]*"look-up-table.xlsm", PathStruct["Industry_Results"]*"look-up-table.xlsm", force = true)
 
 end

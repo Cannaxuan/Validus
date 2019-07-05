@@ -1,6 +1,6 @@
 
-function get_country_PD_forward(countryCode, dataEndMth, folders, nHorizon=60)
-     # countryCode = iSmeEconCode
+function get_country_PD_forward(countryCode, dataEndMth, folders, nHorizon = 60)
+     # countryCode, nHorizon = iSmeEconCode, 60
 
      ## This function is to extract the (cumulative) probability of survival (PS) for a specified economy/country.
      ## [Only valid if the calibrationDate >= 20130607.
@@ -12,11 +12,12 @@ function get_country_PD_forward(countryCode, dataEndMth, folders, nHorizon=60)
      loadPath = sourceFolder*"\\Processing\\M2_Pd\\"
      loadPath_para = sourceFolder*"\\Products\\M2_Pd\\"
 
-     firmList_withCompNum = matread(loadPath*"FSTransformed\\firmList_withCompNum_"*
-                                    string(countryCode)*".mat")["firmList_withCompNum"]
-     firmSpecific_final = matread(loadPath*"FinalDataForCalibration\\firmSpecific_final_"*
-                                  string(countryCode)*".mat")["firmSpecific_final"]
-     firmMonth = matread(loadPath*"FinalDataForCalibration\\firmMonth_"*string(countryCode)*".mat")["firmMonth"]
+     firmList_withCompNum =
+        matread(loadPath*"FSTransformed\\firmList_withCompNum_"*string(countryCode)*".mat")["firmList_withCompNum"]
+     firmSpecific_final =
+        matread(loadPath*"FinalDataForCalibration\\firmSpecific_final_"*string(countryCode)*".mat")["firmSpecific_final"]
+     firmMonth =
+        matread(loadPath*"FinalDataForCalibration\\firmMonth_"*string(countryCode)*".mat")["firmMonth"]
 
      firmlist = firmList_withCompNum
      idx_finance = firmlist[:, 5] .== 10008
@@ -34,7 +35,7 @@ function get_country_PD_forward(countryCode, dataEndMth, folders, nHorizon=60)
      end
 
      firmspecific = firmSpecific_final[:, 4:end, :]
-     firmList_withCompNum = nothing ;  firmSpecific_final = nothing
+     # firmList_withCompNum = nothing ;  firmSpecific_final = nothing
 
      if countryCode == 2 || countryCode == 15 || countryCode == 16  ## get Structure Break Econ's forwrd PD
          ## Load Structure Break Econ's Parameter
@@ -69,7 +70,7 @@ function get_country_PD_forward(countryCode, dataEndMth, folders, nHorizon=60)
                                       cat(PD_all_forward, temp_PD_all_forward, dims = 3)
          end
      else  ## get Econ's forwrd PD without Structure Break
-         paraDef, paraOther = get_country_param(countryCode, dataMthToLoad,sourceFolder)
+         paraDef, paraOther = get_country_param(countryCode, dataMthToLoad, sourceFolder)
          paraDef[3, :] = paraDef[3, :]/100       ## for 3m-interest rate
          paraOther[3, :] = paraOther[3, :]/100   ## for 3m-interest rate
 
@@ -86,8 +87,8 @@ function get_country_PD_forward(countryCode, dataEndMth, folders, nHorizon=60)
      PD_all_forward = cat(firmMonth, PD_all_forward, dims=2)
 
      ## save jld files
-     save(saveFolder*"firmlist_with_comp_num_"*string(countryCode)*".jld", "firmlist", firmlist)
-     save(saveFolder*"PD_all_forward_"*string(countryCode)*".jld", "PD_all_forward", PD_all_forward)
+     save(saveFolder*"firmlist_with_comp_num_"*string(countryCode)*".jld", "firmlist", firmlist, compress = true)
+     save(saveFolder*"PD_all_forward_"*string(countryCode)*".jld", "PD_all_forward", PD_all_forward, compress = true)
 
     return firmlist, PD_all_forward
 end

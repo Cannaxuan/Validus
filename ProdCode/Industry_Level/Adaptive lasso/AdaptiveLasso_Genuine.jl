@@ -100,7 +100,10 @@ function AdaptiveLasso_Genuine(y::Vector{Float64}, X::Matrix{Float64}, par = Dic
     runinfo["Step2"]["weights"] = w
     runinfo["Step2"]["method"] = "TobitWeightedLasso_cv"
     runinfo["Step2"]["rsqr"] = 1 - norm(y .- beta[1] .- X*beta[2:end])^2 / norm(y .- mean(y))^2
-    println("# Computational time = $(time()-start) seconds.")
+
+    s =  @sprintf "# Computational time = %3.2f seconds." (time()-start)
+    println(s)
+
     return runinfo["Step2"]["beta"], runinfo
 
 

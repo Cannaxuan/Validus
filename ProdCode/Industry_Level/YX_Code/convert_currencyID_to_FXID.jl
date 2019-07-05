@@ -15,7 +15,7 @@ function convert_currencyID_to_FXID(currencyID, region)
 
     inID = hcat(currencyID[isIn, 1], fxID[idx[idx .!= nothing], 2])
     notInID = hcat(currencyID[.!isIn, 1], Int64.(zeros(size(currencyID[.!isIn, 1],1))))
-    currencyID = vcat(inID, notIn)
+    currencyID = vcat(inID, notInID)
 
     return currencyID
 end

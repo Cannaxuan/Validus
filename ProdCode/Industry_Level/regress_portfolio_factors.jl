@@ -47,7 +47,10 @@ function  regress_portfolio_factors(smeInfo, facs, resultFolder, options, indSiz
 
        println(repeat("-", 100))
        println("    $regMethod regression of the portfolios''s transformed PDs on all the PD-related factors:")
-       for i = 1:length(averRsqrFacPD); println("    # Average Rsquare = $(averRsqrFacPD[i])"); end
+       for i = 1:length(averRsqrFacPD)
+           s =  @sprintf "# Average Rsquare = %3.2f " (averRsqrFacPD[i])
+           println(s)
+       end
        println("    $regMethod regression of the portfolio''s transformed POEs on all the POE-related factors:")
        println(repeat("-", 100))
      end

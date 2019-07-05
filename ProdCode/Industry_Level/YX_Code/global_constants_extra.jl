@@ -1,6 +1,6 @@
-function global_constants_extra(dateEnd)
+function global_constants_extra(GC, dateEnd)
     ## This function adds extra global constants to GC. This will merge with global_constant_definition_current later.
-    global GC
+    #global GC
 
     ## The BBG_ID of companies that are excluded in CRI system.
     ## Swiss Reinsurance Co Ltd (115745)
@@ -40,7 +40,7 @@ function global_constants_extra(dateEnd)
     str = "$(GC["FS_DATA"])"
     sql = "SELECT Field_Mnemonic FROM [Tier2].[REF].BBG_FIELD_DEFINITION WHERE ID IN ($(str[2:end-1]))"
     cnt = connectDB()
-    GC["FS_FIELD_NAME"] = dropdims(convert(Array, get_data_from_DMTdatabase(sql, cnt)), dims = 2)
+    GC["FS_FIELD_NAME"] = dropdims(convert(Matrix, get_data_from_DMTdatabase(sql, cnt)), dims = 2)
 
     GC["FS_DATA_FINAL"] = [10,16,38,37,117,8,19]
     GC["FS_FIELD_FINAL"] = ["BS_CUR_LIAB","BS_LT_BORROW","BS_TOT_LIAB2","BS_TOT_ASSET","NET_INCOME","BS_CASH_NEAR_CASH_ITEM","BS_MKT_SEC_OTHER_ST_INVEST"]

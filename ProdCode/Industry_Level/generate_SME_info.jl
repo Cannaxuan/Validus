@@ -31,10 +31,9 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
          temp =
          try
              salesRevTurnMth = load(turnOverFolder*"salesRevTurnMth_"*string(iSmeEconCode)*".jld")["salesRevTurnMth"]
-             salesRevTurnMth
          catch
              println("# No stored size data for Economy $iSmeEconCode ! Generate the new data ...")
-             salesRevTurnMth = get_country_sizeInfo(iSmeEconCode, dateStart, dataEndDate, folders, options)["salesRevTurnMth"]
+             salesRevTurnMth = get_country_sizeInfo(iSmeEconCode, dateStart, dataEndDate, folders, options)
              salesRevTurnMth
          end
          salesRevTurnMth = temp
@@ -51,7 +50,6 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
              firmlist, PD_all_forward
          end
          firmlist, PD_all_forward = temp
-
 
          ## Extend the date length of PD
          k_year = PD_all_forward[:, 2, :]
@@ -70,7 +68,7 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
          PDAllForward[isSmeDate[:], :, :] = PD_all_forward[idxSmeDate, :, :]
          ctyFirmList = firmlist
          ctyForwardPD = permutedims(PDAllForward[:, 4:end, :], [1 3 2])
-         PD_all_forward = nothing
+         # PD_all_forward = nothing
 
          isValid = sum(isfinite.(ctyForwardPD[:, :, 1]), dims = 1) .>= pfThresMths
          ctyFirmList = ctyFirmList[isValid[:], :]

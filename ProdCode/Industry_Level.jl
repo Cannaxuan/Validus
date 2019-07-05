@@ -23,12 +23,10 @@ include("./Industry_Level/Adaptive lasso/nanSum.jl")
 include("./Industry_Level/regression_factor.jl")
 include("./Industry_Level/regress_portfolio_factors.jl")
 include("./Industry_Level/calculate_quantile_industry.jl")
+include("./Industry_Level/saveDataInExcel.jl")
 include("./Industry_Level/main_Validus.jl")
 include("./Industry_Level/retrieve_financial_statement_raw.jl")
 include("./Industry_Level/retrieve_sales_rev_turn_raw.jl")
-
-
-
 
 function Industry_Level(DataDate, smeEcon = [1 3 9 10])
  #=
@@ -43,7 +41,6 @@ function Industry_Level(DataDate, smeEcon = [1 3 9 10])
      ## The results will be saved in ProdData/DataMonth/Industry {DataPreparation/FactorModel/Products}
      ## by Yao Xuan 20190531
  =#
-
      ## Add Paths
      # DataDate = 20190430
      mpath = pwd()

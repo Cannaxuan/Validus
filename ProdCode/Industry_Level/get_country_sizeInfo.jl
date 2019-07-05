@@ -13,18 +13,16 @@ function get_country_sizeInfo(iEcon, dateStart, dataEndDate, folders, options)
          println(" # No retrieved raw salesRevTurn data for Economy $iEcon ! Retrieving the new data ...")
          sales_rev_turn_raw, Sales_Rev_Turn_Raw =
             retrieve_sales_rev_turn_raw(iEcon, dateStart, dataEndDate, turnOverFolder, CleanDataFolder)
-
-         Sales_rev_turn_raw = Dict()
-         Sales_rev_turn_raw["sales_rev_turn_raw"] = sales_rev_turn_raw
-         Sales_rev_turn_raw["Sales_Rev_Turn_Raw"] = Sales_Rev_Turn_Raw
          ## save jld file
          save(turnOverFolder*"sales_rev_turn_raw_"*string(iEcon)*".jld", "sales_rev_turn_raw", sales_rev_turn_raw,
          "Sales_Rev_Turn_Raw", Sales_Rev_Turn_Raw, compress = true)
          ## save mat file
+         # Sales_rev_turn_raw = Dict()
+         # Sales_rev_turn_raw["sales_rev_turn_raw"] = sales_rev_turn_raw
+         # Sales_rev_turn_raw["Sales_Rev_Turn_Raw"] = Sales_Rev_Turn_Raw
          # matwrite(turnOverFolder*"sales_rev_turn_raw_"*string(iEcon)*".mat", Sales_rev_turn_raw)
          sales_rev_turn_raw, Sales_Rev_Turn_Raw
      end
-
      sales_rev_turn_raw, Sales_Rev_Turn_Raw = temp
 
      println("- Prioiritize and clean salvs_rev_turn data for Economy $iEcon ...")
@@ -32,10 +30,10 @@ function get_country_sizeInfo(iEcon, dateStart, dataEndDate, folders, options)
 
      println("- Construct Month End salvs_rev_turn data for Economy $iEcon ...")
      salesRevTurnMth = construct_mth_data(sales_rev_turn_clean, iEcon, dataEndDate, options, folders)
-     salesRevTurnMth = Dict("salesRevTurnMth" => salesRevTurnMth)
-     # save jld file
+     # save jld file with compression
      save(turnOverFolder*"salesRevTurnMth_"*string(iEcon)*".jld", "salesRevTurnMth", salesRevTurnMth, compress = true)
      # save mat file
+     # salesRevTurnMth = Dict("salesRevTurnMth" => salesRevTurnMth)
      # matwrite(turnOverFolder*"salesRevTurnMth_"*string(iEcon)*".mat", salesRevTurnMth)
 
      return salesRevTurnMth

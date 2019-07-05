@@ -30,7 +30,7 @@ function  load_data_PD(folders, loadName, econCodesInput, dataEndMth)
          dataMtrxPD = permutedims(dataMtrxPD, [1,3,2])
          ## save jld files
          save(loadFolder*fileName*".jld",
-         "dataMtrxPD", dataMtrxPD, "dateVctr", dateVctr,"firmInfo", firmInfo, "econCodes", econCodes)
+         "dataMtrxPD", dataMtrxPD, "dateVctr", dateVctr,"firmInfo", firmInfo, "econCodes", econCodes, compress = true)
      end
      return dataMtrxPD, dateVctr, firmInfo, loadPDSuccess
 end

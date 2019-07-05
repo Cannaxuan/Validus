@@ -45,7 +45,7 @@ function calculate_quantile_industry(dataEndDate, folders, smeEconCodes)
      ## load smeInfo and smeModel
      resultFolder = folders["Industry_FactorModel"]
      SMEinfoFolder = folders["SMEinfoFolder"]
-     smeModelResult_indSize = matread(resultFolder*"smeModel.mat")
+     smeModelResult_indSize = load(resultFolder*"smeModel.jld")["smeModelResult_indSize"]
      PDSME = smeModelResult_indSize["PDest"]
      SmeInfo = load(SMEinfoFolder*"smeInfo.jld")
      nIndSizeFirms = smeInfo["smeIndSizeCount"]

@@ -1,5 +1,5 @@
-function global_numer_definition_current()
-    global GC
+function global_numer_definition_current(GC)
+    # global GC
 
     ## market variables
     cell_temp = ["'CUR_MKT_CAP'"; "'PX_VOLUME'"; "'PX_LAST'"]

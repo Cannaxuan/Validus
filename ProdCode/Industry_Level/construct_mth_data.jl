@@ -11,7 +11,7 @@ function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
      firmMonth = matread(folders["FinalData"]*"firmMonth_"*string(iEcon)*".mat")["firmMonth"]
      firmmonth = firmMonth
      firmlist = firmList_withCompNum
-     firmMonth = nothing ; firmList_withCompNum = nothing
+     # firmMonth = nothing ; firmList_withCompNum = nothing
 
      colCompNum = 1
      colUpdateDate = 3
