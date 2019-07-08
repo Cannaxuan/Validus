@@ -4,7 +4,7 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
 # smeDateVctr = facs["dateVctr"]
 # folders =PathStruct
      start = time()
-     dataEndMth = floor(Int, dataEndDate/100)
+     dataEndMth = fld(dataEndDate, 100)
      pfThresMths = 0  ## The firms with PD less than or equal to [thresMths] months will be removed?
      if haskey(options, "pfThresMths")
          pfThresMths = options["pfThresMths"]

@@ -30,7 +30,8 @@ function  regress_portfolio_factors(smeInfo, facs, resultFolder, options, indSiz
          ## transPDFlatHorizon = trans_func(PDFlatHorizon);
          ## Regression of the portfolio's PDs and POE's on the global, industry and other common factors
      PDFacs = facs
-     transSamplePDHorizon = trans_func(samplePD)
+     # transSamplePDHorizon = trans_func(samplePD)
+     transSamplePDHorizon = @. log(-log(1 - samplePD))
      regPDFacsRes = regression_factor(transSamplePDHorizon, PDFacs, resultFolder, regMethod)
      estTransPDFlatHorizon = 1 .- exp.(-exp.(regPDFacsRes["dataMtrxEst"]))
      nObs = size(regPDFacsRes["dataMtrxEst"], 1)

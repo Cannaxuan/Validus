@@ -1,8 +1,8 @@
 function convert_currencyID_to_FXID(currencyID, region)
-     # currencyID, region = currency, GC["REGION_OF_ECON"][iEcon]
+     # currencyID, region = currency, GConst["REGION_OF_ECON"][iEcon]
     ##  This function converts currency ID into its corresponding FX ID with USD in a particualr time zone.
-    global GC
-    timeZone = GC["REGIONTIMEZONE"][region]
+    global GConst
+    timeZone = GConst["REGIONTIMEZONE"][region]
     currencyID = Int64.(unique(currencyID))
     strID = "$currencyID"[2:end-1]
     idx = uniqueidx(currencyID)[2] ## IC

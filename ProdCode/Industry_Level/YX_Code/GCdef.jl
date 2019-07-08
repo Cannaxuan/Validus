@@ -14,8 +14,8 @@ include("convert_currencyID_to_FXID.jl")
 
 
 
-function GCdef(dataDate = 20180629)
-    ####New GC in dictionary###############################################################
+function GConstdef(dataDate = 20180629)
+    ####New GConst in dictionary###############################################################
     config = nothing
     if VERSION < v"0.7.0"
         if is_windows()
@@ -48,9 +48,9 @@ function GCdef(dataDate = 20180629)
     # println("\n Output path prefix: $PATH_PREFIX_OUTPUT")
     config = nothing
 
-    #    pathForGC = "//dirac/cri3/OfficialTest_AggDTD_SBChinaNA/ProductionCode_JULIA/yCommonCode/"
-    #    pathIdx = searchindex(uppercase(pathForGC), "CODE") - 1;
-    #    PATH_PREFIX=pathForGC[1:pathIdx[1]];
+    #    pathForGConst = "//dirac/cri3/OfficialTest_AggDTD_SBChinaNA/ProductionCode_JULIA/yCommonCode/"
+    #    pathIdx = searchindex(uppercase(pathForGConst), "CODE") - 1;
+    #    PATH_PREFIX=pathForGConst[1:pathIdx[1]];
     if dataDate == NaN
         dataDate = parse(Float64,"20180629")
     end
@@ -73,102 +73,102 @@ function GCdef(dataDate = 20180629)
     PARAMETER_SETS=Array{Any}(undef, 2);
     PARAMETER_SETS[1]="";
     PARAMETER_SETS[2]="smc/"
-    GC=Dict();
+    GConst=Dict();
     ###fill in values####
-    GC["PATH_PREFIX"]=PATH_PREFIX_INPUT;
-    GC["DATE_START"]="1990-01-01";
-    GC["STKIDX_DATE_START"]="1988-12-01";
-    GC["DATE_START_DATA"]= 19880101;
-    GC["DATE_START_PD"]= 19900101;
-    GC["Data_Date"]="20180629";
-    GC["HistData_Date"]= "20180330";
-    GC["CaliDateArray"]=CaliDateArray;
-    GC["CaliDateOfNS"]=CaliDateOfNS;
-    GC["AGGREGATE_MONTH"]=AGGREGATE_MONTH;
-    GC["AGGREGATE_HEADER"]=AGGREGATE_HEADER;
-    GC["Para_Date"]=string(maximum(filter(.!isnan,CaliDateArray)));
-    GC["All_Para_Date"]=unique(CaliDateArray[isfinite.(CaliDateArray)]);
-    GC["UPPER_WIN"]= 99.9;
-    GC["LOWER_WIN"]= 0.1;
-    GC["UPPER_STK_RET"]= 1;
-    GC["LOWER_STK_RET"]= -0.5;
-    GC["MVGAVE"]= 12;
-    GC["SIGMA_MTHS"]= 12;
-    GC["SIGMA_MIN_MTHS"]= 8;
-    GC["HISTJOINLENGTH"]= 24;
-    GC["LIMIT_GOOD_DATA"]= 5;
-    GC["NPARA_BASE"]= 18;
-    GC["MAX_HORIZON"]= 60;
-    GC["TEXT_FORMAT"]="%12.12f";
-    GC["JMP"]= 0.1;
-    GC["MAX_ECON"]= 297;
-    GC["MAX_DEFAULTS"]= 15;
-    GC["MAX_SECTOR_CHANGES"]= 2;
-    GC["CODE_INCREMENT_SECTOR"]= 100;
-    GC["CODE_INCREMENT_DEFAULT"]= 1000000000;
-    GC["Estimation_Method"]= 1;
-    GC["MC_BACKFILL_LAGLENGTH"]= 280;
-    GC["ACTUAL_LEVEL"]= 0.05;
-    GC["HYPO_LEVEL"]= 0.05;
-    GC["MODNUM_MA"]= 1000000000;
-    GC["TA_BtoA"]= 0.1;
-    GC["TA_CHANGE"]= 0.1;
-    GC["MA_MI"]= 0;
-    GC["MC_CHANGE"]= 0.05;
-    GC["dayNumsBefore_or_AfterT0"]= 5;
-    GC["dayNumsBefore_or_AfterT0_forMC"]= 20;
-    GC["maScreenDailyOrBoth"]= 0;
-    GC["FIN_GROUP_NUMBER"]= 20054;
-    GC["VAR_NAMES"]=["intercept","index", "3m_rate","dtd_ave","dtd_trnd","liq_ave(nonFin)", "liq_trnd(nonFin)","ni_ave","ni_trnd","size_ave","size_trnd","mb","sigma","liq_ave(Fin)","liq_trnd(Fin)", "agg_dtd_level(Fin)","agg_dtd_level(nonFin)","intercept_dummy(NAMR_Fin)"];
-    GC["CVI_MULTIPLIER"]= 10000;
-    GC["CVI_ECONS"]= [1 2 6 9 11 15 16 33 37 38 66 81 89 7 8 12 18 5 36 40 46 82 85];
-    GC["CVI_ECONS_EUZ"]= [23 25 31 35 36 37 38 40 45 47 55 58 64 70 76 77 79 52 54];
-    GC["CVI_TAIL_LEVEL"]= 95;
-    GC["CVI_ID_EUZ"]= 300;
-    GC["CVI_ID_SPP"]= 200;
-    GC["CVI_ZOOM_DAY"]= 1;
-    GC["CVI_ZOOM_WEEK"]= 2;
-    GC["CVI_ZOOM_MONTH"]= 3;
-    GC["CVI_ZOOM_YEAR"]= 4;
-    GC["nSample"]= 1000;
-    GC["minNumDefFirstUpdate"]= 50;
-    GC["SequentialLength"]= 120;
-    GC["isBlkProp"]= 1;
-    GC["minBlk"]= 5;
-    GC["maxBlk"]= 10;
-    GC["FracIndependentProp"]= 0.5;
-    GC["RandomWalkAdjFac"]= 0.2;
-    GC["ESSStopRate"]= 1000 * 0.75;
-    GC["MHAccumAcceptRate"]= 1;
-    GC["ifApplyKfold"]= 1;
-    GC["KfoldAccumAcceptRate"]= 2;
-    GC["KfoldDuplication"]= 1;
-    GC["useMLEprior"]= false;
-    GC["gpuSwitch"]= true;
-    GC["isDpositive"]= true;
-    GC["dataPutOnGPU"]= false;
-    GC["ESSBound"]=1000*0.25;
-    GC["propType"]= 1;
-    GC["isZeroOn1stNSParam"]= true;
-    GC["priorStd"]= 5;
-    GC["varLowerBound"]= 1;
-    GC["cutoff"]= 100;
-    GC["startNum"]= 20;
-    GC["endNum"]= 3;
-    GC["numSpeicialMoveBefRecur"]= 100;
-    GC["numNormalMoveBefRecur"]= 20;
-    GC["stepSize"]= 1;
-    GC["startT"]= 1;
-    GC["numRunWithRandomInitials"]= 60;
-    GC["t90"]= 5.374;
-    GC["t95"]= 6.811;
-    GC["stdFactor"]= 1.3;
-    GC["MAXTRYTIMES"]= 100;
-    GC["DISPLAYACCEPT"]= true;
-    GC["HORIZON_PRODUCE"]=[24 60];
-    GC["HORIZON_histDailyPD"]= [1 3 6 12 24 36 60];
-    GC["PARAMETER_IN_USE"]=[2];
-    GC["PARAMETER_SETS"]=PARAMETER_SETS;
+    GConst["PATH_PREFIX"]=PATH_PREFIX_INPUT;
+    GConst["DATE_START"]="1990-01-01";
+    GConst["STKIDX_DATE_START"]="1988-12-01";
+    GConst["DATE_START_DATA"]= 19880101;
+    GConst["DATE_START_PD"]= 19900101;
+    GConst["Data_Date"]="20180629";
+    GConst["HistData_Date"]= "20180330";
+    GConst["CaliDateArray"]=CaliDateArray;
+    GConst["CaliDateOfNS"]=CaliDateOfNS;
+    GConst["AGGREGATE_MONTH"]=AGGREGATE_MONTH;
+    GConst["AGGREGATE_HEADER"]=AGGREGATE_HEADER;
+    GConst["Para_Date"]=string(maximum(filter(.!isnan,CaliDateArray)));
+    GConst["All_Para_Date"]=unique(CaliDateArray[isfinite.(CaliDateArray)]);
+    GConst["UPPER_WIN"]= 99.9;
+    GConst["LOWER_WIN"]= 0.1;
+    GConst["UPPER_STK_RET"]= 1;
+    GConst["LOWER_STK_RET"]= -0.5;
+    GConst["MVGAVE"]= 12;
+    GConst["SIGMA_MTHS"]= 12;
+    GConst["SIGMA_MIN_MTHS"]= 8;
+    GConst["HISTJOINLENGTH"]= 24;
+    GConst["LIMIT_GOOD_DATA"]= 5;
+    GConst["NPARA_BASE"]= 18;
+    GConst["MAX_HORIZON"]= 60;
+    GConst["TEXT_FORMAT"]="%12.12f";
+    GConst["JMP"]= 0.1;
+    GConst["MAX_ECON"]= 297;
+    GConst["MAX_DEFAULTS"]= 15;
+    GConst["MAX_SECTOR_CHANGES"]= 2;
+    GConst["CODE_INCREMENT_SECTOR"]= 100;
+    GConst["CODE_INCREMENT_DEFAULT"]= 1000000000;
+    GConst["Estimation_Method"]= 1;
+    GConst["MC_BACKFILL_LAGLENGTH"]= 280;
+    GConst["ACTUAL_LEVEL"]= 0.05;
+    GConst["HYPO_LEVEL"]= 0.05;
+    GConst["MODNUM_MA"]= 1000000000;
+    GConst["TA_BtoA"]= 0.1;
+    GConst["TA_CHANGE"]= 0.1;
+    GConst["MA_MI"]= 0;
+    GConst["MC_CHANGE"]= 0.05;
+    GConst["dayNumsBefore_or_AfterT0"]= 5;
+    GConst["dayNumsBefore_or_AfterT0_forMC"]= 20;
+    GConst["maScreenDailyOrBoth"]= 0;
+    GConst["FIN_GROUP_NUMBER"]= 20054;
+    GConst["VAR_NAMES"]=["intercept","index", "3m_rate","dtd_ave","dtd_trnd","liq_ave(nonFin)", "liq_trnd(nonFin)","ni_ave","ni_trnd","size_ave","size_trnd","mb","sigma","liq_ave(Fin)","liq_trnd(Fin)", "agg_dtd_level(Fin)","agg_dtd_level(nonFin)","intercept_dummy(NAMR_Fin)"];
+    GConst["CVI_MULTIPLIER"]= 10000;
+    GConst["CVI_ECONS"]= [1 2 6 9 11 15 16 33 37 38 66 81 89 7 8 12 18 5 36 40 46 82 85];
+    GConst["CVI_ECONS_EUZ"]= [23 25 31 35 36 37 38 40 45 47 55 58 64 70 76 77 79 52 54];
+    GConst["CVI_TAIL_LEVEL"]= 95;
+    GConst["CVI_ID_EUZ"]= 300;
+    GConst["CVI_ID_SPP"]= 200;
+    GConst["CVI_ZOOM_DAY"]= 1;
+    GConst["CVI_ZOOM_WEEK"]= 2;
+    GConst["CVI_ZOOM_MONTH"]= 3;
+    GConst["CVI_ZOOM_YEAR"]= 4;
+    GConst["nSample"]= 1000;
+    GConst["minNumDefFirstUpdate"]= 50;
+    GConst["SequentialLength"]= 120;
+    GConst["isBlkProp"]= 1;
+    GConst["minBlk"]= 5;
+    GConst["maxBlk"]= 10;
+    GConst["FracIndependentProp"]= 0.5;
+    GConst["RandomWalkAdjFac"]= 0.2;
+    GConst["ESSStopRate"]= 1000 * 0.75;
+    GConst["MHAccumAcceptRate"]= 1;
+    GConst["ifApplyKfold"]= 1;
+    GConst["KfoldAccumAcceptRate"]= 2;
+    GConst["KfoldDuplication"]= 1;
+    GConst["useMLEprior"]= false;
+    GConst["gpuSwitch"]= true;
+    GConst["isDpositive"]= true;
+    GConst["dataPutOnGPU"]= false;
+    GConst["ESSBound"]=1000*0.25;
+    GConst["propType"]= 1;
+    GConst["isZeroOn1stNSParam"]= true;
+    GConst["priorStd"]= 5;
+    GConst["varLowerBound"]= 1;
+    GConst["cutoff"]= 100;
+    GConst["startNum"]= 20;
+    GConst["endNum"]= 3;
+    GConst["numSpeicialMoveBefRecur"]= 100;
+    GConst["numNormalMoveBefRecur"]= 20;
+    GConst["stepSize"]= 1;
+    GConst["startT"]= 1;
+    GConst["numRunWithRandomInitials"]= 60;
+    GConst["t90"]= 5.374;
+    GConst["t95"]= 6.811;
+    GConst["stdFactor"]= 1.3;
+    GConst["MAXTRYTIMES"]= 100;
+    GConst["DISPLAYACCEPT"]= true;
+    GConst["HORIZON_PRODUCE"]=[24 60];
+    GConst["HORIZON_histDailyPD"]= [1 3 6 12 24 36 60];
+    GConst["PARAMETER_IN_USE"]=[2];
+    GConst["PARAMETER_SETS"]=PARAMETER_SETS;
     #API write step setting
     DTD_APIstep=Array{Int}(undef, 4,1)
     DTD_APIstep[1]=2;
@@ -194,12 +194,12 @@ function GCdef(dataDate = 20180629)
     PDcal_APIstep[1]=17
     PDcal_APIstep[2]=18
     PDcal_APIstep[3]=19
-    GC["DTD_APIstep"]=DTD_APIstep;
-    GC["PDcali_APIstep"]=PDcali_APIstep;
-    GC["NS_APIstep"]=NS_APIstep;
-    GC["MAFS_APIstep"]=MAFS_APIstep;
-    GC["MADTD_APIstep"]=MADTD_APIstep;
-    GC["PDcal_APIstep"]=PDcal_APIstep;
+    GConst["DTD_APIstep"]=DTD_APIstep;
+    GConst["PDcali_APIstep"]=PDcali_APIstep;
+    GConst["NS_APIstep"]=NS_APIstep;
+    GConst["MAFS_APIstep"]=MAFS_APIstep;
+    GConst["MADTD_APIstep"]=MADTD_APIstep;
+    GConst["PDcal_APIstep"]=PDcal_APIstep;
 
     ##original data prepared by DMT
     OriginalData_varcol=Dict();
@@ -218,13 +218,13 @@ function GCdef(dataDate = 20180629)
     OriginalData_varcol["Marketcap_Clean"]=12;
     OriginalData_varcol["Stock_Index"]=13;
     OriginalData_varcol["Marketcap"]=14;
-    GC["OriginalData_varcol"]=OriginalData_varcol;
+    GConst["OriginalData_varcol"]=OriginalData_varcol;
     #original data after add current asset
     # OriginalDataDaily_<ECON>,PMTV1
     pmt_OriginalData_varcol=deepcopy(OriginalData_varcol);
     pmt_OriginalData_varcol["BS_CUR_ASSET_REPORT"]=15;
     pmt_OriginalData_varcol["BS_CUR_LIAB"]=16;
-    GC["pmt_OriginalData_varcol"]=pmt_OriginalData_varcol;
+    GConst["pmt_OriginalData_varcol"]=pmt_OriginalData_varcol;
     #current asset from DMT
     CurrentAsset_varcol=Dict();
     CurrentAsset_varcol["Company_Number"]=1;
@@ -236,7 +236,7 @@ function GCdef(dataDate = 20180629)
     CurrentAsset_varcol["DTD"]=6;
     CurrentAsset_varcol["BS_CUR_ASSET_REPORT"]=7;
     CurrentAsset_varcol["BS_CUR_LIAB"]=8;
-    GC["CurrentAsset_varcol"]=CurrentAsset_varcol;
+    GConst["CurrentAsset_varcol"]=CurrentAsset_varcol;
     #####BELOW ARE VARCOL NAMES FOR CALI PD####
     #firm history from DMT
     FirmHistory_varcol=Dict();
@@ -254,7 +254,7 @@ function GCdef(dataDate = 20180629)
     FirmHistory_varcol["Number_SubGroup"]=12;
     FirmHistory_varcol["Mapping_Number"]=1;
     FirmHistory_varcol["Status"]=5;
-    GC["FirmHistory_varcol"]=FirmHistory_varcol;
+    GConst["FirmHistory_varcol"]=FirmHistory_varcol;
     #trasnformation fs bef level and trend:
     # firmSpecific_beforeDemean_<ECON>, PMTV2
     # firmSpecific_afterDemean_beforeNormalize_<ECON>, PMTV3
@@ -284,7 +284,7 @@ function GCdef(dataDate = 20180629)
     fs_transform_varcol["Current_Asset"]=14;
     fs_transform_varcol["Aggregate_DTD_NonFin"]=14;
     fs_transform_varcol["Current_Liability"]=15;
-    GC["fs_transform_varcol"]=fs_transform_varcol;
+    GConst["fs_transform_varcol"]=fs_transform_varcol;
     ##trasnformation fs aft level and trend
     # firmSpecific_final_<ECON> PMTV6
     fs_final_varcol=Dict();
@@ -307,7 +307,7 @@ function GCdef(dataDate = 20180629)
     fs_final_varcol["Cash_Over_TA_Trend"]=17
     fs_final_varcol["Aggregate_DTD_Fin"]=18
     fs_final_varcol["Aggregate_DTD_NonFin"]=19;
-    GC["fs_final_varcol"]=fs_final_varcol;
+    GConst["fs_final_varcol"]=fs_final_varcol;
 
     #####BELOW ARE VARCOL NAMES FOR HIST PD####
     hist_initial_varcol=Dict();
@@ -328,7 +328,7 @@ function GCdef(dataDate = 20180629)
     hist_initial_varcol["Current_Liability"]=15;
     hist_initial_varcol["DTD_Median_Fin"]=16;
     hist_initial_varcol["DTD_Median_NonFin"]=17;
-    GC["hist_initial_varcol"]=hist_initial_varcol;
+    GConst["hist_initial_varcol"]=hist_initial_varcol;
     ##########hist fs after normalize###########
     hist_aftnormalize_varcol=Dict();
     hist_aftnormalize_varcol["Comp_Mapped_Number"]=1
@@ -344,7 +344,7 @@ function GCdef(dataDate = 20180629)
     hist_aftnormalize_varcol["Cash_Over_TA"]=11
     hist_aftnormalize_varcol["DTD_Median_Fin"]=12
     hist_aftnormalize_varcol["DTD_Median_NonFin"]=13
-    GC["hist_aftnormalize_varcol"]=hist_aftnormalize_varcol;
+    GConst["hist_aftnormalize_varcol"]=hist_aftnormalize_varcol;
     #########hist fs final#####################
     hist_finalFS_varcol=Dict();
     hist_finalFS_varcol["Comp_Mapped_Number"]=1
@@ -366,7 +366,7 @@ function GCdef(dataDate = 20180629)
     hist_finalFS_varcol["DTD_Median_Fin"]=17
     hist_finalFS_varcol["DTD_Median_NonFin"]=18
     hist_finalFS_varcol["Dummy_For_Group_297_Finance"]=19
-    GC["hist_finalFS_varcol"]=hist_finalFS_varcol;
+    GConst["hist_finalFS_varcol"]=hist_finalFS_varcol;
     ##################################################
     ###################global econs define###############################
     ADJUST_RFR_COUNTRY=[23 25 31 35 36 37 45 47 55 58 64 70 76 77 79 40 52 54]
@@ -1062,7 +1062,7 @@ function GCdef(dataDate = 20180629)
     push!( TMR_ADJDATE,NaN);
 
 
-    #100 Jamaica  3 Months repo rate  JARGCGC Currency
+    #100 Jamaica  3 Months repo rate  JARGConstGConst Currency
     push!( TMR_VAR,[1484 1496]);
     push!( TMR_SOURCE,["BBG" "BBG"]);
     push!( TMR_KEYDATE,[20101130 0]);
@@ -1123,31 +1123,31 @@ function GCdef(dataDate = 20180629)
     push!( TMR_KEYDATE,0);
     push!( TMR_ADJDATE,0);
 
-    GC["TMR_VAR"]=TMR_VAR;
-    GC["TMR_SOURCE"]=TMR_SOURCE;
-    GC["TMR_KEYDATE"]=TMR_KEYDATE
-    GC["TMR_ADJDATE"]=TMR_ADJDATE;
-    GC["ADJUST_RFR_COUNTRY"]=ADJUST_RFR_COUNTRY;
-    GC["NO_OTC_ECONS"]=NO_OTC_ECONS
-    GC["ECONNAMES"]=ECONNAMES;
+    GConst["TMR_VAR"]=TMR_VAR;
+    GConst["TMR_SOURCE"]=TMR_SOURCE;
+    GConst["TMR_KEYDATE"]=TMR_KEYDATE
+    GConst["TMR_ADJDATE"]=TMR_ADJDATE;
+    GConst["ADJUST_RFR_COUNTRY"]=ADJUST_RFR_COUNTRY;
+    GConst["NO_OTC_ECONS"]=NO_OTC_ECONS
+    GConst["ECONNAMES"]=ECONNAMES;
 
     ########################################################################
     ########################global path define############################
     ##.DMT
-    GC["FIRM_HISTORY_PATH"]=string(PATH_PREFIX_INPUT, "Data/ModelCalibration/", dataMth, "/IDMTData/SmartData/FirmHistory/");
-    GC["CLEAN_DATA_PATH"]=string(PATH_PREFIX_INPUT, "Data/ModelCalibration/" ,dataMth, "/IDMTData/CleanData/");
-    GC["DTDINPUT_CALCULATION_BEFORE_MA_PATH"]=string(PATH_PREFIX_INPUT, "Data/ModelCalibration/" ,dataMth, "/IDMTData/SmartData/DTDCalculation/Input/Before_MA/");
-    GC["IMPORTANT_MA_TABLE_PATH"]=string(PATH_PREFIX_INPUT, "Data/ModelCalibration/" ,dataMth, "/IDMTData/CleanData/GlobalInformation/Temp_MA/");
-    GC["DTDINPUT_WHOLE_CALIBRATION_PATH"]=string(PATH_PREFIX_INPUT, "Data/ModelCalibration/" ,dataMth, "/IDMTData/SmartData/DTDCalibration/Input/Input_In_Whole/");
-    GC["CALI_ORIGINAL_PATH_IDMT"]=string(PATH_PREFIX_INPUT, "Data/ModelCalibration/" ,dataMth, "/IDMTData/SmartData/PDCalibration/Input/OriginalData/");
-    GC["HIST_DAILY_ORIGINAL_BEFORE_MA_PATH"]=string(PATH_PREFIX_INPUT, "Data/Historical/" ,dataMth, "/Daily/IDMTData/SmartData/PDCalculation/Input/OriginalData/Before_MA/");
+    GConst["FIRM_HISTORY_PATH"]=string(PATH_PREFIX_INPUT, "Data/ModelCalibration/", dataMth, "/IDMTData/SmartData/FirmHistory/");
+    GConst["CLEAN_DATA_PATH"]=string(PATH_PREFIX_INPUT, "Data/ModelCalibration/" ,dataMth, "/IDMTData/CleanData/");
+    GConst["DTDINPUT_CALCULATION_BEFORE_MA_PATH"]=string(PATH_PREFIX_INPUT, "Data/ModelCalibration/" ,dataMth, "/IDMTData/SmartData/DTDCalculation/Input/Before_MA/");
+    GConst["IMPORTANT_MA_TABLE_PATH"]=string(PATH_PREFIX_INPUT, "Data/ModelCalibration/" ,dataMth, "/IDMTData/CleanData/GlobalInformation/Temp_MA/");
+    GConst["DTDINPUT_WHOLE_CALIBRATION_PATH"]=string(PATH_PREFIX_INPUT, "Data/ModelCalibration/" ,dataMth, "/IDMTData/SmartData/DTDCalibration/Input/Input_In_Whole/");
+    GConst["CALI_ORIGINAL_PATH_IDMT"]=string(PATH_PREFIX_INPUT, "Data/ModelCalibration/" ,dataMth, "/IDMTData/SmartData/PDCalibration/Input/OriginalData/");
+    GConst["HIST_DAILY_ORIGINAL_BEFORE_MA_PATH"]=string(PATH_PREFIX_INPUT, "Data/Historical/" ,dataMth, "/Daily/IDMTData/SmartData/PDCalculation/Input/OriginalData/Before_MA/");
 
     #PATH_PREFIX = "D:/Local_Julia_test_0642/Production"
     #.PMT CODE file
-    GC["GENERATE_HYPO_INPUT_CODE_PATH"]=string(CODE_PATH, "/generateHypoInput");
-    GC["NSparaDefForSB"]=string(CODE_PATH, "/yCommonCode/Group");
-    GC["CALI_CODE_PATH"]=string(CODE_PATH, "/bCalibration/");
-    GC["PYTHON_AS_UPLOADER"]=string(CODE_PATH,"/dDaily/websiteDailyUpdate/uploaderForCdsCalculator/");
+    GConst["GENERATE_HYPO_INPUT_CODE_PATH"]=string(CODE_PATH, "/generateHypoInput");
+    GConst["NSparaDefForSB"]=string(CODE_PATH, "/yCommonCode/Group");
+    GConst["CALI_CODE_PATH"]=string(CODE_PATH, "/bCalibration/");
+    GConst["PYTHON_AS_UPLOADER"]=string(CODE_PATH,"/dDaily/websiteDailyUpdate/uploaderForCdsCalculator/");
     #### Please do modify the following path if launch or test!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     #PMT_DTDforPDCALI = string(PATH_PREFIX, "Data_JULIATEST/");
     #PMT_PDCALI = string(PATH_PREFIX, "Data_JULIATEST/");
@@ -1158,12 +1158,12 @@ function GCdef(dataDate = 20180629)
     #PMT_DAILY = string(PATH_PREFIX, "Data_JULIATEST/");
 
     #.PMT LOG file
-    GC["forAPIcheck"]=string(PATH_PREFIX_OUTPUT, "Log_JULIA1.0.3/for_api_checking/",dataMth,".csv");
-    GC["forAPIcheck_tmp"]=string(PATH_PREFIX_OUTPUT, "Log_JULIA1.0.3/for_api_checking/templete_monthly.csv");
-    GC["CALI_LOG_PATH"]=string(PATH_PREFIX_OUTPUT, "Log_JULIA1.0.3/Calibration/");
-    GC["DTD_LOG_PATH"]=string(PATH_PREFIX_OUTPUT, "Log_JULIA1.0.3/DTD/");
-    GC["HIST_DAILY_PD_LOG_PATH"]=string(PATH_PREFIX_OUTPUT, "Log_JULIA1.0.3/histDailyPD/");
-    GC["DEBUG_LOG_PATH"]=string(PATH_PREFIX_OUTPUT, "Log_JULIA1.0.3/Debug/");
+    GConst["forAPIcheck"]=string(PATH_PREFIX_OUTPUT, "Log_JULIA1.0.3/for_api_checking/",dataMth,".csv");
+    GConst["forAPIcheck_tmp"]=string(PATH_PREFIX_OUTPUT, "Log_JULIA1.0.3/for_api_checking/templete_monthly.csv");
+    GConst["CALI_LOG_PATH"]=string(PATH_PREFIX_OUTPUT, "Log_JULIA1.0.3/Calibration/");
+    GConst["DTD_LOG_PATH"]=string(PATH_PREFIX_OUTPUT, "Log_JULIA1.0.3/DTD/");
+    GConst["HIST_DAILY_PD_LOG_PATH"]=string(PATH_PREFIX_OUTPUT, "Log_JULIA1.0.3/histDailyPD/");
+    GConst["DEBUG_LOG_PATH"]=string(PATH_PREFIX_OUTPUT, "Log_JULIA1.0.3/Debug/");
 
     # PATH_PREFIX = "D:/JuliaTestMonthly/Production"
     # PATH_PREFIX = "//cri-hpc13/JuliaTestMonthly/Production"
@@ -1177,80 +1177,80 @@ function GCdef(dataDate = 20180629)
     PMT_CVI = string(PATH_PREFIX_OUTPUT, "Data/");
     PMT_DAILY = string(PATH_PREFIX_OUTPUT, "Data/");
 
-    GC["PMT_PDCALI"] = PMT_PDCALI;
+    GConst["PMT_PDCALI"] = PMT_PDCALI;
 
     #. PMT DTD FOR PD CALIBRATION
-    GC["DTDINPUT_SEGMENTS_CALIBRATION_PATH"]=string(PMT_DTDforPDCALI,"ModelCalibration/" ,dataMth, "/Processing/M1_Dtd/DTDForPDCalibration/Input/Input_In_Segments/")
-    GC["DTD_PARAMETERS_CALIBRATION_PATH"]=string(PMT_DTDforPDCALI,"ModelCalibration/" ,dataMth, "/Products/M1_Dtd/DTDForPDCalibration/Parameters/")
+    GConst["DTDINPUT_SEGMENTS_CALIBRATION_PATH"]=string(PMT_DTDforPDCALI,"ModelCalibration/" ,dataMth, "/Processing/M1_Dtd/DTDForPDCalibration/Input/Input_In_Segments/")
+    GConst["DTD_PARAMETERS_CALIBRATION_PATH"]=string(PMT_DTDforPDCALI,"ModelCalibration/" ,dataMth, "/Products/M1_Dtd/DTDForPDCalibration/Parameters/")
 
     #. PMT FOR PD CALIBRATION
-    GC["CALI_ORIGINAL_PATH_PMT"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Processing/M2_Pd/OriginalData/");
-    GC["CALI_TRANSFORM_PATH"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Processing/M2_Pd/FSTransformed/");
-    GC["CALI_DATA_PATH"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Processing/M2_Pd/FinalDataForCalibration/")
-    GC["CALI_OUTPUT_PARA_PATH"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Products/M2_Pd/current/")
-    GC["CALI_SMC_PATH"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Products/M2_Pd/current_smc/")
-    GC["CALI_COMPARE_PATH"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Validation/ARResults/Comparison/")
-    GC["AR_OUTPUT"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Validation/ARResults/AR/")
-    GC["AR_OUTPUT_SMC"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Validation/ARResults/AR_SMC/")
+    GConst["CALI_ORIGINAL_PATH_PMT"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Processing/M2_Pd/OriginalData/");
+    GConst["CALI_TRANSFORM_PATH"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Processing/M2_Pd/FSTransformed/");
+    GConst["CALI_DATA_PATH"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Processing/M2_Pd/FinalDataForCalibration/")
+    GConst["CALI_OUTPUT_PARA_PATH"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Products/M2_Pd/current/")
+    GConst["CALI_SMC_PATH"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Products/M2_Pd/current_smc/")
+    GConst["CALI_COMPARE_PATH"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Validation/ARResults/Comparison/")
+    GConst["AR_OUTPUT"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Validation/ARResults/AR/")
+    GConst["AR_OUTPUT_SMC"]=string(PMT_PDCALI, "ModelCalibration/" ,dataMth, "/Validation/ARResults/AR_SMC/")
 
     #. PMT FOR PD CALCULATION AND HYPO FS
-    GC["DTDINPUT_CALCULATION_AFTER_MA_PATH"]=string(PMT_PDCALU, "ModelCalibration/" ,dataMth, "/Processing/M1_Dtd/DTDForPDCalculation/Input/After_MA/")
-    GC["DTD_PARAMETERS_CALCULATION_PATH"]=string(PMT_PDCALU, "ModelCalibration/" ,dataMth, "/Products/M1_Dtd/DTDForPDCalculation/Parameters/")
-    GC["DTDINPUT_HYPO_MA_FIRMS_PATH"]=string(PMT_PDCALU, "ModelCalibration/" ,dataMth, "/Processing/M1_Dtd/DTDForPDCalculation/Input/MAFirms/")
-    GC["DTDOUTPUT_HYPO_MA_FIRMS_PATH"]=string(PMT_PDCALU, "ModelCalibration/" ,dataMth, "/Products/M1_Dtd/DTDForPDCalculation/Parameters/MAFirms/")
-    GC["IMPORTANT_MA_TABLE_DTD_PATH"]=string(PMT_PDCALU, "ModelCalibration/",dataMth,"/Processing/M1_Dtd/DTDForPDCalculation/Input/");
-    GC["IMPORTANT_MA_TABLE_FS_PATH"]=string(PMT_PDCALU, "Historical/",dataMth,"/Daily/Processing/P2_Pd/OriginalData/")
-    GC["HIST_DAILY_DTD_AGGDATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Processing/P2_Pd/AggDTDHistDaily/")
-    GC["HIST_DAILY_PD_INTER_DATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Processing/P2_Pd/")
-    GC["HIST_DAILY_PD_OUTPUT_DATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Products/P2_Pd/")
-    GC["HIST_DAILY_PD_INTER_AGGDATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Processing/P3_PdAgg/")
-    GC["HIST_DAILY_PD_OUTPUT_AGGDATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Products/P3_PdAgg/")
-    GC["HIST_DAILY_PD_UPLOAD_PATH_TR"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Products/P109_ThomsonReuters/")
-    GC["HIST_DAILY_PD_OUTPUT"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Products/")
-    GC["HIST_MONTHLY_PD_OUTPUT"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Products/")
-    GC["HIST_MONTHLY_PD_INTER_DATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Processing/P2_Pd/")
-    GC["HIST_MONTHLY_PD_OUTPUT_DATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Products/P2_Pd/")
-    GC["HIST_MONTHLY_PD_INTER_AGGDATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Processing/P3_PdAgg/")
-    GC["HIST_MONTHLY_PD_OUTPUT_AGGDATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Products/P3_PdAgg/")
-    GC["HIST_MONTHLY_PD_UPLOAD_PATH_WEB"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Products/P101_WebDisplay/")
-    GC["HIST_MONTHLY_PD_UPLOAD_PATH_TR"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Products/P109_ThomsonReuters/")
-    GC["HIST_DAILY_ORIGINAL_BEFORE_MA_PATH_PMT"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Processing/P2_Pd/OriginalData/Before_MA/")
-    GC["HIST_DAILY_ORIGINAL_MA_FIRMS_PATH"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Processing/P2_Pd/OriginalData/MAFirms/")
-    GC["HIST_DAILY_ORIGINAL_AFTER_MA_PATH"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Processing/P2_Pd/OriginalData/After_MA/")
-    GC["CALCU_COMPARE_PATH"]=string(PMT_PDCALI, "Historical/" ,dataMth, "/Validation/IndividualPD/")
+    GConst["DTDINPUT_CALCULATION_AFTER_MA_PATH"]=string(PMT_PDCALU, "ModelCalibration/" ,dataMth, "/Processing/M1_Dtd/DTDForPDCalculation/Input/After_MA/")
+    GConst["DTD_PARAMETERS_CALCULATION_PATH"]=string(PMT_PDCALU, "ModelCalibration/" ,dataMth, "/Products/M1_Dtd/DTDForPDCalculation/Parameters/")
+    GConst["DTDINPUT_HYPO_MA_FIRMS_PATH"]=string(PMT_PDCALU, "ModelCalibration/" ,dataMth, "/Processing/M1_Dtd/DTDForPDCalculation/Input/MAFirms/")
+    GConst["DTDOUTPUT_HYPO_MA_FIRMS_PATH"]=string(PMT_PDCALU, "ModelCalibration/" ,dataMth, "/Products/M1_Dtd/DTDForPDCalculation/Parameters/MAFirms/")
+    GConst["IMPORTANT_MA_TABLE_DTD_PATH"]=string(PMT_PDCALU, "ModelCalibration/",dataMth,"/Processing/M1_Dtd/DTDForPDCalculation/Input/");
+    GConst["IMPORTANT_MA_TABLE_FS_PATH"]=string(PMT_PDCALU, "Historical/",dataMth,"/Daily/Processing/P2_Pd/OriginalData/")
+    GConst["HIST_DAILY_DTD_AGGDATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Processing/P2_Pd/AggDTDHistDaily/")
+    GConst["HIST_DAILY_PD_INTER_DATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Processing/P2_Pd/")
+    GConst["HIST_DAILY_PD_OUTPUT_DATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Products/P2_Pd/")
+    GConst["HIST_DAILY_PD_INTER_AGGDATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Processing/P3_PdAgg/")
+    GConst["HIST_DAILY_PD_OUTPUT_AGGDATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Products/P3_PdAgg/")
+    GConst["HIST_DAILY_PD_UPLOAD_PATH_TR"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Products/P109_ThomsonReuters/")
+    GConst["HIST_DAILY_PD_OUTPUT"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Products/")
+    GConst["HIST_MONTHLY_PD_OUTPUT"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Products/")
+    GConst["HIST_MONTHLY_PD_INTER_DATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Processing/P2_Pd/")
+    GConst["HIST_MONTHLY_PD_OUTPUT_DATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Products/P2_Pd/")
+    GConst["HIST_MONTHLY_PD_INTER_AGGDATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Processing/P3_PdAgg/")
+    GConst["HIST_MONTHLY_PD_OUTPUT_AGGDATA"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Products/P3_PdAgg/")
+    GConst["HIST_MONTHLY_PD_UPLOAD_PATH_WEB"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Products/P101_WebDisplay/")
+    GConst["HIST_MONTHLY_PD_UPLOAD_PATH_TR"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Products/P109_ThomsonReuters/")
+    GConst["HIST_DAILY_ORIGINAL_BEFORE_MA_PATH_PMT"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Processing/P2_Pd/OriginalData/Before_MA/")
+    GConst["HIST_DAILY_ORIGINAL_MA_FIRMS_PATH"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Processing/P2_Pd/OriginalData/MAFirms/")
+    GConst["HIST_DAILY_ORIGINAL_AFTER_MA_PATH"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Processing/P2_Pd/OriginalData/After_MA/")
+    GConst["CALCU_COMPARE_PATH"]=string(PMT_PDCALI, "Historical/" ,dataMth, "/Validation/IndividualPD/")
     #. PMT for historical CONPD
-    GC["CONPD_PATH_PRODUCT"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Products/P4_CondiProb/")
-    GC["CONPD_DAILY_PATH_PRODUCT"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Products/P4_CondiProb/")
+    GConst["CONPD_PATH_PRODUCT"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Monthly/Products/P4_CondiProb/")
+    GConst["CONPD_DAILY_PATH_PRODUCT"]=string(PMT_PDCALU, "Historical/" ,dataMth, "/Daily/Products/P4_CondiProb/")
 
     ## for historical PDiR
-    GC["PDIR_PATH_BOUNDARY_PROCESSING"]=string(PMT_PDIR, "ModelCalibration/" ,dataMth, "/Processing/M5_Pdir/")
-    GC["PDIR_PATH_BOUNDARY_PRODUCT"]=string(PMT_PDIR, "ModelCalibration/" ,dataMth, "/Products/M5_Pdir/")
-    GC["HIST_PDIR_PATH"]=string(PMT_PDIR, "Historical/" ,dataMth, "/Daily/Products/P5_Pdir/")
+    GConst["PDIR_PATH_BOUNDARY_PROCESSING"]=string(PMT_PDIR, "ModelCalibration/" ,dataMth, "/Processing/M5_Pdir/")
+    GConst["PDIR_PATH_BOUNDARY_PRODUCT"]=string(PMT_PDIR, "ModelCalibration/" ,dataMth, "/Products/M5_Pdir/")
+    GConst["HIST_PDIR_PATH"]=string(PMT_PDIR, "Historical/" ,dataMth, "/Daily/Products/P5_Pdir/")
 
     ##. PMT for historical CVI
-    GC["HIST_CVI_PATH_PROCESSING"]=string(PMT_CVI, "Historical/" ,dataMth, "/Daily/Processing/P6_Cvi/")
-    GC["HIST_CVI_PATH_PRODUCT"]=string(PMT_CVI, "Historical/" ,dataMth, "/Daily/Products/P6_Cvi/")
-    GC["HIST_CVI_PATH_PRODUCTWEB"]=string(PMT_CVI, "Historical/" ,dataMth, "/Daily/Products/P101_WebDisplay/Cvi/")
+    GConst["HIST_CVI_PATH_PROCESSING"]=string(PMT_CVI, "Historical/" ,dataMth, "/Daily/Processing/P6_Cvi/")
+    GConst["HIST_CVI_PATH_PRODUCT"]=string(PMT_CVI, "Historical/" ,dataMth, "/Daily/Products/P6_Cvi/")
+    GConst["HIST_CVI_PATH_PRODUCTWEB"]=string(PMT_CVI, "Historical/" ,dataMth, "/Daily/Products/P101_WebDisplay/Cvi/")
 
     ## for AS path files
-    GC["CDS_RESOURCE_PATH"]=string(PMT_AS, "Historical/" ,dataMth, "/Daily/Processing/P7_As/CDS_Resource/CpnyList/")
-    GC["HIST_DAILY_AS_INTER_AGGDATA"]=string(PMT_AS, "Historical/" ,dataMth, "/Daily/Processing/P8_AsAgg/")
-    GC["HIST_DAILY_AS_OUTPUT_DATA"]=string(PMT_AS, "Historical/" ,dataMth, "/Daily/Products/P7_As/")
-    GC["HIST_DAILY_AS_OUTPUT_AGGDATA"]=string(PMT_AS, "Historical/" ,dataMth, "/Daily/Products/P8_AsAgg/")
-    GC["HIST_MONTHLY_AS_OUTPUT_DATA"]=string(PMT_AS, "Historical/" ,dataMth, "/Monthly/Products/P7_As/")
-    GC["HIST_MONTHLY_AS_INTER_AGGDATA"]=string(PMT_AS, "Historical/" ,dataMth, "/Monthly/Processing/P8_AsAgg/")
-    GC["HIST_MONTHLY_AS_OUTPUT_AGGDATA"]=string(PMT_AS, "Historical/" ,dataMth, "/Monthly/Products/P8_AsAgg/")
-    GC["HIST_MONTHLY_AS_UPLOAD_PATH_WEB"]=string(PMT_AS, "Historical/" ,dataMth, "/Monthly/Products/P101_WebDisplay/As")
-    GC["HIST_MONTHLY_AS_UPLOAD_PATH_TR"]=string(PMT_AS, "Historical/" ,dataMth, "/Monthly/Products/P109_ThomsonReuters/As")
+    GConst["CDS_RESOURCE_PATH"]=string(PMT_AS, "Historical/" ,dataMth, "/Daily/Processing/P7_As/CDS_Resource/CpnyList/")
+    GConst["HIST_DAILY_AS_INTER_AGGDATA"]=string(PMT_AS, "Historical/" ,dataMth, "/Daily/Processing/P8_AsAgg/")
+    GConst["HIST_DAILY_AS_OUTPUT_DATA"]=string(PMT_AS, "Historical/" ,dataMth, "/Daily/Products/P7_As/")
+    GConst["HIST_DAILY_AS_OUTPUT_AGGDATA"]=string(PMT_AS, "Historical/" ,dataMth, "/Daily/Products/P8_AsAgg/")
+    GConst["HIST_MONTHLY_AS_OUTPUT_DATA"]=string(PMT_AS, "Historical/" ,dataMth, "/Monthly/Products/P7_As/")
+    GConst["HIST_MONTHLY_AS_INTER_AGGDATA"]=string(PMT_AS, "Historical/" ,dataMth, "/Monthly/Processing/P8_AsAgg/")
+    GConst["HIST_MONTHLY_AS_OUTPUT_AGGDATA"]=string(PMT_AS, "Historical/" ,dataMth, "/Monthly/Products/P8_AsAgg/")
+    GConst["HIST_MONTHLY_AS_UPLOAD_PATH_WEB"]=string(PMT_AS, "Historical/" ,dataMth, "/Monthly/Products/P101_WebDisplay/As")
+    GConst["HIST_MONTHLY_AS_UPLOAD_PATH_TR"]=string(PMT_AS, "Historical/" ,dataMth, "/Monthly/Products/P109_ThomsonReuters/As")
 
     #. PMT DAILY
-    GC["DAILY_DATA_PATH_INTERMEDIATE"]=string(PMT_DAILY, "Recent/Daily/")
-    GC["DAILY_OUTPUT_PATH"]=string(PMT_DAILY, "Recent/Daily/")
+    GConst["DAILY_DATA_PATH_INTERMEDIATE"]=string(PMT_DAILY, "Recent/Daily/")
+    GConst["DAILY_OUTPUT_PATH"]=string(PMT_DAILY, "Recent/Daily/")
 
     ###################################################################################
     ##########################global groups define#######################################
     ##for write API checking csv
-    GrpAPICol=fill(NaN,(GC["MAX_ECON"], 1))
+    GrpAPICol=fill(NaN,(GConst["MAX_ECON"], 1))
     GrpAPICol[2]=3
     GrpAPICol[4]=4
     GrpAPICol[13]=5
@@ -1259,8 +1259,8 @@ function GCdef(dataDate = 20180629)
     GrpAPICol[297]=8
     # define calibratin groups' economies, calibration method, dummy variables
     # Redefined 'GROUPS' as a 1D array instead of a 2D array
-    #GROUPS = fill(NaN,(GC["MAX_ECON"], 1))
-    GROUPS = fill(NaN,(GC["MAX_ECON"], 1))
+    #GROUPS = fill(NaN,(GConst["MAX_ECON"], 1))
+    GROUPS = fill(NaN,(GConst["MAX_ECON"], 1))
     GROUPS[1]= 13
     GROUPS[2]= 2
     GROUPS[3]= 13
@@ -1403,13 +1403,13 @@ function GCdef(dataDate = 20180629)
     A = nothing
     #    CountriesDeMeanTMR = find(indexin(GROUPS, MULTI_ECON_GROUPS))' # 3mr of Countries in Asia Developed, US, and Europe need to be demeaned
 
-    NPARA_GROUP, SUBGROUP_COLS, ECON_COLS = dummy_group_npara_v011(GROUPS, MULTI_ECON_GROUPS, SUB_GROUP_DUMMYS, NUM_SUB_GROUPS, GC["NPARA_BASE"],SUB_GROUPS,ECONS_IN_GROUPS)
+    NPARA_GROUP, SUBGROUP_COLS, ECON_COLS = dummy_group_npara_v011(GROUPS, MULTI_ECON_GROUPS, SUB_GROUP_DUMMYS, NUM_SUB_GROUPS, GConst["NPARA_BASE"],SUB_GROUPS,ECONS_IN_GROUPS)
     # count number of parameters for each group and designate columns for each economy
-    # Lucy: Initialize GC.NPARA_GROUP  GC.SUBGROUP_COLS  GC.ECON_COLS
+    # Lucy: Initialize GConst.NPARA_GROUP  GConst.SUBGROUP_COLS  GConst.ECON_COLS
 
     # iso code for each country
-    ISOCODE = Array{Any}(undef, GC["MAX_ECON"],2)  ####
-    ISOCODE[1,1] = "AU"   # Australia   ##!GC.ISOCODE{1}{1} = "AU";  before, ignoring the second D
+    ISOCODE = Array{Any}(undef, GConst["MAX_ECON"],2)  ####
+    ISOCODE[1,1] = "AU"   # Australia   ##!GConst.ISOCODE{1}{1} = "AU";  before, ignoring the second D
     ISOCODE[2,1] = "CN"   # China
     ISOCODE[3,1] = "HK"  # Hong Kong
     ISOCODE[4,1] = "IN"   # India
@@ -1504,7 +1504,7 @@ function GCdef(dataDate = 20180629)
     ISOCODE[200,1] = "Euro Group"
     ISOCODE[201,1] = "East European Group"
 
-    ISO3CODE = Array{Any}(undef, GC["MAX_ECON"],1)
+    ISO3CODE = Array{Any}(undef, GConst["MAX_ECON"],1)
     ISO3CODE[1] = "AUS"
     ISO3CODE[2] = "CHN"
     ISO3CODE[3] = "HKG"
@@ -1675,7 +1675,7 @@ function GCdef(dataDate = 20180629)
     ISO3CODE[173] = "MMR"
     ISO3CODE[174] = "IRN"
 
-    EurozZoneDate =  fill(NaN,(GC["MAX_ECON"], 1))
+    EurozZoneDate =  fill(NaN,(GConst["MAX_ECON"], 1))
     EurozZoneDate[23] =  19990101  # Austria
     EurozZoneDate[25] =  19990101  # Belgium
     EurozZoneDate[31] =  20080101  # Cyprus
@@ -1706,7 +1706,7 @@ function GCdef(dataDate = 20180629)
     for i = unique(GROUPS[isfinite.(GROUPS)]')
         if i != 0
             for j = (LinearIndices(GROUPS))[findall(GROUPS.==i)]'
-                ISOCODE[j,2] = string(GC["CaliDateArray"][Int(i)])
+                ISOCODE[j,2] = string(GConst["CaliDateArray"][Int(i)])
             end
         end
     end
@@ -1715,64 +1715,64 @@ function GCdef(dataDate = 20180629)
     CovIdxOfCtry = Array{Any}(undef, 297)
     #2
     TimeVariant = [1 4]
-    TimeInvariant = setdiff(1: GC["NPARA_BASE"], TimeVariant)
-    CovIdxOfCtry[2] = Dict("NoOfCovariates"=>GC["NPARA_BASE"],"TimeVariant"=>TimeVariant,"TimeInvariates"=>TimeInvariant,
+    TimeInvariant = setdiff(1: GConst["NPARA_BASE"], TimeVariant)
+    CovIdxOfCtry[2] = Dict("NoOfCovariates"=>GConst["NPARA_BASE"],"TimeVariant"=>TimeVariant,"TimeInvariates"=>TimeInvariant,
                            "FirstMonth"=>198801,"HistMonth4Cut"=>204,"isOldStepResponse"=>0,"isNewStepResponse" =>1,"isImpulseResponse"=>0,"SBmethod"=>2) # step response with different rates before/after t0
 
     #297
     TimeVariant = [18]
-    TimeInvariant = setdiff(1: GC["NPARA_BASE"], TimeVariant)
-    CovIdxOfCtry[297] = Dict("NoOfCovariates"=>GC["NPARA_BASE"],"TimeVariant"=>TimeVariant,"TimeInvariates"=>TimeInvariant,
+    TimeInvariant = setdiff(1: GConst["NPARA_BASE"], TimeVariant)
+    CovIdxOfCtry[297] = Dict("NoOfCovariates"=>GConst["NPARA_BASE"],"TimeVariant"=>TimeVariant,"TimeInvariates"=>TimeInvariant,
                              "FirstMonth"=>198801,"HistMonth4Cut"=>249,"isOldStepResponse"=>0,"isNewStepResponse" =>0,"isImpulseResponse"=>1,"SBmethod"=>3) # # impulse response
 
     TimeVariantOfPara_COUNTRY = [2, 297]
     TimeVariantStartPoint =  12 # start computation after 6 months from break point
-    GC["GROUPS"] = GROUPS
-    GC["MULTI_ECON_GROUPS"] = MULTI_ECON_GROUPS
-    GC["NUM_SUB_GROUPS"] = NUM_SUB_GROUPS
-    GC["CountriesDeMeanTMR"] = CountriesDeMeanTMR
-    GC["ECONS_IN_GROUPS"] = ECONS_IN_GROUPS
-    GC["SUB_GROUPS"] = SUB_GROUPS
-    GC["SUB_GROUP_DUMMYS"] = SUB_GROUP_DUMMYS
-    GC["NPARA_GROUP"] = NPARA_GROUP
-    GC["SUBGROUP_COLS"] = SUBGROUP_COLS
-    GC["ECON_COLS"] = ECON_COLS
-    GC["ISOCODE"] = ISOCODE
-    GC["ISO3CODE"] = ISO3CODE
-    GC["EurozZoneDate"] = EurozZoneDate
-    GC["CovIdxOfCtry"] = CovIdxOfCtry
-    GC["TimeVariantOfPara_COUNTRY"] = TimeVariantOfPara_COUNTRY
-    GC["TimeVariantStartPoint"] = TimeVariantStartPoint
-    GC["GrpAPICol"]=GrpAPICol;
+    GConst["GROUPS"] = GROUPS
+    GConst["MULTI_ECON_GROUPS"] = MULTI_ECON_GROUPS
+    GConst["NUM_SUB_GROUPS"] = NUM_SUB_GROUPS
+    GConst["CountriesDeMeanTMR"] = CountriesDeMeanTMR
+    GConst["ECONS_IN_GROUPS"] = ECONS_IN_GROUPS
+    GConst["SUB_GROUPS"] = SUB_GROUPS
+    GConst["SUB_GROUP_DUMMYS"] = SUB_GROUP_DUMMYS
+    GConst["NPARA_GROUP"] = NPARA_GROUP
+    GConst["SUBGROUP_COLS"] = SUBGROUP_COLS
+    GConst["ECON_COLS"] = ECON_COLS
+    GConst["ISOCODE"] = ISOCODE
+    GConst["ISO3CODE"] = ISO3CODE
+    GConst["EurozZoneDate"] = EurozZoneDate
+    GConst["CovIdxOfCtry"] = CovIdxOfCtry
+    GConst["TimeVariantOfPara_COUNTRY"] = TimeVariantOfPara_COUNTRY
+    GConst["TimeVariantStartPoint"] = TimeVariantStartPoint
+    GConst["GrpAPICol"]=GrpAPICol;
     ######################################################################
     ####################global regions define##############################
     # economies within each region in the daily updating
-    GC["ECONSREGION"]=Array{Any}(undef, 4);
-    GC["ECONSREGION"][1] = [(1:12)' (17:20)' 22]' #Australia, China, Hong Kong India, Indonesia, Japan, Malaysia, Philippines, Singapore, South Korea, Taiwan, Thailand, New Zealand, Vietnam
-    GC["ECONSREGION"][2] = [15,16] # US, Canada
-    GC["ECONSREGION"][3] = [26 60 75 84 23 24 25 31 33 34 35 36 37 38 40 43 (45:49)' 51 55 56 58 61 64 65 66 67 70 71 73 74 76 77 78 79 81 82 88 89 29 30 32 42 52 54 69 72 85 87 59 27 39 50 57 63 83 86 163]'
-    GC["ECONSREGION"][4] = [92,95,96,97,100,102,103,107]
+    GConst["ECONSREGION"]=Array{Any}(undef, 4);
+    GConst["ECONSREGION"][1] = [(1:12)' (17:20)' 22]' #Australia, China, Hong Kong India, Indonesia, Japan, Malaysia, Philippines, Singapore, South Korea, Taiwan, Thailand, New Zealand, Vietnam
+    GConst["ECONSREGION"][2] = [15,16] # US, Canada
+    GConst["ECONSREGION"][3] = [26 60 75 84 23 24 25 31 33 34 35 36 37 38 40 43 (45:49)' 51 55 56 58 61 64 65 66 67 70 71 73 74 76 77 78 79 81 82 88 89 29 30 32 42 52 54 69 72 85 87 59 27 39 50 57 63 83 86 163]'
+    GConst["ECONSREGION"][4] = [92,95,96,97,100,102,103,107]
     # region's name in the daily updating
-    GC["REGIONS"]=Array{Any}(undef, 4)
-    GC["REGIONS"][1] = "ASIAN"
-    GC["REGIONS"][2] = "NORTH AMERICAN"
-    GC["REGIONS"][3] = "EUROPEAN"
-    GC["REGIONS"][4] = "LATIN AMERICAN"
+    GConst["REGIONS"]=Array{Any}(undef, 4)
+    GConst["REGIONS"][1] = "ASIAN"
+    GConst["REGIONS"][2] = "NORTH AMERICAN"
+    GConst["REGIONS"][3] = "EUROPEAN"
+    GConst["REGIONS"][4] = "LATIN AMERICAN"
     # global aggregation group id
-    GC["GLOBALCODE"]=Array{Any}(undef, 1)
-    GC["GLOBALCODE"][1] = 99
+    GConst["GLOBALCODE"]=Array{Any}(undef, 1)
+    GConst["GLOBALCODE"][1] = 99
 
-    GC["REGIONLIST"] = Array{Any}(undef, 4)
-    GC["REGIONLIST"][1] = ["RMI5000_ASIA"]
-    GC["REGIONLIST"][2] = ["RMI5000_NAMR"]
-    GC["REGIONLIST"][3] = ["RMI5000_EURO"]
-    GC["REGIONLIST"][4] = ["RMI5000_LAMR"]
+    GConst["REGIONLIST"] = Array{Any}(undef, 4)
+    GConst["REGIONLIST"][1] = ["RMI5000_ASIA"]
+    GConst["REGIONLIST"][2] = ["RMI5000_NAMR"]
+    GConst["REGIONLIST"][3] = ["RMI5000_EURO"]
+    GConst["REGIONLIST"][4] = ["RMI5000_LAMR"]
 
-    GC["REGIONTIMEZONE"] = Array{Any}(undef, 4)
-    GC["REGIONTIMEZONE"][1] = "Tokyo"
-    GC["REGIONTIMEZONE"][2] = "New York"
-    GC["REGIONTIMEZONE"][3] = "London"
-    GC["REGIONTIMEZONE"][4] = "New York"
+    GConst["REGIONTIMEZONE"] = Array{Any}(undef, 4)
+    GConst["REGIONTIMEZONE"][1] = "Tokyo"
+    GConst["REGIONTIMEZONE"][2] = "New York"
+    GConst["REGIONTIMEZONE"][3] = "London"
+    GConst["REGIONTIMEZONE"][4] = "New York"
 
     #= EQY_CONSOLIDATED
 
@@ -1787,88 +1787,88 @@ function GCdef(dataDate = 20180629)
     more frequently than consolidated ones, so these are given higher priority.}
 
     =#
-    GC["EQY_CONSOLIDATED"] = [4 6 10 11 73 95]
+    GConst["EQY_CONSOLIDATED"] = [4 6 10 11 73 95]
 
-    GC["REGIONCONSOLIDATED"] = Array{Any}(undef, 4)
-    GC["REGIONCONSOLIDATED"][1] = [1; 0]
-    GC["REGIONCONSOLIDATED"][2] = [1; 0]
-    GC["REGIONCONSOLIDATED"][3] = [1; 0]
-    GC["REGIONCONSOLIDATED"][4] = [1; 0]
+    GConst["REGIONCONSOLIDATED"] = Array{Any}(undef, 4)
+    GConst["REGIONCONSOLIDATED"][1] = [1; 0]
+    GConst["REGIONCONSOLIDATED"][2] = [1; 0]
+    GConst["REGIONCONSOLIDATED"][3] = [1; 0]
+    GConst["REGIONCONSOLIDATED"][4] = [1; 0]
 
-    GC["REGION_CONSOLIDATED_PRIORITY"] = Array{Any}(undef, 4)
-    GC["REGION_CONSOLIDATED_PRIORITY"][1] = "DESC"
-    GC["REGION_CONSOLIDATED_PRIORITY"][2] = "ASC"
-    GC["REGION_CONSOLIDATED_PRIORITY"][3] = "ASC"
-    GC["REGION_CONSOLIDATED_PRIORITY"][4] = "ASC"
+    GConst["REGION_CONSOLIDATED_PRIORITY"] = Array{Any}(undef, 4)
+    GConst["REGION_CONSOLIDATED_PRIORITY"][1] = "DESC"
+    GConst["REGION_CONSOLIDATED_PRIORITY"][2] = "ASC"
+    GConst["REGION_CONSOLIDATED_PRIORITY"][3] = "ASC"
+    GConst["REGION_CONSOLIDATED_PRIORITY"][4] = "ASC"
 
     # aggregation group id and economy list for each aggregate group id
-    GC["AGGREGATION_GROUP"]=Array{Any}(undef, 7)
-    GC["AGGREGATION_GROUP"][1] = [1, 3, 6, 9, 10, 11, 17] # Asia Pacific (Developed)
-    GC["AGGREGATION_GROUP"][2] = [2, 4, 5, 7, 8, 12, 18, 19, 20, 22, 132, 136, 138, 150, 152,173] # Asia Pacific (Emerging)
-    GC["AGGREGATION_GROUP"][3] = [15, 16, 112, 168] # North America
-    GC["AGGREGATION_GROUP"][4] = [23, 25, 26, 29, 30, 31, 32, 33, 35, 36, 37, 38, 40, 41, 42, 43, 45, 47, 52, 54, 55, 56, 58, 60, 64, 66, 69, 70,
+    GConst["AGGREGATION_GROUP"]=Array{Any}(undef, 7)
+    GConst["AGGREGATION_GROUP"][1] = [1, 3, 6, 9, 10, 11, 17] # Asia Pacific (Developed)
+    GConst["AGGREGATION_GROUP"][2] = [2, 4, 5, 7, 8, 12, 18, 19, 20, 22, 132, 136, 138, 150, 152,173] # Asia Pacific (Emerging)
+    GConst["AGGREGATION_GROUP"][3] = [15, 16, 112, 168] # North America
+    GConst["AGGREGATION_GROUP"][4] = [23, 25, 26, 29, 30, 31, 32, 33, 35, 36, 37, 38, 40, 41, 42, 43, 45, 47, 52, 54, 55, 56, 58, 60, 64, 66, 69, 70,
                                   72, 73, 75, 76, 77, 79, 81, 82, 85, 87, 89, 117, 126, 129, 130, 131, 133, 134, 140, 165, 162] # Europe
-    GC["AGGREGATION_GROUP"][5] = [92, 94, 95, 96, 97, 100, 101, 102, 103, 104, 106, 107, 108, 120, 123, 124, 125, 139, 149, 146, 98] # Latin America & Caribbean
-    GC["AGGREGATION_GROUP"][6] = [27, 39, 50, 57, 59, 62, 63, 65, 78, 83, 86, 90, 116, 127, 137, 141, 143, 147, 156, 163, 167] # Sub-Saharan Africa
-    GC["AGGREGATION_GROUP"][7] = [24, 34, 44, 46, 48, 49, 51, 61, 67, 71, 74, 84, 88] # Middle East, North Africa & Central Asia
+    GConst["AGGREGATION_GROUP"][5] = [92, 94, 95, 96, 97, 100, 101, 102, 103, 104, 106, 107, 108, 120, 123, 124, 125, 139, 149, 146, 98] # Latin America & Caribbean
+    GConst["AGGREGATION_GROUP"][6] = [27, 39, 50, 57, 59, 62, 63, 65, 78, 83, 86, 90, 116, 127, 137, 141, 143, 147, 156, 163, 167] # Sub-Saharan Africa
+    GConst["AGGREGATION_GROUP"][7] = [24, 34, 44, 46, 48, 49, 51, 61, 67, 71, 74, 84, 88] # Middle East, North Africa & Central Asia
 
     # aggregation Sub-group id and economy list for each aggregate Sub-group id
-    GC["AGGREGATION_SUBGROUP"]=Array{Any}(undef, 7)
-    GC["AGGREGATION_SUBGROUP"][1] = [23, 25, 31, 35, 36, 37, 38, 40, 45, 47, 52, 54, 55, 58, 64, 70, 76, 77, 79] # Eurozone
-    GC["AGGREGATION_SUBGROUP"][2] = [26, 29, 30, 32, 33, 41, 42, 43, 56, 60, 66, 69, 72, 73, 75, 81, 82, 85, 87, 89, 117, 126, 129, 130, 131, 133, 134, 140, 165, 162] # Non-Eurozone
-    GC["AGGREGATION_SUBGROUP"][3] = [92, 95, 96, 97, 102, 103, 104, 106, 107, 120, 125, 98] # Latin America
-    GC["AGGREGATION_SUBGROUP"][4] = [94, 100, 101, 108, 123, 124, 139, 149, 146] # Caribbean
-    GC["AGGREGATION_SUBGROUP"][5] = [24, 34, 44, 46, 48, 51, 67, 71, 74, 88] # Middle East
-    GC["AGGREGATION_SUBGROUP"][6] = [61, 84] # North Africa
-    GC["AGGREGATION_SUBGROUP"][7] = [49] # Central Asia
+    GConst["AGGREGATION_SUBGROUP"]=Array{Any}(undef, 7)
+    GConst["AGGREGATION_SUBGROUP"][1] = [23, 25, 31, 35, 36, 37, 38, 40, 45, 47, 52, 54, 55, 58, 64, 70, 76, 77, 79] # Eurozone
+    GConst["AGGREGATION_SUBGROUP"][2] = [26, 29, 30, 32, 33, 41, 42, 43, 56, 60, 66, 69, 72, 73, 75, 81, 82, 85, 87, 89, 117, 126, 129, 130, 131, 133, 134, 140, 165, 162] # Non-Eurozone
+    GConst["AGGREGATION_SUBGROUP"][3] = [92, 95, 96, 97, 102, 103, 104, 106, 107, 120, 125, 98] # Latin America
+    GConst["AGGREGATION_SUBGROUP"][4] = [94, 100, 101, 108, 123, 124, 139, 149, 146] # Caribbean
+    GConst["AGGREGATION_SUBGROUP"][5] = [24, 34, 44, 46, 48, 51, 67, 71, 74, 88] # Middle East
+    GConst["AGGREGATION_SUBGROUP"][6] = [61, 84] # North Africa
+    GConst["AGGREGATION_SUBGROUP"][7] = [49] # Central Asia
 
     # groups
-    GC["AGGREGATION_GROUP_CODE"]=Array{Any}(undef, 7)
-    GC["AGGREGATION_GROUP_CODE"][1]  = 501
-    GC["AGGREGATION_GROUP_CODE"][2]  = 502
-    GC["AGGREGATION_GROUP_CODE"][3]  = 503
-    GC["AGGREGATION_GROUP_CODE"][4]  = 504
-    GC["AGGREGATION_GROUP_CODE"][5]  = 505
-    GC["AGGREGATION_GROUP_CODE"][6]  = 506
-    GC["AGGREGATION_GROUP_CODE"][7]  = 507
+    GConst["AGGREGATION_GROUP_CODE"]=Array{Any}(undef, 7)
+    GConst["AGGREGATION_GROUP_CODE"][1]  = 501
+    GConst["AGGREGATION_GROUP_CODE"][2]  = 502
+    GConst["AGGREGATION_GROUP_CODE"][3]  = 503
+    GConst["AGGREGATION_GROUP_CODE"][4]  = 504
+    GConst["AGGREGATION_GROUP_CODE"][5]  = 505
+    GConst["AGGREGATION_GROUP_CODE"][6]  = 506
+    GConst["AGGREGATION_GROUP_CODE"][7]  = 507
 
     # subgroups
-    GC["AGGREGATION_SUBGROUP_CODE"]=Array{Any}(undef, 7)
-    GC["AGGREGATION_SUBGROUP_CODE"][1] = 541
-    GC["AGGREGATION_SUBGROUP_CODE"][2] = 542
-    GC["AGGREGATION_SUBGROUP_CODE"][3] = 551
-    GC["AGGREGATION_SUBGROUP_CODE"][4] = 552
-    GC["AGGREGATION_SUBGROUP_CODE"][5] = 571
-    GC["AGGREGATION_SUBGROUP_CODE"][6] = 572
-    GC["AGGREGATION_SUBGROUP_CODE"][7] = 573
+    GConst["AGGREGATION_SUBGROUP_CODE"]=Array{Any}(undef, 7)
+    GConst["AGGREGATION_SUBGROUP_CODE"][1] = 541
+    GConst["AGGREGATION_SUBGROUP_CODE"][2] = 542
+    GConst["AGGREGATION_SUBGROUP_CODE"][3] = 551
+    GConst["AGGREGATION_SUBGROUP_CODE"][4] = 552
+    GConst["AGGREGATION_SUBGROUP_CODE"][5] = 571
+    GConst["AGGREGATION_SUBGROUP_CODE"][6] = 572
+    GConst["AGGREGATION_SUBGROUP_CODE"][7] = 573
 
-    GC["DTD_REGION_GROUP"]=Array{Any}(undef, 4)
-    GC["DTD_REGION_GROUP"][1] = [2,4,13,14]
-    GC["DTD_REGION_GROUP"][2] = [297]
-    GC["DTD_REGION_GROUP"][3] = [14,200]
-    GC["DTD_REGION_GROUP"][4] = [14]
+    GConst["DTD_REGION_GROUP"]=Array{Any}(undef, 4)
+    GConst["DTD_REGION_GROUP"][1] = [2,4,13,14]
+    GConst["DTD_REGION_GROUP"][2] = [297]
+    GConst["DTD_REGION_GROUP"][3] = [14,200]
+    GConst["DTD_REGION_GROUP"][4] = [14]
 
 
-    GC["MinFirmForEconDtdMedian"] = 30   ## minimum amount of firms in econ to using econ Agg DTD instead of group Agg DTD
+    GConst["MinFirmForEconDtdMedian"] = 30   ## minimum amount of firms in econ to using econ Agg DTD instead of group Agg DTD
     ## define the DB numerations of variables
-    GC = global_numer_definition_current(GC)
+    GConst = global_numer_definition_current(GConst)
 
     ## define the paths
-    ## global_paths_definition_current(GC["PATH_PREFIX"], dataMth)
+    ## global_paths_definition_current(GConst["PATH_PREFIX"], dataMth)
 
     ## definitions associated to economies (including macro variable source)
     ## global_economies_definition_current()
 
     ## definitions associated to regions
-    ## GC = global_regions_definition_current()
+    ## GConst = global_regions_definition_current()
 
     ## definitions associated to groups
     ## global_groups_definition_current()
 
     ## Extra global constants
-    GC = global_constants_extra(GC, dataDate)
+    GConst = global_constants_extra(GConst, dataDate)
 
-    return GC
+    return GConst
 end
 
 

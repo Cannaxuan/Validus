@@ -1,6 +1,6 @@
 
 function get_country_PD_forward(countryCode, dataEndMth, folders, nHorizon = 60)
-     # countryCode, nHorizon = iSmeEconCode, 60
+     # countryCode, dataEndMth, folders, nHorizon = iEcon, dataEndMth, folders, 60
 
      ## This function is to extract the (cumulative) probability of survival (PS) for a specified economy/country.
      ## [Only valid if the calibrationDate >= 20130607.
@@ -35,7 +35,7 @@ function get_country_PD_forward(countryCode, dataEndMth, folders, nHorizon = 60)
      end
 
      firmspecific = firmSpecific_final[:, 4:end, :]
-     # firmList_withCompNum = nothing ;  firmSpecific_final = nothing
+     firmList_withCompNum = nothing ;  firmSpecific_final = nothing
 
      if countryCode == 2 || countryCode == 15 || countryCode == 16  ## get Structure Break Econ's forwrd PD
          ## Load Structure Break Econ's Parameter
@@ -46,6 +46,7 @@ function get_country_PD_forward(countryCode, dataEndMth, folders, nHorizon = 60)
          HorzinByCovByTime = matread(path*SBPara[1])
          DefBeta_HorzinByCovByTime = HorzinByCovByTime["DefBeta_HorzinByCovByTime"]
          OthBeta_HorzinByCovByTime = HorzinByCovByTime["OthBeta_HorzinByCovByTime"]
+         HorzinByCovByTime = nothing
          ## Pre-check: the months amount of firmlist firmmonth & firmspecific should be exactly the same
          ## DefBeta_HorzinByCovByTime
          ## OthBeta_HorzinByCovByTime
@@ -66,8 +67,7 @@ function get_country_PD_forward(countryCode, dataEndMth, folders, nHorizon = 60)
                  paraOther = paraOther[setdiff(1:end, 18), :]
              end
              temp_PD_all_forward = cal_country_PD_forward(tempfirmspecific, paraDef, paraOther, nHorizon)[1]
-             PD_all_forward = isempty(PD_all_forward) ? temp_PD_all_forward :
-                                      cat(PD_all_forward, temp_PD_all_forward, dims = 3)
+             PD_all_forward = isempty(PD_all_forward) ? temp_PD_all_forward : cat(PD_all_forward, temp_PD_all_forward, dims = 3)
          end
      else  ## get Econ's forwrd PD without Structure Break
          paraDef, paraOther = get_country_param(countryCode, dataMthToLoad, sourceFolder)
@@ -75,15 +75,19 @@ function get_country_PD_forward(countryCode, dataEndMth, folders, nHorizon = 60)
          paraOther[3, :] = paraOther[3, :]/100   ## for 3m-interest rate
 
          nObs, nVar, nFirm = size(firmspecific)
-         firmspecific = permutedims(firmspecific, [2, 3, 1])
-         firmspecific = deepcopy(reshape(firmspecific, (nVar, nFirm*nObs)))
+         # firmspecific = permutedims(firmspecific, [2, 3, 1])
+         firmspecific = PermutedDimsArray(firmspecific, [2, 3, 1])
+         # firmspecific = deepcopy(reshape(firmspecific, (nVar, nFirm*nObs)))
+         firmspecific = reshape(firmspecific, (nVar, nFirm*nObs))
 
          ## Calculate the cumulative probabilities of default and other exit
          PD_all_forward = cal_country_PD_forward(firmspecific, paraDef, paraOther, nHorizon)[1]
-         PD_all_forward = deepcopy(reshape(PD_all_forward, (:, nFirm, nObs)))
+         # PD_all_forward = deepcopy(reshape(PD_all_forward, (:, nFirm, nObs)))
+         PD_all_forward = reshape(PD_all_forward, (:, nFirm, nObs))
      end
      ## Combine the firm codes and the date to the cumulative PD and POE
-     PD_all_forward = permutedims(PD_all_forward, [3, 1, 2])
+     # PD_all_forward = permutedims(PD_all_forward, [3, 1, 2])
+     PD_all_forward = PermutedDimsArray(PD_all_forward, [3, 1, 2])
      PD_all_forward = cat(firmMonth, PD_all_forward, dims=2)
 
      ## save jld files

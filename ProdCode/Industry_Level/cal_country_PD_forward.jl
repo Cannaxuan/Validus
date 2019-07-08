@@ -12,9 +12,9 @@ function cal_country_PD_forward(firmFS, paraDef, paraOther, nHorizon = size(para
     ## OUTPUT: cumPD      :    nhorizon * nObs matrix, culmulative probability of default
     ##         cumPOE     :    nhorizon * nObs matrix, culmulative probability of other exit
     ##         PS         :    nhorizon * nObs matrix, probability of survival
-    firmFS = deepcopy(firmFS)
-    paraDef = deepcopy(paraDef)
-    paraOther = deepcopy(paraOther)
+    # firmFS = deepcopy(firmFS)
+    # paraDef = deepcopy(paraDef)
+    # paraOther = deepcopy(paraOther)
     delta = 1/12
 
     paraDef = paraDef[:, 1:nHorizon]

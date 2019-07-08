@@ -1,10 +1,11 @@
 function generate_factors(EconCodes, dataEndMth, options, folders)
+    # EconCodes, dataEndMth, options, folders = globalEconCodes, dataEndMth, options, PathStruct
      #### This function is to generate the main and common factors of the transformed data matrix.
-     start=time()
+     start = time()
      industryCodes = options["industryCodes"]
      facThresMths = 60  ## The firms with PD less than or equal to [thresMths] months will be removed
-     if haskey(options,"facThresMths")
-         facThresMths=options["facThresMths"]
+     if haskey(options, "facThresMths")
+         facThresMths = options["facThresMths"]
      end
      qtIndustryFac = options["qtIndustryFac"]  ## The quantile for extracting the industry factors
 
@@ -12,7 +13,7 @@ function generate_factors(EconCodes, dataEndMth, options, folders)
      ## if ~loadFacSuccess
      println('\n' * "@ Generate factors ...")
      ## Load the full PD data up to [dataEndMth] (Genetate the PDPOE data if it does not exist)
-     PDFileName = "PD_forward.mat"
+     PDFileName = "PD_forward.jld"
      dataMtrxPD, dateVctr, firmInfo = load_data_PD(folders, PDFileName, EconCodes, dataEndMth)
      dataMtrxPD, dateVctr = cust_data(dataMtrxPD, dataEndMth, options["startMth"], dateVctr)
 
@@ -27,7 +28,8 @@ function generate_factors(EconCodes, dataEndMth, options, folders)
      dataMtrxPD[dataMtrxPD .> (1 - eps(Float64))] .= (1 - eps(Float64))
 
      ## Transform the PD matrice from domain [0,1] to the whole set of real numbers
-     transDataMtrxPD = trans_func(dataMtrxPD)
+     # transDataMtrxPD = trans_func(dataMtrxPD)
+     transdataMtrx = @. log(-log(1 - dataMtrx))
 
      ##  Generate the global industry PD factors
      println("1) Extract the global industry factors ...")

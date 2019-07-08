@@ -1,7 +1,7 @@
 function get_individual_first_use_time(timePerValue, dateEnd)
     # timePerValue, dateEnd =
     # financialStatement[:,[FinancialStatement["Period_End"], FinancialStatement["Time_Release"],
-    #                       FinancialStatement["Time_Available_CRI"]]], GC["PERIOD_END"]
+    #                       FinancialStatement["Time_Available_CRI"]]], GConst["PERIOD_END"]
 #=
     This function picks the first time we can use a particular financial data given three kinds of date.
     timePerValue:

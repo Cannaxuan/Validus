@@ -10,12 +10,12 @@ function validus_path_define(dataMonth, smeEcon = [1 3 9 10])
     PathStruct = Dict()
     PathStruct["Official"] = raw"\\dirac\cri3\OfficialTest_AggDTD_SBChinaNA\Production"
     PathStruct["PrePath"] = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\Prod"  ## SME Toolbox Production Code Prefix
-    global GC
-    GC = GCdef()
+    global GConst
+    GConst = GConstdef()
 
-    PathStruct["GROUPS"] = GC["GROUPS"][:]
-    PathStruct["DATE_START_DATA"] =  GC["DATE_START_DATA"]
-    PathStruct["ECONSREGION"] = GC["ECONSREGION"]
+    PathStruct["GROUPS"] = GConst["GROUPS"][:]
+    PathStruct["DATE_START_DATA"] =  GConst["DATE_START_DATA"]
+    PathStruct["ECONSREGION"] = GConst["ECONSREGION"]
 
     strSmeEconCodes = join(smeEcon, "_")
     PathStruct["Firm_Code"] = PathStruct["PrePath"]*"Code\\Firm_Level\\"   ## For firm Step3

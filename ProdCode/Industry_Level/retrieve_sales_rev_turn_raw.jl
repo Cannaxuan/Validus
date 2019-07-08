@@ -1,6 +1,6 @@
 function retrieve_sales_rev_turn_raw(iEcon, dateStart, dateEnd, turnOverFolder, CleanDataFolder)
     # dateEnd = dataEndDate
-     global GC
+     global GConst
      temp =
      try
          Companyinformation = matread(turnOverFolder*"CompanyInformation_"*string(iEcon)*".mat")
@@ -46,7 +46,7 @@ function retrieve_sales_rev_turn_raw(iEcon, dateStart, dateEnd, turnOverFolder, 
      ##  Convert the currency ID to FX ID.
      currency = unique(financialStatement[:, FinancialStatement["Currency"]])
      currency = currency[.!isnan.(currency)]
-     fxID = convert_currencyID_to_FXID(currency, GC["REGION_OF_ECON"][iEcon])
+     fxID = convert_currencyID_to_FXID(currency, GConst["REGION_OF_ECON"][iEcon])
      isIn = in.(financialStatement[:,FinancialStatement["Currency"]], [fxID[:,1]])
      idx = indexin(financialStatement[:,FinancialStatement["Currency"]], fxID[:,1])
      financialStatement[isIn, FinancialStatement["Currency"]] = fxID[idx[idx .!= nothing], 2]
@@ -63,7 +63,7 @@ function retrieve_sales_rev_turn_raw(iEcon, dateStart, dateEnd, turnOverFolder, 
      ## Get 1st time use
      ## Revised  @20160919, add one more input for this function
      firstTimeUse = get_individual_first_use_time(financialStatement[:,[FinancialStatement["Period_End"], FinancialStatement["Time_Release"],
-                                                                       FinancialStatement["Time_Available_CRI"]]], GC["PERIOD_END"])
+                                                                       FinancialStatement["Time_Available_CRI"]]], GConst["PERIOD_END"])
      ## Convert BBGID to U3 company number
      BBGID = financialStatement[:, FinancialStatement["BBG_ID"]]
      Lia = in.(BBGID, [companyInformation[:, Int64(CompanyInformation["BBG_ID"])]])

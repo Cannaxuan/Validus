@@ -10,7 +10,7 @@ function get_country_param(countryCode, dataMthToLoad,sourceFolder)
     caliFiles = searchdir(loadPath,key)[1]
 
     ## Load the calibration parameters
-    paraTemp = CSV.read(loadPath*caliFiles,header = collect(1:18), datarow=3)
+    paraTemp = CSV.read(loadPath*caliFiles, header = collect(1:18), datarow = 3)
 
     ## New Methodology 12/03/2018 (Agg DTDMedian)
     ## convert Dataframe to Array

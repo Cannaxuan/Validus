@@ -17,7 +17,7 @@ function main_Validus(dataEndDate, PathStruct, smeEcon = [1 3 9 10])
      options["startMth"] = 199601
      loadFacs = true     ## Whether to load the existing global and industry factors
      loadSMEInfo = true  ## whether to load the existing portfolio's data set
-     dataEndMth = floor(Int, dataEndDate/100)
+     dataEndMth = fld(dataEndDate, 100)
 
      ## Generate the global, regional and other common factors
      println('\n' * "======================= Default Correlation Modelling =======================")
@@ -30,13 +30,13 @@ function main_Validus(dataEndDate, PathStruct, smeEcon = [1 3 9 10])
      #### Step1: Load/Generate factors
      #### ----------------------------------------------------------------------
      print("Generate the factors of (transformed) PDs up to $dataEndMth ...")
-     if loadFacs && isfile(PathStruct["Industry_Factor"]*"fac.mat")
-         facs = matread(PathStruct["Industry_Factor"]*"fac.mat")["facs"]
+     if loadFacs && isfile(PathStruct["Industry_Factor"]*"fac.jld")
+         facs = load(PathStruct["Industry_Factor"]*"fac.jld")["facs"]
          dateVctr = facs["dateVctr"]
          industryFacsPD = facs["industryFacsPD"]
      else
          facs = generate_factors(globalEconCodes, dataEndMth, options, PathStruct)
-         matwrite(PathStruct["Industry_Factor"]*"fac.mat", facs)
+         save(PathStruct["Industry_Factor"]*"fac.jld", "facs", facs)
      end
      #### ----------------------------------------------------------------------
      #### Step2: Load/Generate SME portfolio information

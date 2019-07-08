@@ -3,14 +3,14 @@ function retrieve_financial_statement_raw(BBG_ID, dateStart, dateEnd, fsFieldID)
     ## This function retrieves the raw data of financial statements including entries and field values from SQL.
 
     ## Pre Retrieval
-    global GC
+    global GConst
 
-    numberEntry = length(GC["FS_ENTRY"])
+    numberEntry = length(GConst["FS_ENTRY"])
     FinancialStatement_v = Dict()
 
     ## Get the financial statement field names.
     for i = 1:numberEntry
-        FinancialStatement_v[GC["FS_ENTRY"][i]] = i
+        FinancialStatement_v[GConst["FS_ENTRY"][i]] = i
     end
 
     sql = "SELECT Field_Mnemonic FROM [Tier2].[REF].BBG_FIELD_DEFINITION WHERE ID IN ('$fsFieldID')"

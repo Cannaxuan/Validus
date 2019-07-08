@@ -5,7 +5,7 @@ function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
      ## 1-D months; 2-D col1:company number, col2: filed update date, col3: field value; 3-D firms
 
      #### Construct the data
-     dataEndMth = floor(Int, dataEndDate/100)
+     dataEndMth = fld(dataEndDate, 100)
      dataMthToLoad =  date_yyyymm_add(dataEndMth, 1)
      firmList_withCompNum = matread(folders["Firm_Specific"]*"firmList_withCompNum_"*string(iEcon)*".mat")["firmList_withCompNum"]
      firmMonth = matread(folders["FinalData"]*"firmMonth_"*string(iEcon)*".mat")["firmMonth"]
@@ -28,12 +28,12 @@ function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
      dataFlatMth = fill(NaN, (nMonths + 12, 4, nFirms))
      start = time()
      for iFirm = 1:nFirms
-         compNum = floor(Int, firmlist[iFirm, 1]/1000)
+         compNum = fld(firmlist[iFirm, 1], 1000)
          tempDataFlat = dataFlat[dataFlat[:,1] .== compNum,:]
          if sum(isnan.(tempDataFlat)) != 0
              tempDataFlat = tempDataFlat[vec(sum(isnan.(tempDataFlat), dims = 2) .== 0),:]
          end
-         tempDataFlat = cat(tempDataFlat, floor.(Int, tempDataFlat[:, colUpdateDate]/10000), dims = 2)
+         tempDataFlat = cat(tempDataFlat, fld.(tempDataFlat[:, colUpdateDate], 10000), dims = 2)
          uniqueYear = unique(tempDataFlat[:,colUpdateYear])
          tempYearData = fill(NaN, (length(uniqueYear),1))
 

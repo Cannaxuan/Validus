@@ -1,11 +1,12 @@
 function  load_data_PD(folders, loadName, econCodesInput, dataEndMth)
+    # folders, loadName, econCodesInput, dataEndMth = folders, PDFileName, EconCodes, dataEndMth
      ## This function is to load the full data matrices of PD if it exists.
-     fileidx = findfirst(".mat", loadName)
+     fileidx = findfirst(".jld", loadName)
      fileName = loadName[1:fileidx[1]-1]
      loadFolder = folders["forwardPDFolder"]
      if isfile(loadFolder*loadName)
          println('\n' * " # Load the existing data of PD for the global economies ...")
-         ForwardPD = matread(loadFolder*loadName)
+         ForwardPD = load(loadFolder*loadName)
          dataMtrxPD = ForwardPD["dataMtrxPD"]
          dateVctr = ForwardPD["dateVctr"]
          econCodes = ForwardPD["econCodes"]
@@ -27,8 +28,10 @@ function  load_data_PD(folders, loadName, econCodesInput, dataEndMth)
          if ~isdir(loadFolder)
              mkdir(loadFolder)
          end
-         dataMtrxPD = permutedims(dataMtrxPD, [1,3,2])
-         ## save jld files
+         # dataMtrxPD = permutedims(dataMtrxPD, [1,3,2])
+         dataMtrxPD = PermutedDimsArray(dataMtrxPD, [1, 3, 2])
+
+         ## save PD_forward.jld files
          save(loadFolder*fileName*".jld",
          "dataMtrxPD", dataMtrxPD, "dateVctr", dateVctr,"firmInfo", firmInfo, "econCodes", econCodes, compress = true)
      end

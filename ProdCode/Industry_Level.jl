@@ -42,11 +42,11 @@ function Industry_Level(DataDate, smeEcon = [1 3 9 10])
      ## by Yao Xuan 20190531
  =#
      ## Add Paths
-     # DataDate = 20190430
+     # DataDate = 20190531
      mpath = pwd()
      idx = findfirst("ProdCode", mpath)
      prepath = mpath[1:idx[1]-1]
-     DataMonth = floor(Int, DataDate/100)
+     DataMonth = fld(DataDate, 100)
 
      ## Initial path
      PathStruct = validus_path_define(DataMonth, smeEcon)

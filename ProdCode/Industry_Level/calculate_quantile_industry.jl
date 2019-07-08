@@ -15,8 +15,8 @@ function calculate_quantile_industry(dataEndDate, folders, smeEconCodes)
          CompanyInformationIncremental = vcat(CompanyInformationIncremental, firmHistory[:,[1,8]])
      end
 
-     haha = in.(Int64.(IncrementalPD[:, 1]), [floor.(Int, CompanyInformationIncremental[:, 1]/1000)])
-     indexInformation = indexin(Int64.(IncrementalPD[:, 1]), floor.(Int, CompanyInformationIncremental[:, 1]/1000))
+     haha = in.(Int64.(IncrementalPD[:, 1]), [fld.(CompanyInformationIncremental[:, 1], 1000)])
+     indexInformation = indexin(Int64.(IncrementalPD[:, 1]), fld.(CompanyInformationIncremental[:, 1], 1000))
      IncrementalPD = IncrementalPD[haha, :]
      IncrementalPD = cat(CompanyInformationIncremental[indexInformation[indexInformation .!= nothing], 2], IncrementalPD, dims = 2)
      IncrementalPD[:, 2] = IncrementalPD[:, 2] * 1000
@@ -28,12 +28,12 @@ function calculate_quantile_industry(dataEndDate, folders, smeEconCodes)
      CombineMonthEndForPeriod = Matrix(sort(DataFrame(CombineMonthEndForPeriod), (:x1, :x2, :x3, :x4)))
 
      ##  Continue the following steps
-     temp_month = (floor.(Int, dataEndDate/10000) - 1988) *12 + parse(Int64, folders["dataSource"][end-1:end])
+     temp_month = (fld.(dataEndDate, 10000) - 1988) *12 + parse(Int64, folders["dataSource"][end-1:end])
      temp = fill(NaN, temp_month, 1)
      PDAll = Array{Float64, 2}(undef, temp_month, 0)
      for m = unique(CombineMonthEndForPeriod[:,2])
          #  Need change once the logic for PD was settled
-         temp_month = (floor.(Int, dataEndDate/10000) - 1988) *12 + parse(Int64, folders["dataSource"][end-1:end])
+         temp_month = (fld.(dataEndDate, 10000) - 1988) *12 + parse(Int64, folders["dataSource"][end-1:end])
          temp = fill(NaN, temp_month, 1)
          tempCompYearMonth = CombineMonthEndForPeriod[CombineMonthEndForPeriod[:, 2] .== m, :]
          tempCompYearMonth[:, 1] = (tempCompYearMonth[:, 3] .- 1988) * 12 .+ tempCompYearMonth[:, 4]
@@ -63,7 +63,7 @@ function calculate_quantile_industry(dataEndDate, folders, smeEconCodes)
              PDSME_CombineSize[:, iInd, iHorizon] =
              sum(PDSME_thisHorizon[:,((iInd - 1) * nSize + 1):iInd * nSize] .* nIndSizeFirms[:, (iInd-1)*nSize+1 : iInd * nSize], dims = 2) ./ nIndFirms[:,iInd]
          end
-         PDSME_CombineAll[:,iHorizon] = sum(PDSME_CombineSize[:,:,iHorizon] .* nIndFirms, dims = 2) ./ sum(nIndFirms, dims = 2)
+         PDSME_CombineAll[:,iHorizon] = sum(PDSME_CombineSize[:, :, iHorizon] .* nIndFirms, dims = 2) ./ sum(nIndFirms, dims = 2)
          for iSize = 1:nSize
              PDSME_CombineIndustry[:,iSize,iHorizon] =
              sum(PDSME_thisHorizon[:, iSize:nSize:((nInd-1)*nSize+iSize)] .* nIndSizeFirms[:, iSize:nSize:((nInd-1)*nSize+iSize)], dims = 2) ./
@@ -107,7 +107,7 @@ function calculate_quantile_industry(dataEndDate, folders, smeEconCodes)
      quantileInfo["PDSME_CombineIndustry"] = PDSME_CombineIndustry
      quantileInfo["PDSME_CombineSize"] = PDSME_CombineSize
      quantileInfo["PDSME_CombineAll"] = PDSME_CombineAll
-     matwrite(resultFolder*"quantileInfo.mat", quantileInfo)
+     save(resultFolder*"quantileInfo.jld", "quantileInfo", quantileInfo, compress = true)
 
      Data = tuple(rankIndustryxSize, rankIndustry, rankSize, rankAll, qntGlobal*10000)
      file = XLSX.open_empty_template()

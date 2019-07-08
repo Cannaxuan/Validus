@@ -1,5 +1,5 @@
 function RetrieveFieldEnum_v011(cell_field_names, str_base, nargout)
-    # cell_field_names, str_base, nargout = cell_temp, GC["FS_ANN_IDX"], 2
+    # cell_field_names, str_base, nargout = cell_temp, GConst["FS_ANN_IDX"], 2
 
     sql_query = "SELECT CAST([ID] AS FLOAT), CAST(FS_Type AS FLOAT), [Field_Mnemonic] FROM [Tier2].[REF].[BBG_field_definition]"
     sql_query = sql_query* " WHERE [Field_Mnemonic] IN ($(join(cell_field_names[:],","))) ORDER BY [ID]"
