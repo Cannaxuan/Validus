@@ -1,38 +1,53 @@
- function generate_data_PD(folders, econs, dataEndMth, mths = [])
-     # folders, econs, dataEndMth = folders, econCodesInput, dataEndMth
-     ## This function is to generate the valid data matrices of PDs and POEs.
-     ## Inputs:
-     ##        econs:       economy code(s) (could be a row vector)
-     ##        dataEndMth:  the end month of data for all groups [yyyymm]
-     ##        mths:        the month index(s)
+ function generate_data_PD(folders, econs, ipart, mths = [])
+    # folders, econs, dataEndMth, ipart = folders, econCodesInput, dataEndMth, ipart
+     #= This function is to generate the valid data matrices of PDs and POEs.
+         Inputs:
+                econs:       economy code(s) (could be a row vector)
+                dataEndMth:  the end month of data for all groups [yyyymm]
+                mths:        the month index(s)
+     =#
 
-     #### Generate the data
-     PD_all_forward = []
-     firmlist = []
-     pdAllForward = []
-     firmInfo = []
-     dateVctr = []
-     loadFolder = folders["forwardPDFolder"]
+    #### Generate the data
+    PD_all_forward = []
+    firmlist = []
+    PD_all_forward_part = []
+    pdAllForward = []
+    firmInfo = []
+    dateVctr = []
+    loadFolder = folders["forwardPDFolder"]
 
+    ## Guarantee all Forward PD jld file have been created.
+    # for iEcon = econs
+    #      # mths = []
+    #      println("## Load the PD data for Economy $iEcon ...")
+    #      if !isfile(loadFolder*"firmlist_with_comp_num_"*string(Int(iEcon))*".jld")
+    #          println("-- No stored data for Econ $iEcon !  Generate the new data ..." )
+    #          firmlist, PD_all_forward_part, parts = get_country_PD_forward(iEcon, dataEndMth, folders)
+    #      end
+    #      #=
+    #      temp =
+    #         try
+    #              firmlist = load(loadFolder*"firmlist_with_comp_num_"*string(Int(iEcon))*".jld")["firmlist"]
+    #              # PD_all_forward_part = load(loadFolder*"PD_all_forward_"*string(Int(iEcon))*".jld")["PD_all_forward"]
+    #              firmlist, PD_all_forward_part
+    #         catch
+    #              println("-- No stored data for Econ $iEcon !  Generate the new data ..." )
+    #              firmlist, PD_all_forward_part = get_country_PD_forward(iEcon, dataEndMth, folders)
+    #              firmlist, PD_all_forward_part
+    #         end
+    #      firmlist, PD_all_forward_part = temp
+    #      parts = length(PD_all_forward_part)
+    #      temp = nothing ## could release memories?
+    #      =#
+    # end
+
+    ## Generate Global CCI with seperate time observations.
     for iEcon = econs
-         # mths = []
-         println("## Load the PD data for Economy $iEcon ...")
-         temp =
-            try
-                 firmlist = load(loadFolder*"firmlist_with_comp_num_"*string(Int(iEcon))*".jld")["firmlist"]
-                 PD_all_forward = load(loadFolder*"PD_all_forward_"*string(Int(iEcon))*".jld")["PD_all_forward"]
-                 firmlist, PD_all_forward
-            catch
-                 println("-- No stored data for Econ $iEcon !  Generate the new data ..." )
-                 firmlist, PD_all_forward = get_country_PD_forward(iEcon, dataEndMth, folders)
-                 firmlist, PD_all_forward
-            end
-         firmlist, PD_all_forward = temp
-         temp = nothing ## could release memories?
-
-         temp_year = nanMean_CK(PD_all_forward[:, 2, :], 2)
+         println("load all Forward PD for Econ $iEcon")
+         PD_all_forward = load(loadFolder*"PD_all_forward_"*string(Int(iEcon))*"Part"*string(Int(ipart))*".jld")["PD_all_forward_Part$(Int(ipart))"]
+         temp_year = nanMean(PD_all_forward[:, 2, :], 2)
          temp_year[temp_year .== 0] .= NaN
-         temp_month = nanMean_CK(PD_all_forward[:, 3, :], 2)
+         temp_month = nanMean(PD_all_forward[:, 3, :], 2)
          temp_month[temp_month .== 0] .= NaN
          dateVctrTmp = temp_year*100 + temp_month
 
@@ -40,23 +55,18 @@
              mths = 1:(size(PD_all_forward, 2) - 3)
          end
 
-         ## Remove the data of the firm whose PD are all NaN
+         ## No need to remove the data of the firm whose PD are all NaN,
+         ## since the data of the firm with PD less than or equal to [thresMths] months have been removed
          econPDAll = PD_all_forward[:, (mths .+3), :]
-         econFirmInfo = firmlist
-         invalidIdx = sum(.!isnan.(econPDAll[:, 1, :]), dims = 1) .== 0
-         # econFirmInfo = econFirmInfo[deepcopy(vec(.!invalidIdx)),:]
-         # econPDAll = econPDAll[:, :, deepcopy(vec(.!invalidIdx))]
-         econFirmInfo = econFirmInfo[vec(.!invalidIdx), :]
-         econPDAll = econPDAll[:, :, vec(.!invalidIdx)]
+         econFirmInfo = load(loadFolder*"firmlist_with_comp_num_"*string(Int(iEcon))*".jld")["firmlist"]
+         # invalidIdx = sum(.!isnan.(econPDAll[:, 1, :]), dims = 1) .== 0
+         # econFirmInfo = econFirmInfo[vec(.!invalidIdx), :]
+         # econPDAll = econPDAll[:, :, vec(.!invalidIdx)]
 
          PD_all_forward = nothing
-         firmlist = nothing
+         # firmlist = nothing
 
          ## Sequentially construct data that include PDs from valid firms in groupArray at each month
-
-         # global dateVctr
-         # global pdAllForward
-         # global firmInfo
 
          if iEcon == econs[1]
              pdAllForward = econPDAll
@@ -77,9 +87,9 @@
 
              pdAllForward = cat(pdAllForward, econPDAll, dims = 3)
              firmInfo = vcat(firmInfo, econFirmInfo)
-             dateVctr = nanMean_CK(hcat(dateVctr, dateVctrTmp), 2)
+             dateVctr = nanMean(hcat(dateVctr, dateVctrTmp), 2)
          end
-         GC.gc()
-     end
-     return pdAllForward, dateVctr, firmInfo
+    end
+    GC.gc()
+    return pdAllForward, dateVctr, firmInfo
  end

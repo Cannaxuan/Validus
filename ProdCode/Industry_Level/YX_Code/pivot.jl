@@ -1,5 +1,5 @@
 function pivot(df::AbstractDataFrame, rowFields, colField::Symbol, valuesField::Symbol; ops=sum, filter::Dict=Dict(), sort=[])
-
+## pivot(df::AbstractDataFrame, rowFields, colField::Symbol, valuesField::Symbol; ops=sum, filter::Dict=Dict(), sort=[])
     for (k,v) in filter
       df = df[ [i in v for i in df[k]], :]
     end

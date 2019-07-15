@@ -6,7 +6,7 @@ function clean_sales_rev_turn(sales_rev_turn_raw)
      colFiscalPeriod = 5
      colConsolidate = 6
      colFillingStatus = 7
-     orderPriority = [1 31 32 33 34 11 12 21 22 23 24 ]
+     orderPriority = [1 31 32 33 34 11 12 21 22 23 24]
 
      sales_rev_turn_raw = sales_rev_turn_raw[.!isnan.(sales_rev_turn_raw[:, colFieldValue]), :]
      ## function unique cannot give normal output for Array in Julia 1.0.3, which need to be transferred into DataFrame.

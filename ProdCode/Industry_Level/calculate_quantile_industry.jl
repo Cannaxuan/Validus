@@ -2,9 +2,9 @@ function calculate_quantile_industry(dataEndDate, folders, smeEconCodes)
      # dataEndDate, folders, smeEconCodes = dataEndDate, PathStruct, smeEcon
 
      ## Read full period data
-     ## Julia cannot read large mat file, need to resave it by adding '-v7.3' through matlab
-     ## therefore, the read path is changed, later all files would be transfered to jld.
-     IncrementalPD = matread(raw"C:\Users\e0375379\Downloads\DT\Validus\Validus"*"\\pd60hUpToMostRecent_bk.mat")["dataUpToMostRecent"]
+     ## Julia cannot read large mat file, need to resave it by adding '-v7.3' through matlab.
+     ## therefore, the read path is changed.
+     IncrementalPD = matread(folders["Industry_Data"]*"pd60hUpToMostRecent_bk.mat")["dataUpToMostRecent"]
 
      ## Load Total FirmHistory
      CompanyInformationIncremental = Array{Float64, 2}(undef, 0, 2)
@@ -29,11 +29,11 @@ function calculate_quantile_industry(dataEndDate, folders, smeEconCodes)
 
      ##  Continue the following steps
      temp_month = (fld.(dataEndDate, 10000) - 1988) *12 + parse(Int64, folders["dataSource"][end-1:end])
-     temp = fill(NaN, temp_month, 1)
+     # temp = fill(NaN, temp_month, 1)
      PDAll = Array{Float64, 2}(undef, temp_month, 0)
-     for m = unique(CombineMonthEndForPeriod[:,2])
+     for m in unique(CombineMonthEndForPeriod[:,2])
          #  Need change once the logic for PD was settled
-         temp_month = (fld.(dataEndDate, 10000) - 1988) *12 + parse(Int64, folders["dataSource"][end-1:end])
+         # temp_month = (fld.(dataEndDate, 10000) - 1988) *12 + parse(Int64, folders["dataSource"][end-1:end])
          temp = fill(NaN, temp_month, 1)
          tempCompYearMonth = CombineMonthEndForPeriod[CombineMonthEndForPeriod[:, 2] .== m, :]
          tempCompYearMonth[:, 1] = (tempCompYearMonth[:, 3] .- 1988) * 12 .+ tempCompYearMonth[:, 4]
@@ -47,9 +47,9 @@ function calculate_quantile_industry(dataEndDate, folders, smeEconCodes)
      SMEinfoFolder = folders["SMEinfoFolder"]
      smeModelResult_indSize = load(resultFolder*"smeModel.jld")["smeModelResult_indSize"]
      PDSME = smeModelResult_indSize["PDest"]
-     SmeInfo = load(SMEinfoFolder*"smeInfo.jld")
-     nIndSizeFirms = smeInfo["smeIndSizeCount"]
-     nIndFirms = smeInfo["smeIndCount"]
+     SmeInfo = load(SMEinfoFolder*"smeInfo.jld")["smeInfo"]
+     nIndSizeFirms = SmeInfo["smeIndSizeCount"]
+     nIndFirms = SmeInfo["smeIndCount"]
      nInd = size(nIndFirms,2)
      nSize = Int(size(nIndSizeFirms, 2) / nInd)
      nHorizons = 60
@@ -83,6 +83,7 @@ function calculate_quantile_industry(dataEndDate, folders, smeEconCodes)
 
      qntGlobal = Array{Float64,2}(undef,size(PDAll, 1), 2)
      for i = 1:size(PDAll, 1)
+         # println(i)
          qntGlobal[i,:] = quantile(PDAll[i, .!isnan.(PDAll[i, :])], [0.05 0.95])
      end
 
@@ -134,13 +135,13 @@ function calculate_quantile_industry(dataEndDate, folders, smeEconCodes)
      Combinefile = XLSX.open_empty_template()
 
      sheet1 = Combinefile[1]
-     XLSX.rename!(sheet1, "PDSME_CombineIndustryFlat")
+     XLSX.rename!(sheet1, "data_table_combine_industry")
      XLSX.writetable!(sheet1, DataFrame(CombineData[1]), split(" "^(size(CombineData[1], 2) - 1), " "))
-     sheet2 = XLSX.addsheet!(Combinefile,"PDSME_CombineSizeFlat")
+     sheet2 = XLSX.addsheet!(Combinefile,"data_table_combine_size")
      XLSX.writetable!(sheet2, DataFrame(CombineData[2]), split(" "^(size(CombineData[2], 2) - 1), " "))
-     sheet3 = XLSX.addsheet!(Combinefile,"PDSME_CombineAll")
+     sheet3 = XLSX.addsheet!(Combinefile,"data_table_combine_all")
      XLSX.writetable!(sheet3, DataFrame(CombineData[3]),  split(" "^(size(CombineData[3], 2) - 1), " "))
 
-     XLSX.writexlsx(folders["Industry_Results"]*"data_table_combine.xlsx", Combinefile, overwrite=true)
+     XLSX.writexlsx(folders["Industry_Results"]*"data_table_combine.xlsx", Combinefile, overwrite = true)
 
 end

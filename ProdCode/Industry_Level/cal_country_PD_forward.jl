@@ -1,5 +1,5 @@
 function cal_country_PD_forward(firmFS, paraDef, paraOther, nHorizon = size(paraDef, 2))
-    # firmFS = firmspecific
+    # firmFS = firmspecific[iMonthSB, :, :]
     ## This script calculates (cumulative) probabilities of default and (cumulative)
     ## probability of other exit by considering forward defaut intensity
     ## as well as forward other-exit intensity.

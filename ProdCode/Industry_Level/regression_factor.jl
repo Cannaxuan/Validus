@@ -1,4 +1,4 @@
-function regression_factor(dataMtrx3D, factorMtrx3D, resultFolder, regMethod)
+function regression_factor(dataMtrx3D, factorMtrx3D, resultFolder, regMethod, options)
      # dataMtrx3D, factorMtrx3D, resultFolder, regMethod = transSamplePDHorizon, PDFacs, resultFolder, regMethod
      nFacs = size(factorMtrx3D, 2)
      valid1stRow = findfirst(sum(.!isnan.(factorMtrx3D[:, :, 1]), dims = 2)[:] .== nFacs)
@@ -27,8 +27,8 @@ function regression_factor(dataMtrx3D, factorMtrx3D, resultFolder, regMethod)
                  noNaNrow = .!isnan.(y)
                  y = y[noNaNrow]
                  x = x[noNaNrow, :]
-                 println("We are at i = $i")
-                 beta, runinfo = AdaptiveLasso_Genuine(y, x, par)
+                 # println("We are at i = $i")
+                 beta, runinfo = AdaptiveLasso_Genuine(y, x, options, par)
                  coef = cat(coef, beta, dims = 2)
              end
              dataMtrxEst = coef[1,:]' .+ factorMtrx * coef[2:end, :]
@@ -47,7 +47,8 @@ function regression_factor(dataMtrx3D, factorMtrx3D, resultFolder, regMethod)
          AdaptiveLasso_Input_And_Output["Y"] = Y
          AdaptiveLasso_Input_And_Output["X"] = X
          AdaptiveLasso_Input_And_Output["coefficient"] = coefficient
-         matwrite(resultFolder*"\\AdaptiveLasso_Input_And_Output.mat", AdaptiveLasso_Input_And_Output)
+         # matwrite(resultFolder*"\\AdaptiveLasso_Input_And_Output.mat", AdaptiveLasso_Input_And_Output)
+         save(resultFolder*"\\AdaptiveLasso_Input_And_Output.jld","AdaptiveLasso_Input_And_Output", AdaptiveLasso_Input_And_Output, compress = true)
      end
      regFacRes = Dict()
      regFacRes["coef"] = coefAll

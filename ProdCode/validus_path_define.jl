@@ -1,8 +1,3 @@
-Ycom = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdCode\Industry_Level\YX_Code"
-include(Ycom*"\\connectDB.jl")
-include(Ycom*"\\get_data_from_DMTdatabase.jl")
-include(Ycom*"\\GCdef.jl")
-
 function validus_path_define(dataMonth, smeEcon = [1 3 9 10])
     # dataMonth = DataMonth
 

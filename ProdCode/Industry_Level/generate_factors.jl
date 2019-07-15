@@ -12,33 +12,19 @@ function generate_factors(EconCodes, dataEndMth, options, folders)
      #### Generate the factor matrix of all firms (in all groups) if it does not exist
      ## if ~loadFacSuccess
      println('\n' * "@ Generate factors ...")
-     ## Load the full PD data up to [dataEndMth] (Genetate the PDPOE data if it does not exist)
-     PDFileName = "PD_forward.jld"
-     dataMtrxPD, dateVctr, firmInfo = load_data_PD(folders, PDFileName, EconCodes, dataEndMth)
-     dataMtrxPD, dateVctr = cust_data(dataMtrxPD, dataEndMth, options["startMth"], dateVctr)
+     ## Divide into different time obervations and generate Forward PD files
+     mthObs = (fld(dataEndMth, 100)- fld(options["startMth"], 100)) *12 + mod(dataEndMth, 100) - mod(options["startMth"], 100) + 1
+     parts = fld(mthObs, 100) + 1
 
-     ## Remove the data of the firm with PD less than or equal to [thresMths] months
-     validColIdx = deepcopy(vec(sum(isfinite.(dataMtrxPD[:, :, 1]), dims = 1) .>= facThresMths))
-     dataMtrxPD = dataMtrxPD[:, validColIdx, :]
-     firmInfo = firmInfo[validColIdx, :]
-
-     ## To avoid the value Inf after transformation, replace the entries of value < eps with eps and
-     ## replace the entries of value > 1-eps with 1-eps
-     dataMtrxPD[dataMtrxPD .< eps(Float64)] .= eps(Float64)
-     dataMtrxPD[dataMtrxPD .> (1 - eps(Float64))] .= (1 - eps(Float64))
-
-     ## Transform the PD matrice from domain [0,1] to the whole set of real numbers
-     # transDataMtrxPD = trans_func(dataMtrxPD)
-     transdataMtrx = @. log(-log(1 - dataMtrx))
-
-     ##  Generate the global industry PD factors
-     println("1) Extract the global industry factors ...")
-     industryFacsPD = extract_industry_factors(transDataMtrxPD, firmInfo, industryCodes, qtIndustryFac)
+     ## check global and generate all Econ Forward PD files
+     industryFacsPD, dateVctr = generate_PDfile(folders, EconCodes, dataEndMth, mthObs, parts, facThresMths, industryCodes, qtIndustryFac)
 
      facs = Dict()
      facs["industryFacsPD"] = industryFacsPD
      facs["dateVctr"] = dateVctr
+     facs["parts"] = parts
      s =  @sprintf "# Elapsed time = %3.2f seconds." (time()-start)
      println(s)
+
      return facs
 end

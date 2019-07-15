@@ -15,6 +15,7 @@ function main_Validus(dataEndDate, PathStruct, smeEcon = [1 3 9 10])
      options["thresMethod"] = "lasso"
      options["smeHorizon"] = 60    ## The horizon for generating portfolio's PDs[should be <= 60]
      options["startMth"] = 199601
+     options["startDate"] = 19960101
      loadFacs = true     ## Whether to load the existing global and industry factors
      loadSMEInfo = true  ## whether to load the existing portfolio's data set
      dataEndMth = fld(dataEndDate, 100)
@@ -48,6 +49,7 @@ function main_Validus(dataEndDate, PathStruct, smeEcon = [1 3 9 10])
          smeEcon = SmeInfo["smeEcon"]
      else
          ctyInfo, smeInfo =
+            # generate_SME_info(smeEcon, options["startDate"], dataEndDate, facs["dateVctr"], options, PathStruct, parts)
             generate_SME_info(smeEcon, PathStruct["DATE_START_DATA"], dataEndDate, facs["dateVctr"], options, PathStruct)
          save(PathStruct["SMEinfoFolder"]*"smeInfo.jld", "smeInfo", smeInfo, "smeEcon", smeEcon, compress = true)
          save(PathStruct["SMEinfoFolder"]*"ctyInfo.jld", "ctyInfo", ctyInfo, compress = true)
@@ -56,8 +58,9 @@ function main_Validus(dataEndDate, PathStruct, smeEcon = [1 3 9 10])
      #### Step3: Load/Establish the factor model specific to the porfolio(according to size, industry)
      #### ----------------------------------------------------------------------
      println("Establish the factor model specific to the SME porfolio ... ")
+     println( "Julia cannot read large mat file, need to resave it by adding '-v7.3' through matlab!!!")
      if isfile(PathStruct["Industry_FactorModel"]*"smeModel.jld")
-         smeModelResult_indSize = load(PathStruct["Industry_FactorModel"]*"smeModel.jld")
+         smeModelResult_indSize = load(PathStruct["Industry_FactorModel"]*"smeModel.jld")["smeModelResult_indSize"]
      else
          ## 1) Regress each industry/size PDs on industry factors
          println("* Regress SME's average PDs on the global industry PD factors ...")

@@ -1,5 +1,6 @@
 function saveDataInExcel(PathStruct, smeModelResult_indSize, smeInfo, options)
-
+# PathStruct, smeModelResult_indSize, smeInfo, options =
+#     PathStruct, smeModelResult_indSize["smeModelResult_indSize"], smeInfo, options
     PDest = smeModelResult_indSize["PDest"]
     nIndustry = length(options["industryCodes"])
     nSize = size(options["nSize"], 1)
@@ -13,7 +14,7 @@ function saveDataInExcel(PathStruct, smeModelResult_indSize, smeInfo, options)
     end
 
     transFlatPD = Array{Float64, 2}(undef, size(tranPD, 1), 0)
-    for iHorizon = 3:nHorizon
+    for iHorizon = 1:nHorizon
         tmp = tranPD[:, :, iHorizon]
         transFlatPD = cat(transFlatPD, tmp, dims = 2)
     end

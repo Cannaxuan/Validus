@@ -1,4 +1,4 @@
-using PyCall
+# using PyCall
 function get_data_from_DMTdatabase(query, cnt)
     #cnt = connectDB()
     pd = pyimport("pandas")

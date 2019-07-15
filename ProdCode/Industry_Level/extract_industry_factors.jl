@@ -1,10 +1,9 @@
 function  extract_industry_factors(transDataMtrxPD, firmInfo, industryCodes, qtIndustryFac)
-     ## This function to to equentially extract the industry PD factors of
-     ## the transformed  PD-quantile (standardized)
-
+     ## This function to to equentially extract the industry PD factors of the transformed PD-quantile(standardized)
      nMths = size(transDataMtrxPD, 1)
      nIndus = length(industryCodes)
-     industryFacsPD = fill(NaN,(nMths, nIndus,60))
+     industryFacsPD = fill(NaN,(nMths, nIndus, 60))
+
 
      ## Take the median PD of all firms in each industry of each month for each horizon
      for iIndu = 1:nIndus
@@ -16,5 +15,6 @@ function  extract_industry_factors(transDataMtrxPD, firmInfo, industryCodes, qtI
              end
          end
      end
+
      return industryFacsPD
 end

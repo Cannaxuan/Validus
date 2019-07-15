@@ -8,6 +8,7 @@ function retrieve_sales_rev_turn_raw(iEcon, dateStart, dateEnd, turnOverFolder, 
      catch
          Companyinformation = matread(CleanDataFolder*"EconomicInformation\\CompanyInformation\\CompanyInformation_"*string(iEcon)*".mat")
          matwrite(turnOverFolder*"CompanyInformation_"*string(iEcon)*".mat", Companyinformation)
+         ## julia to save mat file would be quite larger than matlab, later consider to use copy file
          Companyinformation
      end
      Companyinformation = temp
@@ -22,6 +23,7 @@ function retrieve_sales_rev_turn_raw(iEcon, dateStart, dateEnd, turnOverFolder, 
          fxrate = matread(CleanDataFolder*"GlobalInformation\\fxRate.mat")
          fxRate = fxrate["fxRate"]
          matwrite(turnOverFolder*"fxRate.mat", fxrate)
+         ## julia to save mat file would be quite larger than matlab, later consider to use copy file
          fxRate
      end
      fxRate = temp
@@ -33,7 +35,7 @@ function retrieve_sales_rev_turn_raw(iEcon, dateStart, dateEnd, turnOverFolder, 
      FinancialStatement = Dict()
      # @distributed
      for i = 1:size(companyList, 1)
-         println("generate FS for $i, $(size(companyList, 1)-i) left.")
+         # println("generate FS for $i, $(size(companyList, 1)-i) left.")
          financialStatement[i], FinancialStatement2 =  retrieve_financial_statement_raw(companyList[i], dateStart, dateEnd, 127)
          if !isempty(FinancialStatement2)
             FinancialStatement = FinancialStatement2
@@ -70,9 +72,9 @@ function retrieve_sales_rev_turn_raw(iEcon, dateStart, dateEnd, turnOverFolder, 
      Lib = indexin(BBGID, companyInformation[:, Int64(CompanyInformation["BBG_ID"])])
      missingComps = findall(.!Lia)
      if !isempty(missingComps)
-         for i = 1:length(missingComps)
-             println("We have missing information for company with BBG_ID: $(BBGID[LinearIndices(Lia)[missingComps[i]]])")
-         end
+         # for i = 1:length(missingComps)
+         #     println("We have missing information for company with BBG_ID: $(BBGID[LinearIndices(Lia)[missingComps[i]]])")
+         # end
          financialStatement = financialStatement[.!in.(1:size(financialStatement,1), [missingComps]),:]
          Lib = Lib[.!in.(1:size(Lib,1), [missingComps]),:]
      end

@@ -1,19 +1,3 @@
-include("highest_indexin.jl")
-include("readConfig.jl")
-include("RetrieveFieldEnum_v011.jl")
-include("RetrieveDwnAccStdrd_v011.jl")
-include("global_numer_definition_current.jl")
-include("global_constants_extra.jl")
-include("split_data.jl")
-include("pivot.jl")
-include("convert_currency_financial_statement.jl")
-include("get_specific_day_value.jl")
-include("get_individual_first_use_time.jl")
-include("filter_financial_statement.jl")
-include("convert_currencyID_to_FXID.jl")
-
-
-
 function GConstdef(dataDate = 20180629)
     ####New GConst in dictionary###############################################################
     config = nothing

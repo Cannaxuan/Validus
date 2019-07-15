@@ -32,7 +32,7 @@ function  regress_portfolio_factors(smeInfo, facs, resultFolder, options, indSiz
      PDFacs = facs
      # transSamplePDHorizon = trans_func(samplePD)
      transSamplePDHorizon = @. log(-log(1 - samplePD))
-     regPDFacsRes = regression_factor(transSamplePDHorizon, PDFacs, resultFolder, regMethod)
+     regPDFacsRes = regression_factor(transSamplePDHorizon, PDFacs, resultFolder, regMethod, options)
      estTransPDFlatHorizon = 1 .- exp.(-exp.(regPDFacsRes["dataMtrxEst"]))
      nObs = size(regPDFacsRes["dataMtrxEst"], 1)
      regResult = Dict()

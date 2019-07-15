@@ -25,7 +25,7 @@ function retrieve_financial_statement_raw(BBG_ID, dateStart, dateEnd, fsFieldID)
     sql = "select * from [TEST].[DBO].[FUN_RETRIEVE_FS_ENT]('$(BBGsql[2:end-1])','$dateStart','$dateEnd')"
     financialStatementEnt = Matrix(get_data_from_DMTdatabase(sql, cnt))
     if isempty(financialStatementEnt)
-        println("No FSEnt data for BBG_IDs: $BBG_ID")
+        # println("No FSEnt data for BBG_IDs: $BBG_ID")
         financialStatement_v = Array{Float64, 2}(undef, 0, (size(financialStatementEnt, 2) + 1) )
         FinancialStatement_v = Dict()
         return financialStatement_v, FinancialStatement_v
@@ -34,7 +34,9 @@ function retrieve_financial_statement_raw(BBG_ID, dateStart, dateEnd, fsFieldID)
     financialStatementEnt = Float64.(financialStatementEnt)
 
     ## Retrieve financial statement data in terms of segment because there seems a limit of integer arrays passing to the database.
+
     fsID = split_data(Int64.(financialStatementEnt[:, FinancialStatement_v["FS_ID"]]), 1000)
+
     financialStatementDat = Vector{Array{Float64, 2}}(undef, size(fsID, 1))
     for i = 1:size(fsID, 1)
         # println("financialStatementDat$i")
@@ -47,14 +49,14 @@ function retrieve_financial_statement_raw(BBG_ID, dateStart, dateEnd, fsFieldID)
             fSData[ismissing.(fSData)] .= NaN
             financialStatementDat[i] = Float64.(fSData)
         else
-            println("No fSData for fsIDs: $(fsID[i])")
+            # println("No fSData for fsIDs: $(fsID[i])")
             financialStatementDat[i] = Array{Float64, 2}(undef, 0, size(fSData, 2))
         end
     end
     financialStatementDat = vcat(financialStatementDat...)
 
     if isempty(financialStatementDat)
-        println("No FSDat data for fsID: $(fsID[i])")
+        # println("No FSDat data for fsID: $fsID")
         financialStatement_v = Array{Float64, 2}(undef, 0, (size(financialStatementEnt, 2) + 1))
         FinancialStatement_v = Dict()
         return financialStatement_v, FinancialStatement_v

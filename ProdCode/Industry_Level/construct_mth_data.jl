@@ -11,7 +11,14 @@ function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
      firmMonth = matread(folders["FinalData"]*"firmMonth_"*string(iEcon)*".mat")["firmMonth"]
      firmmonth = firmMonth
      firmlist = firmList_withCompNum
-     # firmMonth = nothing ; firmList_withCompNum = nothing
+     # firmlist = load(folders["forwardPDFolder"]*"firmlist_with_comp_num_"*string(Int(iEcon))*".jld")["firmlist"]
+
+     firmMonth = nothing ; firmList_withCompNum = nothing
+     # PD_all_forward =[]
+     # for ipart = 1:parts
+     #     PD_all_forward_part = load(fwdPDFolder*"PD_all_forward_"*string(iSmeEconCode)*"Part"*string(ipart)*".jld")["PD_all_forward_Part$ipart"]
+     #     PD_all_forward = ipart==1 ? PD_all_forward_part : cat(PD_all_forward, PD_all_forward_part, dims = 1)
+     # end
 
      colCompNum = 1
      colUpdateDate = 3
@@ -25,6 +32,10 @@ function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
 
      nMonths = size(firmmonth, 1)
      nFirms = size(firmmonth, 3)
+     # nMonths = size(PD_all_forward, 1)
+     # nFirms = size(PD_all_forward, 3)
+
+
      dataFlatMth = fill(NaN, (nMonths + 12, 4, nFirms))
      start = time()
      for iFirm = 1:nFirms
@@ -51,9 +62,10 @@ function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
          rowInTYD = convert(Array{Int64}, rowInTYD)
 
          tempDataFlat[rowInTDF, colFieldValue] = tempYearData[rowInTYD, 2]
-         dataFlatMth[Int64.(tempDataFlat[:, colUpdateMth]), :, iFirm] =
-         tempDataFlat[:, [colCompNum, colFieldValue, colUpdateDate, colPeriodEnd]]
+         dataFlatMth[Int64.(tempDataFlat[:, colUpdateMth]), :, iFirm] = tempDataFlat[:, [colCompNum, colFieldValue, colUpdateDate, colPeriodEnd]]
 
+         # firmStartMth = Int64(firmlist[iFirm, 2] + 12) - 96  ## 96 is the gap mths between 198801 and 199601
+         # firmEndMth = Int64(firmlist[iFirm, 3] + 12) - 96
          firmStartMth = Int64(firmlist[iFirm, 2] + 12)
          firmEndMth = Int64(firmlist[iFirm, 3] + 12)
 

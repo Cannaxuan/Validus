@@ -1,8 +1,7 @@
 function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, options, folders)
-# smeEconCodes = smeEcon
-# dateStart = PathStruct["DATE_START_DATA"]
-# smeDateVctr = facs["dateVctr"]
-# folders =PathStruct
+
+# smeEconCodes, dateStart, dataEndDate, smeDateVctr, options, folders =
+# smeEcon, PathStruct["DATE_START_DATA"], dataEndDate, facs["dateVctr"], options, PathStruct
      start = time()
      dataEndMth = fld(dataEndDate, 100)
      pfThresMths = 0  ## The firms with PD less than or equal to [thresMths] months will be removed?
@@ -16,13 +15,15 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
      turnOverFolder = folders["SMEinfoFolder"]
      CleanDataFolder = folders["dataSource"]*"\\IDMTData\\CleanData\\"
 
+     mthObs = (fld(dataEndMth, 100)- fld(options["startMth"], 100)) *12 + mod(dataEndMth, 100) - mod(options["startMth"], 100) + 1
+
      ##  Load the Selected Countries PD data  ##
      nEcons = length(smeEconCodes)
      println("* The SME's information comes from $nEcons economy(s)!")
      ctyInfo = Dict()
      ctyInfo["firmList"] = Array{Float64,2}(undef, 0, 6)
-     ctyInfo["ForwardPD"] = Array{Float64,3}(undef, 280, 0, 60)
-     ctyInfo["SalesRevTurn"] = Array{Float64,2}(undef, 280, 0)
+     ctyInfo["ForwardPD"] = Array{Float64,3}(undef, mthObs, 0, 60)
+     ctyInfo["SalesRevTurn"] = Array{Float64,2}(undef, mthObs, 0)
 
      for iEcon = 1:nEcons
          iSmeEconCode = smeEconCodes[iEcon]
@@ -38,18 +39,25 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
          end
          salesRevTurnMth = temp
 
+
          println("- Collect portfolio information from Economy $iSmeEconCode ...")
          temp =
          try
-             firmlist = load(fwdPDFolder*"firmlist_with_comp_num_"*string(iSmeEconCode)*".jld")["firmlist"]
-             PD_all_forward = load(fwdPDFolder*"PD_all_forward_"*string(iSmeEconCode)*".jld")["PD_all_forward"]
+             firmlist = load(fwdPDFolder*"\\specific\\firmlist_with_comp_num_"*string(iSmeEconCode)*".jld")["firmlist"]
+             PD_all_forward = load(fwdPDFolder*"\\specific\\PD_all_forward_"*string(iSmeEconCode)*".jld")["PD_all_forward"]
+             # PD_all_forward =[]
+             # for ipart = 1:parts
+             #     PD_all_forward_part = load(fwdPDFolder*"PD_all_forward_"*string(iSmeEconCode)*"Part"*string(ipart)*".jld")["PD_all_forward_Part$ipart"]
+             #     PD_all_forward = ipart==1 ? PD_all_forward_part : cat(PD_all_forward, PD_all_forward_part, dims = 1)
+             # end
              firmlist, PD_all_forward
          catch
              println(" # No stored data for Economy $iSmeEconCode ! Generate the new data ...")
-             firmlist, PD_all_forward = get_country_PD_forward(iSmeEconCode, dataEndMth, folders)
+             firmlist, PD_all_forward = get_country_PD_forward_specific(iSmeEconCode, dataEndMth, folders)
              firmlist, PD_all_forward
          end
          firmlist, PD_all_forward = temp
+         temp = nothing
 
          ## Extend the date length of PD
          k_year = PD_all_forward[:, 2, :]
@@ -106,7 +114,7 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
             size(ctyInfo["ForwardPD"], 1), 1)) .& (ctyInfo["SalesRevTurn"] .>= nSize[1, 1]) .& (ctyInfo["SalesRevTurn"] .< nSize[end, end])
          iInduFirmIdxHorizon = repeat(iInduFirmIdx, inner = (1, 1, 60))
          smeInfo["smeIndPD"][:,iIndu,:] =
-            sum(.!isnan.(ctyInfo["ForwardPD"] .* iInduFirmIdxHorizon), dims = 2) ./ sum(iInduFirmIdxHorizon, dims = 2)
+            nanSum((ctyInfo["ForwardPD"] .* iInduFirmIdxHorizon), 2) ./ dropdims(sum(iInduFirmIdxHorizon, dims = 2), dims = 2)
          smeInfo["smeIndPD"][smeInfo["smeIndPD"] .== 0] .= NaN
          smeInfo["smeIndCount"][:,iIndu] = sum(iInduFirmIdxHorizon[:, :, 1], dims = 2)
 
@@ -116,7 +124,8 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
              smeInfo["smeIndSizeCount"][:, intCol] = sum(iInduSizeFirmIdx, dims = 2)
              iInduSizeFirmIdxHorizon = repeat(iInduSizeFirmIdx, inner = (1, 1, 60))
 
-             temp = nanSum_CK(ctyInfo["ForwardPD"] .* iInduSizeFirmIdxHorizon, 2)
+             # temp = nanSum_CK(ctyInfo["ForwardPD"] .* iInduSizeFirmIdxHorizon, 2)
+             temp = nanSum(ctyInfo["ForwardPD"] .* iInduSizeFirmIdxHorizon, 2)
              temp_1 = reshape(temp, size(temp,1), 1, size(temp, 2))
              smeInfo["smeIndSizePD"][:,intCol,:] = temp_1 ./ sum(iInduSizeFirmIdxHorizon, dims = 2)
 

@@ -1,4 +1,4 @@
-function AdaptiveLasso_Genuine(y::Vector{Float64}, X::Matrix{Float64}, par = Dict())
+function AdaptiveLasso_Genuine(y::Vector{Float64}, X::Matrix{Float64}, options, par = Dict())
     # y, X = y, x
     #=
         This function is used to perform Adaptive Lasso Regression

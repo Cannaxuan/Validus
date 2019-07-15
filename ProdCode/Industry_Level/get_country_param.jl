@@ -1,4 +1,4 @@
-using CSV
+# using CSV
 function get_country_param(countryCode, dataMthToLoad,sourceFolder)
 ## This function is to collect the parameters of common factors and firm-specific attributes for each country
 
@@ -16,12 +16,12 @@ function get_country_param(countryCode, dataMthToLoad,sourceFolder)
     ## convert Dataframe to Array
     paraDef = paraTemp[1:60, 1:17]
     paraDef[:1] = parse.(Float64, paraDef[:1])
-    paraDef = convert(Array{Float64}, paraDef)
+    paraDef = convert(Matrix{Float64}, paraDef)
     paraDef = paraDef'
 
     paraOther = paraTemp[62:121, 1:17]
     paraOther[:1] = parse.(Float64, paraOther[:1])
-    paraOther = convert(Array{Float64}, paraOther)
+    paraOther = convert(Matrix{Float64}, paraOther)
     paraOther = paraOther'
 
     countryFromFile = countryCode
