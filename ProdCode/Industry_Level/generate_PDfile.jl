@@ -44,7 +44,7 @@ function  generate_PDfile(folders, econCodesInput, dataEndMth, mthObs, parts, fa
             dataMtrxPD[dataMtrxPD .< eps(Float64)] .= eps(Float64)
             dataMtrxPD[dataMtrxPD .> (1 - eps(Float64))] .= (1 - eps(Float64))
 
-            ## Transform the PD matrice from domain [0,1] to the whole set of real numbers
+            ## Transform the PD matrice from domain [0, 1] to the whole set of real numbers
             # transDataMtrxPD = trans_func(dataMtrxPD)
             transdataMtrxPD = @. log(-log(1 - dataMtrxPD))
 

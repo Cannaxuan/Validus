@@ -24,16 +24,30 @@ function get_individual_first_use_time(timePerValue, dateEnd)
     idxCRI = .!isnan.(timePerValue[:, 3])
 
     # dateadd = Date.(string.(Int64.(timePerValue[:, 1])), "yyyymmdd") .+ Month(3)
+    # timeadd = fill(NaN, size(timePerValue, 1), 1)
+    # timePerValue = hcat(timePerValue[:, 1:3], timeadd)
+    # dateadd = Date.(string.(Int64.(timePerValue[idxPE, 1])), "yyyymmdd") .+ Month(3)
+    # comp1 = map(s -> parse(Int, replace(s, "-" => "")), string.(dateadd))
+    # timeadd[idxPE] = comp1
+    # comp2 = fill(dateEnd, size(timePerValue, 1), 1)
+    # timePerValue[:, 4] = minimum(hcat(timeadd, comp2), dims = 2)
+    # timePerValue[:, 4][isnan.(timePerValue[:, 4])] .= dateEnd
+
     timeadd = fill(NaN, size(timePerValue, 1), 1)
     timePerValue = hcat(timePerValue[:, 1:3], timeadd)
-    dateadd = Date.(string.(Int64.(timePerValue[idxPE, 1])), "yyyymmdd") .+ Month(3)
-    comp1 = map(s -> parse(Int, replace(s, "-" => "")), string.(dateadd))
+
+    ## NaN cannot transfer to Int64
+    valuedate = Date.(string.(Int64.(timePerValue[idxPE, 1])), "yyyymmdd")
+    ## check if the date is the last day of one month, if true, then return the last day of month after adding 3 months
+    idxend =  valuedate .== lastdayofmonth.(valuedate)
+    valuedate[idxend] .= lastdayofmonth.(valuedate[idxend] .+ Month(3))
+    valuedate[.!idxend] .= valuedate[.!idxend] .+ Month(3)
+
+    comp1 = map(s -> parse(Int, replace(s, "-" => "")), string.(valuedate))
     timeadd[idxPE] = comp1
-    comp2 = fill(dateEnd, size(timePerValue, 1), 1)
+    comp2 = fill(dateEnd, size(timePerValue, 1))
     timePerValue[:, 4] = minimum(hcat(timeadd, comp2), dims = 2)
     timePerValue[:, 4][isnan.(timePerValue[:, 4])] .= dateEnd
-
-
     firstUseTime = fill(NaN, size(timePerValue, 1), 1)
 
     ##  The status of validity of the three times is denoted by [idxPE, idxAD, idxCRI]

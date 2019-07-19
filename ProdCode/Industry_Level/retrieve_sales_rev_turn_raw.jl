@@ -16,12 +16,12 @@ function retrieve_sales_rev_turn_raw(iEcon, dateStart, dateEnd, turnOverFolder, 
      CompanyInformation = Companyinformation["CompanyInformation"]
      temp =
      try
-         fxrate = matread(turnOverFolder*"fxRate.mat")["fxRate"]
-         fxRate = fxrate["fxRate"]
+         fxRate = matread(turnOverFolder*"fxRate.mat")["fxRate"]
+         # fxRate = fxrate["Data"]
          fxRate
      catch
-         fxrate = matread(CleanDataFolder*"GlobalInformation\\fxRate.mat")
-         fxRate = fxrate["fxRate"]
+         fxRate = matread(CleanDataFolder*"GlobalInformation\\fxRate.mat")["fxRate"]
+         # fxRate = fxrate["Data"]
          matwrite(turnOverFolder*"fxRate.mat", fxrate)
          ## julia to save mat file would be quite larger than matlab, later consider to use copy file
          fxRate
@@ -36,6 +36,7 @@ function retrieve_sales_rev_turn_raw(iEcon, dateStart, dateEnd, turnOverFolder, 
      # @distributed
      for i = 1:size(companyList, 1)
          # println("generate FS for $i, $(size(companyList, 1)-i) left.")
+         global financialStatement, FinancialStatement2
          financialStatement[i], FinancialStatement2 =  retrieve_financial_statement_raw(companyList[i], dateStart, dateEnd, 127)
          if !isempty(FinancialStatement2)
             FinancialStatement = FinancialStatement2
