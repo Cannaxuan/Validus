@@ -18,7 +18,10 @@ function filter_financial_statement(fsEntry, FsEntry, dateEnd)
         fsEntry[idx, FsEntry["Period_End"]] .= NaN
 
         ## find missing value, and set it to NaN
-        fsEntry[findall(ismissing.(fsEntry[:,FsEntry["Time_Release"]])), FsEntry["Time_Release"]] .= NaN
+        # fsEntry[findall(ismissing.(fsEntry[:,FsEntry["Time_Release"]])), FsEntry["Time_Release"]] .= NaN
+        fsEntry[:, FsEntry["Time_Release"]] =
+            Matrix(missing2NaN!(DataFrame(fsEntry[:, FsEntry["Time_Release"]]')))[:]
+
         ## If announcement day is beyond 1988-01-01 and dateEnd or it is earlier than period end, we set it to NaN.
         idx = (fsEntry[:,FsEntry["Time_Release"]].<GConst["DATE_START_DATA"]).|(fsEntry[:,FsEntry["Time_Release"]].>dateEnd).|(fsEntry[:,FsEntry["Time_Release"]].<fsEntry[:,FsEntry["Period_End"]]).|(fsEntry[:,FsEntry["Time_Release"]].>fsEntry[:,FsEntry["Time_Available_CRI"]])
         fsEntry[idx, FsEntry["Time_Release"]] .= NaN
@@ -29,7 +32,10 @@ function filter_financial_statement(fsEntry, FsEntry, dateEnd)
         ## Choosing 2011-03-01 as the starting time to use CRI available date is just to be more conservative.
         ## If the available date is before the period end, we also set it to NaN.
         ## find missing value, and set it to NaN
-        fsEntry[findall(ismissing.(fsEntry[:,FsEntry["Time_Available_CRI"]])), FsEntry["Time_Available_CRI"]] .= NaN
+        # fsEntry[findall(ismissing.(fsEntry[:,FsEntry["Time_Available_CRI"]])), FsEntry["Time_Available_CRI"]] .= NaN
+        fsEntry[:, FsEntry["Time_Available_CRI"]] =
+            Matrix(missing2NaN!(DataFrame(fsEntry[:, FsEntry["Time_Available_CRI"]]')))[:]
+
         idx = (fsEntry[:,FsEntry["Time_Available_CRI"]].<20110301).|(fsEntry[:,FsEntry["Time_Available_CRI"]].>dateEnd).|(fsEntry[:,FsEntry["Time_Available_CRI"]].<fsEntry[:,FsEntry["Period_End"]])
         fsEntry[idx, FsEntry["Time_Available_CRI"]] .= NaN
     end

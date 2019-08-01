@@ -1,5 +1,5 @@
 function cust_data(data, dataEndMth, custMth, dateVctr = [])
-    # data, dataEndMth, custMth = dataMtrxPD, endMth, options["startMth"]
+    # data, dataEndMth, custMth = dataFlatMth, dataEndMth, options["startMth"]
      dataendmth = Dict()
      dataendmth["year"] =  fld(dataEndMth, 100)
      dataendmth["month"] =  dataEndMth - dataendmth["year"]*100

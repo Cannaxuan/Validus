@@ -30,7 +30,8 @@ function retrieve_financial_statement_raw(BBG_ID, dateStart, dateEnd, fsFieldID)
         FinancialStatement_v = Dict()
         return financialStatement_v, FinancialStatement_v
     end
-    financialStatementEnt[ismissing.(financialStatementEnt)] .= NaN
+    # financialStatementEnt[ismissing.(financialStatementEnt)] .= NaN
+    financialStatementEnt = Matrix(missing2NaN!(DataFrame(financialStatementEnt)))[:]
     financialStatementEnt = Float64.(financialStatementEnt)
 
     ## Retrieve financial statement data in terms of segment because there seems a limit of integer arrays passing to the database.
@@ -46,7 +47,8 @@ function retrieve_financial_statement_raw(BBG_ID, dateStart, dateEnd, fsFieldID)
         fSData = Matrix(get_data_from_DMTdatabase(sql, cnt))
         # if !all(ismissing.(tmp))
         if !isempty(fSData)
-            fSData[ismissing.(fSData)] .= NaN
+            # fSData[ismissing.(fSData)] .= NaN
+            fSData = Matrix(missing2NaN!(DataFrame(fSData)))
             financialStatementDat[i] = Float64.(fSData)
         else
             # println("No fSData for fsIDs: $(fsID[i])")
@@ -64,7 +66,8 @@ function retrieve_financial_statement_raw(BBG_ID, dateStart, dateEnd, fsFieldID)
 
     FSDatpivot = pivot(DataFrame(financialStatementDat), :x1, :x2, :x3 , ops = nanMean)
     realID = parse.(Float64, String.(names(FSDatpivot)[2:end]))
-    Matrix(FSDatpivot)[ismissing.(Matrix(FSDatpivot))] .= NaN
+    # Matrix(FSDatpivot)[ismissing.(Matrix(FSDatpivot))] .= NaN
+    missing2NaN!(FSDatpivot)
     FSDatpivot = Float64.(Matrix(FSDatpivot))
 
     hasDat = in.(financialStatementEnt[:, FinancialStatement_v["FS_ID"]], [FSDatpivot[:, 1]])

@@ -26,6 +26,7 @@ function calculate_quantile_industry(dataEndDate, folders, smeEconCodes)
 
      CombineMonthEndForPeriod = IncrementalPD
      CombineMonthEndForPeriod = Matrix(sort(DataFrame(CombineMonthEndForPeriod), (:x1, :x2, :x3, :x4)))
+     IncrementalPD = nothing
 
      ##  Continue the following steps
      temp_month = (fld.(dataEndDate, 10000) - 1988) *12 + parse(Int64, folders["dataSource"][end-1:end])

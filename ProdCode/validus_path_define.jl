@@ -1,4 +1,4 @@
-function validus_path_define(dataMonth, smeEcon = [1 3 9 10])
+function validus_path_define(dataMonth, smeEcon = [1 3 9 10], PDEcon = 9)
     # dataMonth = DataMonth
 
     ## Define global PathStruct for Industry_Level and Firm_Level
@@ -24,7 +24,7 @@ function validus_path_define(dataMonth, smeEcon = [1 3 9 10])
     PathStruct["Firm_Specific"] = PathStruct["dataSource"]*"\\Processing\\M2_Pd\\FSTransformed\\"
     PathStruct["FinalData"] = PathStruct["dataSource"]*"\\Processing\\M2_Pd\\FinalDataForCalibration\\"
     PathStruct["firmspecific_justBeforeMissingHandling"] = PathStruct["FinalData"]
-    PathStruct["paramPath"] = PathStruct["dataSource"]*"\\Processing\\M2_Pd\\"
+    PathStruct["paramPath"] = PathStruct["dataSource"]*"\\Products\\M2_Pd\\"
     PathStruct["loadFolder"] = PathStruct["Official"]*"Data\\FullPeriod\\"*string(dataMonth)*"_withoutRevision\\Monthly\\Products\\P2_Pd\\" ## Full Period Data
     PathStruct["SourcePath"] = PathStruct["PrePath"]*"Data\\Look_Up_Table\\" ## Look Up Table Source Folder
     PathStruct["SME_Titles"] = PathStruct["PrePath"]*"Data\\Firm_Calculation_User_Input\\SME_Titles\\"
@@ -44,9 +44,9 @@ function validus_path_define(dataMonth, smeEcon = [1 3 9 10])
     PathStruct["Firm_DTD_Regression_FxRate"] = PathStruct["Firm_Data"]*"Data\\"*"DTD_Regression\\Econs_"*strSmeEconCodes*"\\FxRate\\"
     PathStruct["Firm_DTD_Regression_Parameter"] = PathStruct["Firm_Data"]*"Data\\"*"DTD_Regression\\Econs_"*strSmeEconCodes*"\\Parameter\\"
     PathStruct["FullPeriodPD"] = PathStruct["Firm_Data"]*"FullPeriodPD\\"
-    PathStruct["CRI_Calibration_Parameter"] = PathStruct["Firm_Data"]*"SMEPD_Calculation_Econ9\\CRI_Calibration_Parameter\\"
-    PathStruct["SMEPD_Input"] = PathStruct["Firm_Data"]*"SMEPD_Calculation_Econ9\\Input\\"
-    PathStruct["SMEPD_Output"] = PathStruct["Firm_Data"]*"SMEPD_Calculation_Econ9\\Output\\"
+    PathStruct["CRI_Calibration_Parameter"] = PathStruct["Firm_Data"]*"SMEPD_Calculation_Econ"*string(PDEcon)*"\\CRI_Calibration_Parameter\\"
+    PathStruct["SMEPD_Input"] = PathStruct["Firm_Data"]*"SMEPD_Calculation_Econ"*string(PDEcon)*"\\Input\\"
+    PathStruct["SMEPD_Output"] = PathStruct["Firm_Data"]*"SMEPD_Calculation_Econ"*string(PDEcon)*"\\Output\\"
 
     Sub_Key = Array(["Industry_Data", "Industry_Factor", "forwardPDFolder", "SMEinfoFolder", "Industry_FactorModel",
                     "Industry_Results", "Firm_DTD_Regression_CriRiskFactor", "Firm_DTD_Regression_FS",

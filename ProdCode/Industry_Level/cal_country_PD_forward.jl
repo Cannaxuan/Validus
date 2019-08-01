@@ -1,20 +1,21 @@
 function cal_country_PD_forward(firmFS, paraDef, paraOther, nHorizon = size(paraDef, 2))
-    # firmFS = firmspecific[iMonthSB, :, :]
-    ## This script calculates (cumulative) probabilities of default and (cumulative)
-    ## probability of other exit by considering forward defaut intensity
-    ## as well as forward other-exit intensity.
+#= firmFS = firmspecific[iMonthSB, :, :]
+    This script calculates (cumulative) probabilities of default and (cumulative)
+    probability of other exit by considering forward defaut intensity
+    as well as forward other-exit intensity.
 
-    ## INPUT : firmFS     :    nVar * nObs matrix
+    INPUT : firmFS     :    nVar * nObs matrix
     ##         paraDef    :    nVar * nhorizon matrix, parameter sets for default
     ##         paraOther  :    nVar * nhorizon matrix, parameter sets for other exit
     ##         nHorizon   :    the end month to compute
 
-    ## OUTPUT: cumPD      :    nhorizon * nObs matrix, culmulative probability of default
-    ##         cumPOE     :    nhorizon * nObs matrix, culmulative probability of other exit
-    ##         PS         :    nhorizon * nObs matrix, probability of survival
-    # firmFS = deepcopy(firmFS)
-    # paraDef = deepcopy(paraDef)
-    # paraOther = deepcopy(paraOther)
+    OUTPUT: cumPD      :    nhorizon * nObs matrix, culmulative probability of default
+            cumPOE     :    nhorizon * nObs matrix, culmulative probability of other exit
+            PS         :    nhorizon * nObs matrix, probability of survival
+    firmFS = deepcopy(firmFS)
+    paraDef = deepcopy(paraDef)
+    paraOther = deepcopy(paraOther)
+=#
     delta = 1/12
 
     paraDef = paraDef[:, 1:nHorizon]

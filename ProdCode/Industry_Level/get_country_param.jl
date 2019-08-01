@@ -1,5 +1,5 @@
 # using CSV
-function get_country_param(countryCode, dataMthToLoad,sourceFolder)
+function get_country_param(countryCode, dataMthToLoad, sourceFolder)
 ## This function is to collect the parameters of common factors and firm-specific attributes for each country
 
     loadPath = sourceFolder*"\\Products\\M2_Pd\\current_smc\\"

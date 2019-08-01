@@ -64,7 +64,7 @@ include("$prePath/Industry_Level/generate_PDfile.jl")
 
 
 
-function Industry_Level(DataDate, smeEcon = [1 3 9 10])
+function Industry_Level(DataDate, smeEcon = [1 3 9 10], PDEcon = 9)
  #=
 
      ## Production Procedure (Validus production code should be run shortly after monthly calibration without revision.)
@@ -77,16 +77,11 @@ function Industry_Level(DataDate, smeEcon = [1 3 9 10])
      ## The results will be saved in ProdData/DataMonth/Industry {DataPreparation/FactorModel/Products}
      ## by Yao Xuan 20190601
  =#
-     ## Add Paths
-
 
      # DataDate = 20190531
-     # mpath = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdCode"
-     # idx = findfirst("ProdCode", mpath)
-     # prepath = mpath[1:idx[1]-1]
      DataMonth = fld(DataDate, 100)
 
      ## Initial path
-     PathStruct = validus_path_define(DataMonth, smeEcon)
+     PathStruct = validus_path_define(DataMonth, smeEcon, PDEcon)
      main_Validus(DataDate, PathStruct, smeEcon)
 end
