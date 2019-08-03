@@ -37,7 +37,6 @@ function get_country_PD_forward_specific(countryCode, dataEndMth, folders, nHori
 
     if countryCode == 2 || countryCode == 15 || countryCode == 16  ## get Structure Break Econ's forwrd PD
         ## Load Structure Break Econ's Parameter
-        searchdir(path, key) = filter(x->occursin(key, x), readdir(path))
         path = loadPath_para*"current_smc\\sb\\"*string(countryCode)*"\\"
         key = "para_both_smc_"*string(countryCode)
         SBPara = searchdir(path, key)

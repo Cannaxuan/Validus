@@ -85,10 +85,7 @@ function datacleanforRegression_main(PathStruct, DataMonth, smeEcon, PDEcon)
     cp(PathStruct["Firm_Specific"]*"UpLwBounds_"*string(PDEcon)*".csv",
        PathStruct["CRI_Calibration_Parameter"]*"UpLwBounds_"*string(PDEcon)*".csv", force = true)
 
-    searchdir(path, key) = filter(x->occursin(key, x), readdir(path))
-    path = PathStruct["paramPath"]*"current_smc\\"
-    key = "C"*string(PDEcon)*"_"
-    files = searchdir(path, key)
+    files = searchdir(PathStruct["paramPath"]*"current_smc\\", "C"*string(PDEcon)*"_")
     CALIBRATION_DATE = maximum(map(x->parse(Int, x[4:11]), files))
 
     cp(PathStruct["paramPath"]*"current_smc\\C"*string(PDEcon)*"_"*string(CALIBRATION_DATE)*".csv",

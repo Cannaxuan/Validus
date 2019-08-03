@@ -21,8 +21,10 @@ function retrieve_sales_rev_turn_raw(iEcon, dateStart, dateEnd, turnOverFolder, 
          fxRate
      catch
          fxRate = matread(CleanDataFolder*"GlobalInformation\\fxRate.mat")["fxRate"]
+         # fxRate = matread(CleanDataFolder*"GlobalInformation\\fxRate.mat")
          # fxRate = fxrate["Data"]
-         matwrite(turnOverFolder*"fxRate.mat", fxrate)
+         matwrite(turnOverFolder*"fxRate.mat", fxRate)
+         # fxRate = matread(PathStruct["dataSource"]*"\\IDMTData\\CleanData\\GlobalInformation\\fxRate.mat")["fxRate"]
          ## julia to save mat file would be quite larger than matlab, later consider to use copy file
          fxRate
      end

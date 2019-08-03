@@ -2,7 +2,7 @@ function sales(PathStruct, enddate, smeEcon, nyear)
     # PathStruct, enddate, smeEcon, nyear = PathStruct, DataDate, smeEcon, nyear
     DataMonth = fld(enddate, 100)
     monthVctr = load(PathStruct["Industry_Factor"]*"fac.jld")["facs"]["dateVctr"]
-    fxRate = matread(PathStruct["SMEinfoFolder"]*"fxRate.mat")["fxRate"]
+    fxRate = matread(PathStruct["SMEinfoFolder"]*"fxRate.mat")
     for iEcon = smeEcon
 
         salesRevTurnMth = load(PathStruct["SMEinfoFolder"]*"salesRevTurnMth_"*string(iEcon)*".jld")["salesRevTurnMth"]

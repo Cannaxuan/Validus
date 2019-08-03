@@ -5,9 +5,7 @@ function get_country_param(countryCode, dataMthToLoad, sourceFolder)
     loadPath = sourceFolder*"\\Products\\M2_Pd\\current_smc\\"
 
     ## Identify the file to load
-    searchdir(path,key) = filter(x->occursin(key,x), readdir(path))
-    key = "C"*string(countryCode)*"_"
-    caliFiles = searchdir(loadPath,key)[1]
+    caliFiles = searchdir(loadPath, "C"*string(countryCode)*"_")[1]
 
     ## Load the calibration parameters
     paraTemp = CSV.read(loadPath*caliFiles, header = collect(1:18), datarow = 3)

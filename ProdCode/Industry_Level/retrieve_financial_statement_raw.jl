@@ -31,7 +31,8 @@ function retrieve_financial_statement_raw(BBG_ID, dateStart, dateEnd, fsFieldID)
         return financialStatement_v, FinancialStatement_v
     end
     # financialStatementEnt[ismissing.(financialStatementEnt)] .= NaN
-    financialStatementEnt = Matrix(missing2NaN!(DataFrame(financialStatementEnt)))[:]
+    # financialStatementEnt = Matrix(missing2NaN!(DataFrame(financialStatementEnt)))[:]
+    financialStatementEnt = Matrix(missing2NaN!(DataFrame(financialStatementEnt)))
     financialStatementEnt = Float64.(financialStatementEnt)
 
     ## Retrieve financial statement data in terms of segment because there seems a limit of integer arrays passing to the database.

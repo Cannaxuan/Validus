@@ -12,17 +12,18 @@ end
 @everywhere using Pkg, PyCall, Printf, Statistics, MAT, JLD, DataFrames, GLMNet, GLM, StatsBase,
                 Random, XLSX, CSV, Dates, ZipFile
 using LinearAlgebra
-@everywhere prePath = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdCode"
+@everywhere prePath = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdCode\\"
 @everywhere include("$prePath/Industry_Level/date_yyyymm_add.jl")
 @everywhere include("$prePath/Industry_Level/cal_country_PD_forward.jl")
 @everywhere include("$prePath/Industry_Level/get_country_param.jl")
 @everywhere include("$prePath/Industry_Level/get_country_PD_forward.jl")
-@everywhere Ycom = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdCode\Industry_Level\YX_Code"
+@everywhere Ycom = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdCode\Industry_Level\YX_Code\\"
 @everywhere include(Ycom*"\\split_data.jl")
 
 include("$prePath/Industry_Level/load_data_PD.jl")
 include("$prePath/Industry_Level/generate_data_PD.jl")
 include(Ycom*"\\connectDB.jl")
+include(Ycom*"\\searchdir.jl")
 include(Ycom*"\\get_data_from_DMTdatabase.jl")
 include(Ycom*"\\highest_indexin.jl")
 include(Ycom*"\\readConfig.jl")
@@ -37,6 +38,7 @@ include(Ycom*"\\get_individual_first_use_time.jl")
 include(Ycom*"\\filter_financial_statement.jl")
 include(Ycom*"\\convert_currencyID_to_FXID.jl")
 include(Ycom*"\\GCdef.jl")
+include(Ycom*"\\missing2NaN.jl")
 include("$prePath/validus_path_define.jl")
 include("$prePath/Industry_Level/get_country_PD_forward_specific.jl")
 include("$prePath/Industry_Level/cust_data.jl")
