@@ -1,5 +1,5 @@
 function fs2DTDinput_v3(firminfo, endmonth, firmindex)
-# firminfo, dateEnd, firmindex = num[i], dateVctr[end, 1], VfirmInfo[i, 1]
+# firminfo, endmonth, firmindex = num[i], dateVctr[end], VfirmInfo[i, 1]
     if firminfo[1, 1] == size(firminfo, 2)
         firminfo = firminfo[2:end, :]'
         firminfo = Matrix(sort!(DataFrame(firminfo), (:x1)))
@@ -25,17 +25,17 @@ function fs2DTDinput_v3(firminfo, endmonth, firmindex)
             ####  Col15: median DTD
             ####  Col16: median 1/Sigma
         nrows = length(monthVtr)
-        ncols = curcols + 2
+        ncols = curcols + 2     ## 18 cols
         firmpreDTD = fill(NaN, nrows, ncols)
-        BE = fill(NaN, nrows)   ## Size proxy
+        BE = fill(NaN, nrows)   ## Size proxy: Book Equity
 
         firmpreDTD[:, 1] .= firmindex
-        firmpreDTD[:, 2] = monthVtr
+        firmpreDTD[:, 2]  = monthVtr
 
         period_end = firminfo[:, 1]
-        push!(period_end, 1e10)
+        push!(period_end, 1e10)     ## in matlab, add Inf to
         idxtmp = fill(false, length(monthVtr))
-        for i = length(period_end)-1
+        for i = 1:length(period_end)-1
             # global period_end, idxtmp
             idx = fld(period_end[i], 100) .< monthVtr .<= fld(period_end[i+1], 100)
             testidx = idx .& .!idxtmp
@@ -50,7 +50,7 @@ function fs2DTDinput_v3(firminfo, endmonth, firmindex)
                 firminfo[i, 10]./firminfo[i, 4]            ## 10:BE/TL
                 firminfo[i, 10]./firminfo[i, 5]            ## 11:BE/CL
                 firminfo[i, 2]./1e6                        ## 12:TA in million for log(TA/median TA)
-                firminfo[i, 2]./firminfo[i, 4]]',           ## 13:TA/TL for log(TA/TL)
+                firminfo[i, 2]./firminfo[i, 4]]',          ## 13:TA/TL for log(TA/TL)
                 outer = (sum(testidx), 1))
             BE[testidx] = repeat([firminfo[i, 10]/1e6], outer = sum(testidx))
 

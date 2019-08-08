@@ -1,4 +1,4 @@
-function  step2_II_PDpreparation(PathStruct, DataMonth, smeEcon)
+function  step2_II_PDpreparation(PathStruct, DataMonth, smeEcon, countrycode = 9)
 
     # econs = findall(.!isnan.(PathStruct["GROUPS"]))
     econs = vcat(PathStruct["ECONSREGION"]...)
@@ -6,16 +6,16 @@ function  step2_II_PDpreparation(PathStruct, DataMonth, smeEcon)
     fullperiod =
         matread(PathStruct["Industry_Data"]*"pd60hUpToMostRecent_bk.mat")["dataUpToMostRecent"][:,[1,2,3,16]]
     ## column 16 represents one year PD
-    full_period_date = fullperiod[:,2]*100 + fullperiod[:,3]
+    full_period_date = fullperiod[:, 2]*100 + fullperiod[:, 3]
 
     ## Load Total FirmHistory
     UpdatedFirmHistory = Array{Float64, 2}(undef, 0, 6)
     for i = 1:length(econs)
         # global UpdatedFirmHistory
-        Firmhistory = matread(PathStruct["CompanyInformationFolder"]*"FirmHistory_"*string(econs[i])*".mat")
-        firmHistory = Firmhistory["firmHistory"]
-        FirmHistory = Firmhistory["FirmHistory"]
+        firmHistory = matread(PathStruct["CompanyInformationFolder"]*"FirmHistory_"*string(econs[i])*".mat")["firmHistory"]
         UpdatedFirmHistory = vcat(UpdatedFirmHistory, firmHistory[:,[1,2,3,8,10,11]])
+        ## UpdatedFirmHistory columns:
+        ## 1. Company Number  2.Time Start  3. Time end  4. econ  5.Sector Number  6.Group Number
     end
 
     ## Construct time series
@@ -25,9 +25,9 @@ function  step2_II_PDpreparation(PathStruct, DataMonth, smeEcon)
     pdAllForward = []
     firmInfo = []
 
-    for i = 1:size(econs, 1)
-        # global Timevec, UpdatedFirmHistory, pdAllForward, firmInfo
-        idx_Econs = findall(UpdatedFirmHistory[:,4] .== econs[i])
+    for i = 1:length(econs)
+        # global Timevec, UpdatedFirmHistory, pdAllForward, firmInfos
+        idx_Econs = findall(UpdatedFirmHistory[:, 4] .== econs[i])
         firmlist = UpdatedFirmHistory[idx_Econs, :]
         save(PathStruct["FullPeriodPD"]*"firmlist_with_comp_num_"*string(econs[i])*".jld", "firmlist", firmlist, compress = true)
 
@@ -37,12 +37,14 @@ function  step2_II_PDpreparation(PathStruct, DataMonth, smeEcon)
         PD_all[:, 3, :] .= last.(Timevec)
 
         for j = 1:length(unique_firmlist)
-            # global PD_all
+            # global PD_all， PD_all_date
             PD_all[:, 1, j] .= unique_firmlist[j]
             idx_fullperiod = fullperiod[:, 1] .== unique_firmlist[j]
+                ##  fullperiod is from dataUpToMostRecent, the PD file;
+                ##  unique_firmlist is from firmHistory, the firm information file
             idx_Date = fullperiod[idx_fullperiod, 2]*100 + fullperiod[idx_fullperiod, 3]
             a = in.(PD_all_date, [idx_Date])
-            PD_all[a, 4, j] = fullperiod[idx_fullperiod, 4]
+            PD_all[a, 4, j] = fullperiod[idx_fullperiod, 4]     ## one year pd
         end
         save(PathStruct["FullPeriodPD"]*"PD_all_"*string(econs[i])*".jld", "PD_all", PD_all, compress = true)
 
@@ -76,8 +78,9 @@ function  step2_II_PDpreparation(PathStruct, DataMonth, smeEcon)
     end
 
     ## the firm level data have been compared and confirmed to be identical
-
     dateVctr = PD_all_date
+
+    ## add one column for tag SME indicator
     pdAllForwardtemp = reshape(deepcopy(pdAllForward), size(pdAllForward, 1), 1, size(pdAllForward, 2))
     pdAllForwardtemp = hcat(pdAllForwardtemp, fill(NaN, size(pdAllForward, 1), 1, size(pdAllForward, 2)))
 
@@ -100,10 +103,9 @@ function  step2_II_PDpreparation(PathStruct, DataMonth, smeEcon)
     Varresult = compute_Var_quantile(pdAllForwardtemp, dateVctr, firmInfo, smeEcon)
     save(PathStruct["SMEPD_Input"]*"Varresult.jld", "Varresult", Varresult, compress = true)
 
-    fxratesAll = matread(PathStruct["FxPath"])["fxRate"]
-    ## still unclear what's 9 meaning!!!
-    fxrate = fxratesAll["Data"][9, 1]
-
+    fxratesAll = matread(PathStruct["FxPath"]*"fxRateEcon.mat")["fxRateEcon"]
+    idx = Int(fxratesAll["ID"][countrycode, 3])     ## to find the match row of econ
+    fxrate = fxratesAll["Data"][idx, 1]
     save(PathStruct["SMEPD_Input"]*"fxrate.jld", "fxrate", fxrate, compress = true)
 
 end

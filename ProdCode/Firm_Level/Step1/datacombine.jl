@@ -3,13 +3,13 @@ function datacombine(PathStruct, smeEcon, DataMonth)
  This function is used for loading data from earlier steps.
  Load :SMElist.jld,'mthendfxrate.jld,'compAll.jld,'tempdata.jld' in economy 1, 3, 9, 10
  Output:
-        :fxAll.jld': 		'monthDate,'fxrate,'econID'
-		'compall.jld':		'CompNo,'monthDate,'MarketCap,'CL,'LTB,'TL,'TA,'rfr,'econID'
-		'OrigDataAll.jld':	'CompNo,'monthDate,'rfr,'stkrtn,'dtd_MLE,'NI2TA,'TA,'TL,'Cash'
-		'MeTable.jld,'SmTable.jld' and :MiTable.jld' have same format:
-            				'CompNo,'monthDate,'industryID,'econID,
-            				'Sales,'CL,'LTB,'TL,'TA,'rfr,'stkrtn,
-            				'NI2TA,'Cash,'fxrate,'tme,'Sales2TA,'CA,'NI,'BE'
+        :fxAll.jld': 		'monthDate','fxrate','econID'
+		'compall.jld':		'CompNo','monthDate','MarketCap','CL','LTB','TL','TA','rfr','econID'
+		'OrigDataAll.jld':	'CompNo','monthDate','rfr','stkrtn','dtd_MLE','NI2TA','TA','TL','Cash'
+		'MeTable.jld','SmTable.jld' and :'MiTable.jld' have same format:
+            				'CompNo','monthDate','industryID','econID',
+            				'Sales','CL','LTB','TL','TA','rfr','stkrtn',
+            				'NI2TA','Cash','fxrate','tme','Sales2TA','CA','NI','BE'
 =#
 
 	Fx_Combined = DataFrame()

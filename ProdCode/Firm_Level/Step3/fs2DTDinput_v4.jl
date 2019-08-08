@@ -35,7 +35,7 @@ function fs2DTDinput_v4(firminfo, endmonth, firmindex, industrycode)
         period_end = firminfo[:, 1]
         push!(period_end, 1e10)
         idxtmp = fill(false, length(monthVtr))
-        for i = length(period_end)-1
+        for i = 1:length(period_end)-1
             # global period_end, idxtmp
             idx = fld(period_end[i], 100) .< monthVtr .<= fld(period_end[i+1], 100)
             testidx = idx .& .!idxtmp
@@ -44,28 +44,28 @@ function fs2DTDinput_v4(firminfo, endmonth, firmindex, industrycode)
                     [firminfo[i, 8]/12 ./firminfo[i, 2]        ## 3:NI/TA
                     firminfo[i, 9]/12 ./firminfo[i, 2]         ## 4:sales/TA
                     firminfo[i, 4]./firminfo[i, 2]             ## 5:TL/TA
-                    log(firminfo[i, 7]./firminfo[i, 2])        ## 6:CASH/TA
+                    log(firminfo[i, 7]./firminfo[i, 2])        ## 6:log(CASH/TA)
                     firminfo[i, 7]./firminfo[i, 5]             ## 7:CASH/CL
                     firminfo[i, 5]./firminfo[i, 4]             ## 8:CL/TL
                     firminfo[i, 6]./firminfo[i, 4]             ## 9:LB/TL
                     firminfo[i, 10]./firminfo[i, 4]            ## 10:BE/TL
                     firminfo[i, 10]./firminfo[i, 5]            ## 11:BE/CL
                     firminfo[i, 2]./1e6                        ## 12:TA in million for log(TA/median TA)
-                    firminfo[i, 2]./firminfo[i, 4]]',           ## 13:TA/TL for log(TA/TL)
+                    firminfo[i, 2]./firminfo[i, 4]]',          ## 13:TA/TL for log(TA/TL)
                     outer = (sum(testidx), 1))
             else    ## Non-Finance
                 firmpreDTD[testidx, 3:end-5] = repeat(
                     [firminfo[i, 8]/12 ./firminfo[i, 2]        ## 3:NI/TA
                     firminfo[i, 9]/12 ./firminfo[i, 2]         ## 4:sales/TA
                     firminfo[i, 4]./firminfo[i, 2]             ## 5:TL/TA
-                    log(firminfo[i, 3]./firminfo[i, 5])        ## 6:Current Asset/CL
+                    log(firminfo[i, 3]./firminfo[i, 5])        ## 6:log(CA/CL)
                     firminfo[i, 7]./firminfo[i, 5]             ## 7:CASH/CL
                     firminfo[i, 5]./firminfo[i, 4]             ## 8:CL/TL
                     firminfo[i, 6]./firminfo[i, 4]             ## 9:LB/TL
                     firminfo[i, 10]./firminfo[i, 4]            ## 10:BE/TL
                     firminfo[i, 10]./firminfo[i, 5]            ## 11:BE/CL
                     firminfo[i, 2]./1e6                        ## 12:TA in million for log(TA/median TA)
-                    firminfo[i, 2]./firminfo[i, 4]]',           ## 13:TA/TL for log(TA/TL)
+                    firminfo[i, 2]./firminfo[i, 4]]',          ## 13:TA/TL for log(TA/TL)
                     outer = (sum(testidx), 1))
             end
             BE[testidx] = repeat([firminfo[i, 10]/1e6], outer = sum(testidx))

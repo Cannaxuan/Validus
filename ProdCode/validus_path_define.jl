@@ -17,7 +17,7 @@ function validus_path_define(dataMonth, smeEcon = [1 3 9 10], PDEcon = 9)
 
     ##Source data
     PathStruct["dataSource"] = PathStruct["Official"]*"Data\\ModelCalibration\\"*string(dataMonth)
-    PathStruct["FxPath"] = PathStruct["dataSource"]*"\\IDMTData\\CleanData\\GlobalInformation\\fxRate.mat"
+    PathStruct["FxPath"] = PathStruct["dataSource"]*"\\IDMTData\\CleanData\\GlobalInformation\\"
     PathStruct["CompanyInformationFolder"] = PathStruct["dataSource"]*"\\IDMTData\\SmartData\\FirmHistory\\Before_MA\\"
     PathStruct["DTDinputpath"] = PathStruct["dataSource"]*"\\IDMTData\\SmartData\\DTDCalculation\\Input\\Before_MA\\"
     PathStruct["OriginalPath"] = PathStruct["dataSource"]*"\\Processing\\M2_Pd\\OriginalData\\"

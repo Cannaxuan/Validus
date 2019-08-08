@@ -15,6 +15,9 @@ function DTDinput(PathStruct, enddate, smeEcon, nyear, DataMonth)
     for iEcon = smeEcon
         # DTDinput = matread(PathStruct["DTDinputpath"]*"DTDInput_"*string(iEcon)*".mat")
         # DTDInput = DTDinput["DTDInput"]
+        ## Column: 
+            ## 1. Company_Number/Mapping_Number  2. Time  3. MarketCap  4. Current Liability
+            ## 5. Long-term Borrow  6. Total Liability  7. Total Asset  8. Risk free rate
         compAll = matread(PathStruct["DTDinputpath"]*"DTDInput_"*string(iEcon)*".mat")["dtdInput"]
         compAll = compAll[compAll[:, 2] .> dataStart, :]
         compAll = compAll[compAll[:, 2] .<= enddate, :]

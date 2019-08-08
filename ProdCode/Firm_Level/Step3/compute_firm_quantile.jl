@@ -1,39 +1,39 @@
 function compute_firm_quantile(PD_target, pdAllForwardtemp, dateVctr, firmInfo, CfirmInfo)
     # CfirmInfo = VfirmInfo[i,:]
-    FirmInfo = [CfirmInfo'; firmInfo]
-    idxnnan = .!isnan.(PD_target[:, 2])
+    FirmInfo  = [CfirmInfo'; firmInfo]
+    idxnnan   = .!isnan.(PD_target[:, 2])
     firmmonth = PD_target[idxnnan, 2]*100 + PD_target[idxnnan, 3]
-    PD_value = PD_target[:, 15]
-    PD_value = hcat(PD_value, fill(CfirmInfo[4], length(PD_value)))
+    PD_value  = PD_target[:, 15]         ## one year pd for specific firm
+    PD_value  = hcat(PD_value, fill(CfirmInfo[4], length(PD_value)))    ## pd and category for specific firm
 
-    concat = cat(PD_value, pdAllForwardtemp, dims = 3)
+    concat = cat(PD_value, pdAllForwardtemp, dims = 3)  ## pd and category for specific firm and all firms
     category = CfirmInfo[4]
     idx1, idx2 = ismember_CK(firmmonth, dateVctr)
     idx = Int.(idx2[idx1])
 
-    PDsamplevalue = concat[idx, 1, :]
-    PDsample = concat[idx, end, :]
+    PDsamplevalue = concat[idx, 1, :]   ## pd calue for specific firm and all firms
+    PDsample = concat[idx, end, :]      ## category for specific firm and all firms
     idx3 = PDsample .== category
     PDsamplevalueCat = fill(NaN, size(PDsamplevalue))
-    PDsamplevalueCat[idx3] = PDsamplevalue[idx3]
+    PDsamplevalueCat[idx3] = PDsamplevalue[idx3]    ## pd in specific category
 
     result = Dict{String, Any}("global" => Vector{Float64}(undef, length(PD_value[idx])),
-                  "category" => Vector{Float64}(undef, length(PD_value[idx])),
-                  "selectedEcons" => Vector{Float64}(undef, length(PD_value[idx])),
-                  "industry" => Vector{Float64}(undef, length(PD_value[idx])),
-                  "selectedEconsPlusindustry" => Vector{Float64}(undef, length(PD_value[idx])))
+                             "category" => Vector{Float64}(undef, length(PD_value[idx])),
+                        "selectedEcons" => Vector{Float64}(undef, length(PD_value[idx])),
+                            "industry"  => Vector{Float64}(undef, length(PD_value[idx])),
+            "selectedEconsPlusindustry" => Vector{Float64}(undef, length(PD_value[idx])))
     idxecon = in.(FirmInfo[:, 4], [smeEcon])
     idxind = in.(FirmInfo[:, 5], [CfirmInfo[5]])
 
     for i = 1:length(PD_value[idx])
         # global result
-        result["global"][i] = invprctile(PDsamplevalue[i, :], PD_value[idx][i])
-        result["category"][i] = invprctile(PDsamplevalueCat[i, :], PD_value[idx][i])
+        result["global"][i]        = invprctile(.!isnan.(PDsamplevalue[i, :]), PD_value[idx][i])
+        result["category"][i]      = invprctile(PDsamplevalueCat[i, :], PD_value[idx][i])
         result["selectedEcons"][i] = invprctile(PDsamplevalue[i, idxecon], PD_value[idx][i])
-        result["industry"][i] = invprctile(PDsamplevalue[i, idxind], PD_value[idx][i])
+        result["industry"][i]      = invprctile(PDsamplevalue[i, idxind], PD_value[idx][i])
         result["selectedEconsPlusindustry"][i] = invprctile(PDsamplevalue[i, idxind .& idxecon], PD_value[idx][i])
     end
-    idxnnan = idxnnan[end-288:end]
+    idxnnan  = idxnnan[end-288:end]
     PD_value = PD_value[end-288:end, 1]
     PD_value = PD_value[idxnnan]
 

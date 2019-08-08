@@ -1,20 +1,20 @@
-function MacroPart(IncreTable, RatioM, LogRatioM, medianVtr; econ = [1 3 9 10])
+function MacroPart(IncreTable, RatioM, LogRatioM, medianVtr; smeEcon = [1 3 9 10])
 #=
  Output:
-    finalX:   :NI2TA, :Sales2TA, :TL2TA, :Cash2TA, :Cash2CL, :CL2TL, :LTB2TL,
-              :BE2TL, :BE2CL, :LogTA2median, :LogTA2TL, :rfr, :fxrate, :stkrtn, :medianDTD, :medianOverSigma
-    finalXres::NI2TA, :Cash2TA, :CL2TL, :BE2CL, :LogTA2TL, :medianDTD, :medianOverSigma
-    monthmedian::monthDate, :econID, :Count, :DTD, :M2B, :Sigma, :OverSigma, :medianTA, :medianBE
-    DTD:
-    FirmIndex: :CompNo, :monthDate, :econID
-    lb, ub: lower and upper bound of each column
-    industry:
+    finalX      :NI2TA, :Sales2TA, :TL2TA, :Cash2TA, :Cash2CL, :CL2TL, :LTB2TL,
+                :BE2TL, :BE2CL, :LogTA2median, :LogTA2TL, :rfr, :fxrate, :stkrtn, :medianDTD, :medianOverSigma
+    finalXres   subset of finalX,    :NI2TA, :Cash2TA, :CL2TL, :BE2CL, :LogTA2TL, :medianDTD, :medianOverSigma
+    monthmedian :monthDate, :econID, :Count, :DTD, :M2B, :Sigma, :OverSigma, :medianTA, :medianBE
+    DTDres      DTD
+    FirmIndex   :CompNo, :monthDate, :econID
+    lb, ub      lower and upper bound of each column
+    industry    10 industries codes
 =#
     finalX = join(RatioM, LogRatioM, on = [:CompNo, :monthDate, :econID], kind = :left)
     finalX = join(finalX, IncreTable[:, [:CompNo, :monthDate, :rfr, :fxrate, :stkrtn, :DTD, :Sigma, :M2B, :industryID]],
                   on = [:CompNo, :monthDate], kind = :left)
     # centralized rfr and fxrate
-    for iEcon = econ
+    for iEcon = smeEcon
         # global finalX
         idx = finalX.econID .== iEcon
         rfrmean = nanMean(finalX.rfr[idx, :])
@@ -54,11 +54,11 @@ function MacroPart(IncreTable, RatioM, LogRatioM, medianVtr; econ = [1 3 9 10])
     names!(monthmedian,  vcat(:monthDate, :econID, :Count, propertylist))
 
     for iMonth = 1:length(monthlist)
-        for iEcon = 1:length(econ)
-            idxecon = finalX.econID .== econ[iEcon]
+        for iEcon = 1:length(smeEcon)
+            idxecon = finalX.econID .== smeEcon[iEcon]
             idxmonth = finalX.monthDate .== monthlist[iMonth]
             monthmedian[4*(iMonth-1)+iEcon, :monthDate] = monthlist[iMonth]
-            monthmedian[4*(iMonth-1)+iEcon, :econID] = econ[iEcon]
+            monthmedian[4*(iMonth-1)+iEcon, :econID] = smeEcon[iEcon]
             for i = names(monthmedian)
                 if i in propertylist
                     monthmedian[4*(iMonth-1)+iEcon, i] = nanMedian(finalX[idxecon .& idxmonth, i])

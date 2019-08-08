@@ -1,5 +1,5 @@
 function Cal_CountryPD_v011(Para_def, Para_other, Data, nhorizon)
-    # Para_def, Para_other, Data = para_def_finance, para_other_finance, data[:,4:end]
+    # Para_def, Para_other, Data = para_def_nonfinance, para_other_nonfinance, data[:,4:end]
     #= This script calculates cumulative default probabilities by considering
        forward defaut intensity as well as forward other-exit intensity.
        INPUT:

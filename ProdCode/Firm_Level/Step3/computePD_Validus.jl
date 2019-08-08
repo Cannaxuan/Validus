@@ -1,6 +1,9 @@
 function computePD_Validus(PathStruct, countrycode, firmspecific, firmlist, nhorizon = 60)
     # firmspecific, firmlist = firmspecificAll, firmlistAll
     firmspecificleveltrend = compute_level_trend(firmspecific, firmlist, countrycode)
+    ##      1. company code  2. yr (yyyy)   3. mth (mm)      4. index return   5.  3 month r
+    ##      6. DTD(AVG)      7. DTD(DIF)    8. CASH/TA(AVG)  9. CASH/TA(DIF)   10. NI/TA(AVG)
+    ##      11. NI/TA(DIF)   12. SIZE(AVG)  13. SIZE(DIF)    14. M/B           15. SIGMA
     nrows = size(firmspecificleveltrend, 1)
     nfirm = size(firmspecificleveltrend, 3)
     ## Add AggDTDmedian
@@ -62,9 +65,17 @@ function computePD_Validus(PathStruct, countrycode, firmspecific, firmlist, nhor
 
     PDfile = CSV.read(PathStruct["CRI_Calibration_Parameter"]*file, header = false, skipto = 3)
 
+    #=  Original Column names:
+    1.  intercept	2. Stock_Index_Return	   3. Three_Month_Rate_After_Demean
+    4.  DTD_Level	5. DTD_Trend	6. CA_Over_CL_Level	    7. CA_Over_CL_Trend
+    8.  NI_Over_TA_Level	9.  NI_Over_TA_Trend	    10. Size_Level	  11. Size_Trend
+    12. M_Over_B	13. SIGMA	14. Cash_Over_TA_Level	    15. Cash_Over_TA_Trend
+    16. Aggregate_DTD_Fin   17. Aggregate_DTD_NonFin	18. intercept_dummy(NAMR_Fin)
+    =#
+
     para_def = Matrix(PDfile[1:60, 1:end-1])
     para_def[:, 1] = map(x -> parse(Float64, x), para_def[:, 1])
-    para_def = Float64.(para_def')
+    para_def = Float64.(para_def')      ## tranpose PD horizons from rows to columns
     para_other = Matrix(PDfile[62:end, 1:end-1])
     para_other[:, 1] = map(x -> parse(Float64, x), para_other[:, 1])
     para_other = Float64.(para_other')
@@ -83,6 +94,12 @@ function computePD_Validus(PathStruct, countrycode, firmspecific, firmlist, nhor
         data[:, 5] = data[:, 5] / 100
         PD_all[:, 1:3, iFirm] = data[:, 1:3]
         if firmlist[iFirm, 5] == 10008
+        #= para_def_finance rows:
+            1.  intercept	2. Stock_Index_Return   3. Three_Month_Rate_After_Demean
+            4.  DTD_Level	5. DTD_Trend	6. Cash_Over_TA_Level	 7. Cash_Over_TA_Trend
+            8.  NI_Over_TA_Level	9.  NI_Over_TA_Trend	  10. Size_Level	  11. Size_Trend
+            12. M_Over_B	13. SIGMA      14. Aggregate_DTD_Fin   15. Aggregate_DTD_NonFin
+        =#
             para_def_finance = para_def[vcat(1:5, 14:15, 8:13, 16:17), :]
             para_def_finance[15, :] .= 0
             para_other_finance = para_other[vcat(1:5, 14:15, 8:13, 16:17), :]
@@ -90,12 +107,18 @@ function computePD_Validus(PathStruct, countrycode, firmspecific, firmlist, nhor
             PD_all[:, 4:end, iFirm] =
                 Cal_CountryPD_v011(para_def_finance, para_other_finance, data[:,4:end], nhorizon)
         else
-            para_def_finance = para_def[vcat(1:13, 16:17), :]
-            para_def_finance[14, :] .= 0
-            para_other_finance = para_other[vcat(1:13, 16:17), :]
-            para_other_finance[14, :] .= 0
+        #= para_def_nonfinance rows:
+            1.  intercept	2. Stock_Index_Return	   3. Three_Month_Rate_After_Demean
+            4.  DTD_Level	5. DTD_Trend	6. CA_Over_CL_Level	    7. CA_Over_CL_Trend
+            8.  NI_Over_TA_Level	9.  NI_Over_TA_Trend	    10. Size_Level	  11. Size_Trend
+            12. M_Over_B	13. SIGMA    14. Aggregate_DTD_Fin   15. Aggregate_DTD_NonFin
+        =#
+            para_def_nonfinance = para_def[vcat(1:13, 16:17), :]
+            para_def_nonfinance[14, :] .= 0
+            para_other_nonfinance = para_other[vcat(1:13, 16:17), :]
+            para_other_nonfinance[14, :] .= 0
             PD_all[:, 4:end, iFirm] =
-                Cal_CountryPD_v011(para_def_finance, para_other_finance, data[:,4:end], nhorizon)
+                Cal_CountryPD_v011(para_def_nonfinance, para_other_nonfinance, data[:,4:end], nhorizon)
         end
     end
 

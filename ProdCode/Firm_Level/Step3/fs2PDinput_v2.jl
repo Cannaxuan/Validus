@@ -1,4 +1,4 @@
-function fs2PDinput_v2(PathStruct, firminfo, DTDi, countrycode)
+function fs2PDinput_v2(PathStruct, firminfo, DTDi, countrycode = 9)
  # firminfo, DTDi = firmpreDTD[i], DTDres[i]
 
     firmlist =
@@ -26,7 +26,7 @@ function fs2PDinput_v2(PathStruct, firminfo, DTDi, countrycode)
         ## 4:sales/TA
         ## 5:TL/TA
         ## 6:CASH/TA
-        ## 7cash/CL
+        ## 7:cash/CL
         ## 8:CL/TL
         ## 9:LB/TL
         ## 10:BE/TL
@@ -36,8 +36,10 @@ function fs2PDinput_v2(PathStruct, firminfo, DTDi, countrycode)
     firmspecific_BeforeAverDiff[(end-l+1):end, [7, 9]] = [firminfo[:, 3] firminfo[:, 6]]    ## Col7:NI/TA, Col9:Cash/TA
     firmspecific =
         load(PathStruct["CRI_Calibration_Parameter"]*"firmspecific_BeforeAverDiff_"*string(countrycode)*".jld")["firmspecific"]
+
     tmpfirm = nanMean(firmspecific[:, 2:5, :], 3)
     idxtmp = Int.(ismember_CK(firmspecific_BeforeAverDiff[(end-l+1):end, 2:3], tmpfirm[:, 1:2], "rows")[2])
     firmspecific_BeforeAverDiff[(end-l+1):end, 4:5] = tmpfirm[idxtmp, 3:4]
+
     return firmspecific_BeforeAverDiff, monthNumbers
 end

@@ -5,18 +5,20 @@ sales_rev_turn_raw = deepcopy(sales_rev_turn_raw_temp)
 
 
 data1 =
-    matread(raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\firmspecificAll.mat")
+    matread(raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\firmspecificleveltrend.mat")["firmspecificleveltrend"][:,:,1]
 
 data1 =  data1["firmspecificAll"]
 
+data1[idx]
+data2[idx]
 
-
-data2 = firmspecificAll
+data2 = firmspecificleveltrend[:,:,1]
     load(raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdData\201905\Firm\FullPeriodPD\PD_all_9.jld")
 
-findall(.!isequal.(data1, data2))
+idx = findall(.!isequal.(data1, data2))
 
-findall(data1 .- data2 .>= 0.1)
+
+idx = findall(abs.(data1 .- data2) .>= 0.0001)
 deepcopy(dataFlatMth)
 res = []
 for i = 1:3642
