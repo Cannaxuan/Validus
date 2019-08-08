@@ -25,14 +25,28 @@ function compute_firm_quantile(PD_target, pdAllForwardtemp, dateVctr, firmInfo, 
     idxecon = in.(FirmInfo[:, 4], [smeEcon])
     idxind = in.(FirmInfo[:, 5], [CfirmInfo[5]])
 
+    # for i = 1:length(PD_value[idx])
+    #     # global result
+    #     result["global"][i]        = invprctile(PDsamplevalue[i, :], PD_value[idx][i])
+    #     result["category"][i]      = invprctile(PDsamplevalueCat[i, :], PD_value[idx][i])
+    #     result["selectedEcons"][i] = invprctile(PDsamplevalue[i, idxecon], PD_value[idx][i])
+    #     result["industry"][i]      = invprctile(PDsamplevalue[i, idxind], PD_value[idx][i])
+    #     result["selectedEconsPlusindustry"][i] = invprctile(PDsamplevalue[i, idxind .& idxecon], PD_value[idx][i])
+    # end
+
+
     for i = 1:length(PD_value[idx])
         # global result
-        result["global"][i]        = invprctile(.!isnan.(PDsamplevalue[i, :]), PD_value[idx][i])
-        result["category"][i]      = invprctile(PDsamplevalueCat[i, :], PD_value[idx][i])
-        result["selectedEcons"][i] = invprctile(PDsamplevalue[i, idxecon], PD_value[idx][i])
-        result["industry"][i]      = invprctile(PDsamplevalue[i, idxind], PD_value[idx][i])
-        result["selectedEconsPlusindustry"][i] = invprctile(PDsamplevalue[i, idxind .& idxecon], PD_value[idx][i])
+        result["global"][i]       = ecdf(PDsamplevalue[i, .!isnan.(PDsamplevalue[i, :])])(PD_value[idx][i])
+        result["category"][i]     = ecdf(PDsamplevalueCat[i,.!isnan.(PDsamplevalueCat[i, :])])(PD_value[idx][i])
+        temp = PDsamplevalue[i, idxecon]
+        result["selectedEcons"][i] = ecdf(temp[.!isnan.(temp)])(PD_value[idx][i])
+        temp = PDsamplevalue[i, idxind]
+        result["industry"][i]      = ecdf(temp[.!isnan.(temp)])(PD_value[idx][i])
+        temp = PDsamplevalue[i, idxind .& idxecon]
+        result["selectedEconsPlusindustry"][i] = ecdf(temp[.!isnan.(temp)])(PD_value[idx][i])
     end
+
     idxnnan  = idxnnan[end-288:end]
     PD_value = PD_value[end-288:end, 1]
     PD_value = PD_value[idxnnan]

@@ -5,20 +5,45 @@ sales_rev_turn_raw = deepcopy(sales_rev_turn_raw_temp)
 
 
 data1 =
-    matread(raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\firmspecificleveltrend.mat")["firmspecificleveltrend"][:,:,1]
+    matread(raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\PD_all.mat")["PD_all"][:,:,1]
 
-data1 =  data1["firmspecificAll"]
 
+
+data1 = data1[309:end,4:end]
+
+findfirst(isfinite.(data2[:,1]))
 data1[idx]
-data2[idx]
+data2 = data2[309:end,4:end]
 
-data2 = firmspecificleveltrend[:,:,1]
+data2 = PD_all[:,:,1]
     load(raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdData\201905\Firm\FullPeriodPD\PD_all_9.jld")
 
 idx = findall(.!isequal.(data1, data2))
 
+data3 =
+    matread(raw"C:\Users\e0375379\Downloads\DT\Validus_SMECombined\Validus_SMECombined\ProdData\201905\Firm\FullPeriodPD\pdAllForwardtemp.mat")["pdAllForwardtemp"]
+data4 = pdAllForwardtemp
 
-idx = findall(abs.(data1 .- data2) .>= 0.0001)
+idx3 = nanSum(data3[:, 2, :], 1) .!= 0
+data5 = data3[:,1,idx3]
+
+
+
+
+
+
+
+
+idx4 = nanSum(data4[:, 2, :], 1) .!= 0
+data6 = data4[:,1,idx4]
+
+
+
+
+
+
+
+idx = findall(abs.(data1 .- data2) .>= 0.001)
 deepcopy(dataFlatMth)
 res = []
 for i = 1:3642
