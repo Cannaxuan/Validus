@@ -49,6 +49,7 @@ function datacleanforRegression_main(PathStruct, DataMonth, smeEcon, PDEcon)
     ColNames_DTDmedian = [:monthDate, :econID, :DTD, :OverSigma, :Count, :M2B, :Sigma, :medianTA, :medianBE]
 
     ## Convert to matrix
+    ## replaced finalMeX's col 13 :fxrate and col 14 :stkrtn
     finalMeX    = Matrix(finalMeX[ColNames_finalX])
     DTDmedianMe = Matrix(DTDmedianMe[ColNames_DTDmedian])
     FirmIndexMe = Matrix(FirmIndexMe)

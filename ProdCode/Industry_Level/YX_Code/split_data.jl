@@ -9,26 +9,44 @@ function split_data(Arr,n)
     else
 
         x, y = fldmod(num, n)
-        res = Vector{Array{eltype(Arr)}}(undef, x+1)
+        if y != 0
+            res = Vector{Array{eltype(Arr)}}(undef, x+1)
 
-        if ndims(Arr) == 1
-            for i in 1:x
-                res[i] = Arr[(i-1)*n+1:i*n]
-            end
-            res[end] = Arr[x*n+1:x*n+y]
+            if ndims(Arr) == 1
+                for i in 1:x
+                    res[i] = Arr[(i-1)*n+1:i*n]
+                end
+                res[end] = Arr[x*n+1:x*n+y]
 
-        elseif ndims(Arr) == 2
-            for i in 1:x
-                res[i] = Arr[((i-1)*n+1:i*n), :]
-            end
-            res[end] = Arr[(x*n+1:x*n+y), :]
+            elseif ndims(Arr) == 2
+                for i in 1:x
+                    res[i] = Arr[((i-1)*n+1:i*n), :]
+                end
+                res[end] = Arr[(x*n+1:x*n+y), :]
 
-        elseif ndims(Arr) == 3
-            for i in 1:x
-                res[i] = Arr[((i-1)*n+1:i*n), :, :]
+            elseif ndims(Arr) == 3
+                for i in 1:x
+                    res[i] = Arr[((i-1)*n+1:i*n), :, :]
+                end
+                res[end] = Arr[(x*n+1:x*n+y), :, :]
             end
-            res[end] = Arr[(x*n+1:x*n+y), :, :]
+        else
+            res = Vector{Array{eltype(Arr)}}(undef, x)
+            if ndims(Arr) == 1
+                for i in 1:x
+                    res[i] = Arr[(i-1)*n+1:i*n]
+                end
+            elseif ndims(Arr) == 2
+                for i in 1:x
+                    res[i] = Arr[((i-1)*n+1:i*n), :]
+                end
+            elseif ndims(Arr) == 3
+                for i in 1:x
+                    res[i] = Arr[((i-1)*n+1:i*n), :, :]
+                end
+            end
         end
+
     end
 
     return res

@@ -4,7 +4,7 @@ addprocs(5)
 # @everywhere push!(LOAD_PATH, "C:\\Users\\e0375379\\.juliapro\\JuliaPro_v1.0.3.2\\environments\\v1.0\\Project.toml")
 @everywhere using Pkg
 for i in ["PyCall","MAT", "Statistics", "Printf", "JLD", "DataFrames", "GLMNet", "GLM", "StatsBase", "Random",
-        "XLSX", "CSV", "Dates", "ZipFile"]
+        "XLSX", "CSV", "Dates", "ZipFile", "Glob"]
         @everywhere i = $i
         println(i)
         @everywhere Pkg.add("$i")
@@ -19,6 +19,7 @@ using LinearAlgebra
 @everywhere include("$prePath/Industry_Level/get_country_PD_forward.jl")
 @everywhere Ycom = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdCode\Industry_Level\YX_Code\\"
 @everywhere include(Ycom*"\\split_data.jl")
+@everywhere include(Ycom*"\\searchdir.jl")
 
 include("$prePath/Industry_Level/load_data_PD.jl")
 include("$prePath/Industry_Level/generate_data_PD.jl")
@@ -85,5 +86,8 @@ function Industry_Level(DataDate, smeEcon = [1 3 9 10], PDEcon = 9)
 
      ## Initial path
      PathStruct = validus_path_define(DataMonth, smeEcon, PDEcon)
+
+     ## before running, please reload pd60hUpToMostRecent.mat and
+     ## resave it as pd60hUpToMostRecent_bk.mat under industry folder
      main_Validus(DataDate, PathStruct, smeEcon)
 end

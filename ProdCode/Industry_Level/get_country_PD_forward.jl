@@ -32,7 +32,7 @@ function get_country_PD_forward(countryCode, dataEndMth, folders, facThresMths, 
         firmSpecific_final = cat(firmSpecific_final, temp, dims= 2)
         ## Add Intercept
      end
-;
+
      firmspecific = firmSpecific_final[:, 4:end, :]
      firmList_withCompNum = nothing ;  firmSpecific_final = nothing
 
@@ -40,8 +40,12 @@ function get_country_PD_forward(countryCode, dataEndMth, folders, facThresMths, 
          ## Load Structure Break Econ's Parameter
          path = loadPath_para*"current_smc\\sb\\"*string(countryCode)*"\\"
          key = "para_both_smc_"*string(countryCode)
-         SBPara = searchdir(path, key)
-         HorzinByCovByTime = MAT.matread(path*SBPara[1])
+         # SBPara = searchdir(path, key)
+         SBPara = glob(key*"*.mat", path)
+         ## 2 is for .mat
+         # HorzinByCovByTime = MAT.matread(path*SBPara[2])
+         HorzinByCovByTime = MAT.matread(SBPara[1])
+         # tt =  matread(raw"\\dirac\CRI3\OfficialTest_AggDTD_SBChinaNA\ProductionData\ModelCalibration\201906\Products\M2_Pd\current_smc\sb\2\para_both_smc_2_20190704.mat")
          DefBeta_HorzinByCovByTime = HorzinByCovByTime["DefBeta_HorzinByCovByTime"]
          OthBeta_HorzinByCovByTime = HorzinByCovByTime["OthBeta_HorzinByCovByTime"]
          HorzinByCovByTime = nothing

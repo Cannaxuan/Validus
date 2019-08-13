@@ -39,8 +39,9 @@ function get_country_PD_forward_specific(countryCode, dataEndMth, folders, nHori
         ## Load Structure Break Econ's Parameter
         path = loadPath_para*"current_smc\\sb\\"*string(countryCode)*"\\"
         key = "para_both_smc_"*string(countryCode)
-        SBPara = searchdir(path, key)
-        HorzinByCovByTime = matread(path*SBPara[1])
+        # SBPara = searchdir(path, key)
+        SBPara = glob(key*"*.mat", path)
+        HorzinByCovByTime = matread(SBPara[1])
         DefBeta_HorzinByCovByTime = HorzinByCovByTime["DefBeta_HorzinByCovByTime"]
         OthBeta_HorzinByCovByTime = HorzinByCovByTime["OthBeta_HorzinByCovByTime"]
         HorzinByCovByTime = nothing

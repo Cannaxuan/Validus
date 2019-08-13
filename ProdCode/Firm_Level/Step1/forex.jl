@@ -3,7 +3,7 @@ function forex(PathStruct, smeEcon, DataMonth)
     ## change fxRate.mat to fxRateEcon.mat to match the econ's fx
     fxRateEcon = matread(PathStruct["FxPath"]*"fxRateEcon.mat")["fxRateEcon"]
     for iEcon = smeEcon
-        irow = fxRateEcon["ID"][iEcon, 3]
+        irow = Int(fxRateEcon["ID"][iEcon, 3])
         fxrate = fxRateEcon["Data"][irow, 1]
         # fxrate = fxratesAll["Data"][iEcon]
         fxrate = fxrate[fxrate[:, 2] .!= NaN, :]
