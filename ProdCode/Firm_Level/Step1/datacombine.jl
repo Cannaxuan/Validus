@@ -50,7 +50,9 @@ function datacombine(PathStruct, smeEcon, DataMonth)
 	Sm_DTDInput = prepareCols_v1(SmFirms)
 	Mi_DTDInput = prepareCols_v1(MiFirms)
 	## :CompNo, :monthDate, :industryID, :econID, :Sales, :CL, :LTB, :TL, :TA,
-	## :rfr, :stkrtn, :NI2TA, :Cash, :fxrate, :tme, :Sales2TA, :CA, :NI, :BE
+	## :rfr, :stkrtn, :NI2TA, :Cash, :fxrate, :tmr, :Sales2TA, :CA, :NI, :BE
+
+	## 'tmr', 'CA', 'NI' are all NaN for current stage
 
 	save(PathStruct["Firm_DTD_Regression_FS"]*"Me_DTDInput.jld", "Me_DTDInput", Me_DTDInput, compress = true)
 	save(PathStruct["Firm_DTD_Regression_FS"]*"Sm_DTDInput.jld", "Sm_DTDInput", Sm_DTDInput, compress = true)

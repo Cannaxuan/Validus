@@ -10,7 +10,7 @@ for i in ["PyCall","MAT", "Statistics", "Printf", "JLD", "DataFrames", "GLMNet",
         @everywhere Pkg.add("$i")
 end
 @everywhere using Pkg, PyCall, Printf, Statistics, MAT, JLD, DataFrames, GLMNet, GLM, StatsBase,
-                Random, XLSX, CSV, Dates, ZipFile
+                Random, XLSX, CSV, Dates, ZipFile, Glob
 using LinearAlgebra
 @everywhere prePath = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdCode\\"
 @everywhere include("$prePath/Industry_Level/date_yyyymm_add.jl")
@@ -81,7 +81,7 @@ function Industry_Level(DataDate, smeEcon = [1 3 9 10], PDEcon = 9)
      ## by Yao Xuan 20190601
  =#
 
-     # DataDate = 20190531
+      # DataDate = 20190630
      DataMonth = fld(DataDate, 100)
 
      ## Initial path

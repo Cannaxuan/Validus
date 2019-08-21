@@ -88,12 +88,33 @@ function datacleanforRegression_main(PathStruct, DataMonth, smeEcon, PDEcon)
         "DTDMe", DTDMe, "DTDSm", DTDSm, "DTDMi", DTDMi,
         "lbMe", lbMe, "ubMe", ubMe, "lbSm", lbSm, "ubSm", ubSm, "lbMi", lbMi, "ubMi", ubMi, compress = true)
 
+    CSV.write(PathStruct["SMEPD_Input"]*"finalMeX.csv",DataFrame(finalMeX))
+    CSV.write(PathStruct["SMEPD_Input"]*"FirmIndexMe.csv",DataFrame(FirmIndexMe))
+    CSV.write(PathStruct["SMEPD_Input"]*"lbMe.csv",DataFrame(lbMe))
+    CSV.write(PathStruct["SMEPD_Input"]*"ubMe.csv",DataFrame(ubMe))
+
+    CSV.write(PathStruct["SMEPD_Input"]*"finalSmX.csv",DataFrame(finalSmX))
+    CSV.write(PathStruct["SMEPD_Input"]*"FirmIndexSm.csv",DataFrame(FirmIndexSm))
+    CSV.write(PathStruct["SMEPD_Input"]*"lbSm.csv",DataFrame(lbSm))
+    CSV.write(PathStruct["SMEPD_Input"]*"ubSm.csv",DataFrame(ubSm))
+
+    CSV.write(PathStruct["SMEPD_Input"]*"finalMiX.csv",DataFrame(finalMiX))
+    CSV.write(PathStruct["SMEPD_Input"]*"FirmIndexMi.csv",DataFrame(FirmIndexMi))
+    CSV.write(PathStruct["SMEPD_Input"]*"lbMi.csv",DataFrame(lbMi))
+    CSV.write(PathStruct["SMEPD_Input"]*"ubMi.csv",DataFrame(ubMi))
+
+
     save(PathStruct["Firm_DTD_Regression_Parameter"]*"beta.jld",
         "betaMe", betaMe, "betaSm", betaSm, "betaMi", betaMi,
         "RsMe", RsMe, "RsSm", RsSm, "RsMi", RsMi, compress = true)
 
+
     save(PathStruct["Firm_DTD_Regression_CriRiskFactor"]*"medianInfo.jld",
         "DTDmedianMe", DTDmedianMe, "DTDmedianSm", DTDmedianSm, "DTDmedianMi", DTDmedianMi, compress = true )
+
+        CSV.write(PathStruct["SMEPD_Input"]*"DTDmedianMe.csv",DataFrame(DTDmedianMe))
+        CSV.write(PathStruct["SMEPD_Input"]*"DTDmedianSm.csv",DataFrame(DTDmedianSm))
+        CSV.write(PathStruct["SMEPD_Input"]*"DTDmedianMi.csv",DataFrame(DTDmedianMi))
 
     ## trans from mat to jld
     firmlist =

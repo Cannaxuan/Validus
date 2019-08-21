@@ -1,5 +1,5 @@
 function retrieve_sales_rev_turn_raw(iEcon, dateStart, dateEnd, turnOverFolder, CleanDataFolder)
-    # dateEnd = dataEndDate
+     # dateEnd = 20190630
      global GConst
      temp =
      try
@@ -16,7 +16,7 @@ function retrieve_sales_rev_turn_raw(iEcon, dateStart, dateEnd, turnOverFolder, 
      CompanyInformation = Companyinformation["CompanyInformation"]
      temp =
      try
-         fxRate = matread(turnOverFolder*"fxRate.mat")["fxRate"]
+         fxRate = matread(turnOverFolder*"fxRate.mat")
          # fxRate = fxrate["Data"]
          fxRate
      catch

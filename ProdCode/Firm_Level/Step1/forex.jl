@@ -11,6 +11,12 @@ function forex(PathStruct, smeEcon, DataMonth)
         idxmthendf = vcat(findall(diff(fxrate[:, 1]) .!= 0), size(fxrate, 1))
         fxrate = DataFrame(fxrate[idxmthendf, :])
         names!(fxrate, [:monthDate, :fxrate])
+        fxrate_raw = deepcopy(fxrate)
+        mu = mean(fxrate_raw.fxrate)
+        sigma = std(fxrate_raw.fxrate)
+        fxrate.fxrate = (fxrate_raw.fxrate .- mu) ./ sigma
         save(PathStruct["Firm_DTD_Regression_FxRate"]*"fxrate_"*string(iEcon)*".jld", "fxrate", fxrate, compress = true)
+        save(PathStruct["Firm_DTD_Regression_FxRate"]*"fxrate_Raw_"*string(iEcon)*".jld", "fxrate_raw", fxrate_raw, "mu", mu, "sigma", sigma, compress = true)
+        CSV.write(PathStruct["Firm_DTD_Regression_FxRate"]*"fxrate_Raw_"*string(iEcon)*".csv",fxrate_raw)
     end
 end

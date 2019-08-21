@@ -1,6 +1,6 @@
 function step3_generate_report(path_to_input_file, DataMonth, smeEcon = [1 3 9 10], countrycode = 9)
-     # path_to_input_file = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\template_for_Validus.xlsx"
-    # DataMonth = 201905
+    #  path_to_input_file = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\template_for_Validus.xlsx"
+    # DataMonth = 201906
     PathStruct = validus_path_define(DataMonth)
     filename = basename(path_to_input_file)
 
@@ -16,6 +16,7 @@ function step3_generate_report(path_to_input_file, DataMonth, smeEcon = [1 3 9 1
     sampleMatrices = load(PathStruct["SMEPD_Input"]*"sampleMatrices.jld")
 
     ## Beta keys are "betaMe", "betaMi", "betaSm", "RsSm", "RsMi", "RsMe"
+    ## Beta need to use new one by Deepselect
     Beta = load(PathStruct["Firm_DTD_Regression_Parameter"]*"beta.jld")
 
     ## medianInfo keys are "DTDmedianMi", "DTDmedianMe", "DTDmedianSm"
@@ -133,6 +134,8 @@ function step3_generate_report(path_to_input_file, DataMonth, smeEcon = [1 3 9 1
     end
     println("Start to compute PD for all firms...")
     PD_all, firmspecificleveltrend = computePD_Validus(PathStruct, countrycode, firmspecificAll, firmlistAll)
+    CSV.write("a.csv",DataFrame(firmspecificleveltrend[:,:,1]))
+    CSV.write("a3.csv",DataFrame(firmspecificleveltrend[:,:,2]))
 
     println("Start to write global quantile data to output file.")
     Varresult      = load(PathStruct["SMEPD_Input"]*"Varresult.jld")["Varresult"]

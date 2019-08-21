@@ -1,5 +1,8 @@
+using Distributed
+addprocs(7)
 using Pkg, Printf, Statistics, MAT, JLD, DataFrames, GLMNet, GLM, StatsBase, Random,
-      LinearAlgebra, XLSX, CSV, Dates, Missings, ToolCK, ZipFile, PyCall
+    LinearAlgebra, XLSX, CSV, Dates, Missings, ToolCK, ZipFile, PyCall, SharedArrays
+
 prePath = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdCode"
 include("$prePath/validus_path_define.jl")
 Ycom = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdCode\Industry_Level\YX_Code"
@@ -47,6 +50,7 @@ include(prePath*"\\Firm_Level\\Step2\\LassoRegression.jl")
 include(prePath*"\\Firm_Level\\Step2\\datacleanforRegression_main.jl")
 include(prePath*"\\Firm_Level\\Step2\\handlepdall.jl")
 include(prePath*"\\Firm_Level\\Step2\\compute_Var_quantile.jl")
+@everywhere using MAT, JLD
 include(prePath*"\\Firm_Level\\Step2\\step2_II_PDpreparation.jl")
 include(prePath*"\\Firm_Level\\Step3\\read_fs_xls_V2.jl")
 include(prePath*"\\Firm_Level\\Step3\\fs2DTDinput_v3.jl")
@@ -61,7 +65,7 @@ include(prePath*"\\Firm_Level\\Step3\\firm_quantile_to_cell.jl")
 include(prePath*"\\Firm_Level\\Step3\\step3_generate_report.jl")
 
 function Firm_Level(DataDate, smeEcon = [1 3 9 10], PDEcon = 9)
-    # DataDate = 20190531
+    # DataDate = 20190630
     #= Firm_Level can be run right after validation request for Industry Level.
       As Validation team does not validate firm_level results,
       you should compare previous month betaMe, betaSm, betaMi with

@@ -6,8 +6,9 @@ function handlepdall(allcat, pdAllForward, firmInfo, dateVctr, indicator)
         compseg = allcat[allcat.CompNo .== i, :]
         idx1 = in.(compseg.monthDate, [dateVctr])
         idx2 = indexin(compseg.monthDate, dateVctr)
+        idx = Int.(idx2[idx1])
         idxcomp = fld.(firmInfo[:, 1], 1000) .== i
-        pdAllForward[idx2[idx1], 2, idxcomp] .= indicator
+        pdAllForward[idx, 2, idxcomp] .= indicator
     end
 
     return pdAllForward

@@ -1,7 +1,7 @@
 function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, options, folders)
-
-# smeEconCodes, dateStart, dataEndDate, smeDateVctr, options, folders =
-# smeEcon, PathStruct["DATE_START_DATA"], dataEndDate, facs["dateVctr"], options, PathStruct
+#
+# smeEconCodes, dateStart,  smeDateVctr, options, folders =
+# smeEcon, PathStruct["DATE_START_DATA"], facs["dateVctr"], options, PathStruct
      start = time()
      dataEndMth = fld(dataEndDate, 100)
      pfThresMths = 0  ## The firms with PD less than or equal to [thresMths] months will be removed?
@@ -111,7 +111,7 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
      for iIndu = 1: length(industryCodes)
          iInduFirmIdx =
             (repeat(reshape(in.(ctyInfo["firmList"][:,5], industryCodes[iIndu]), (1,:)),
-            size(ctyInfo["ForwardPD"], 1), 1)) .& (ctyInfo["SalesRevTurn"] .>= nSize[1, 1]) .& (ctyInfo["SalesRevTurn"] .< nSize[end, end])
+            size(ctyInfo["ForwardPD"], 1), 1)) .& (nSize[1, 1] .<= ctyInfo["SalesRevTurn"] .< nSize[end, end])
          iInduFirmIdxHorizon = repeat(iInduFirmIdx, inner = (1, 1, 60))
          smeInfo["smeIndPD"][:,iIndu,:] =
             nanSum((ctyInfo["ForwardPD"] .* iInduFirmIdxHorizon), 2) ./ dropdims(sum(iInduFirmIdxHorizon, dims = 2), dims = 2)
@@ -120,7 +120,7 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
 
          for iSize = 1:size(nSize, 1)
              iInduSizeFirmIdx = repeat(reshape(in.(ctyInfo["firmList"][:,5], industryCodes[iIndu]), (1, :)),
-             size(ctyInfo["ForwardPD"], 1) , 1) .& (ctyInfo["SalesRevTurn"] .>= nSize[iSize,1]) .& (ctyInfo["SalesRevTurn"] .< nSize[iSize,2])
+             size(ctyInfo["ForwardPD"], 1) , 1) .& (nSize[iSize, 1] .<= ctyInfo["SalesRevTurn"] .< nSize[iSize, 2])
              smeInfo["smeIndSizeCount"][:, intCol] = sum(iInduSizeFirmIdx, dims = 2)
              iInduSizeFirmIdxHorizon = repeat(iInduSizeFirmIdx, inner = (1, 1, 60))
 

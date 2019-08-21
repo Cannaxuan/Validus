@@ -40,6 +40,7 @@ function retrieve_financial_statement_raw(BBG_ID, dateStart, dateEnd, fsFieldID)
     fsID = split_data(Int64.(financialStatementEnt[:, FinancialStatement_v["FS_ID"]]), 1000)
 
     financialStatementDat = Vector{Array{Float64, 2}}(undef, size(fsID, 1))
+    # financialStatementDat = @sync @distributed (vcat) for i = 1:size(fsID, 1)
     for i = 1:size(fsID, 1)
         # println("financialStatementDat$i")
         ID = "$(fsID[i])"
@@ -55,6 +56,7 @@ function retrieve_financial_statement_raw(BBG_ID, dateStart, dateEnd, fsFieldID)
             # println("No fSData for fsIDs: $(fsID[i])")
             financialStatementDat[i] = Array{Float64, 2}(undef, 0, size(fSData, 2))
         end
+        # financialStatementDat
     end
     financialStatementDat = vcat(financialStatementDat...)
 

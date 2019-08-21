@@ -10,4 +10,4 @@ function prepareCols_v1(Firms)
     return X
 end
 ## 'CompNo', 'monthDate', 'industryID', 'econID', 'Sales', 'CL', 'LTB', 'TL', 'TA', 'rfr',
-## 'stkrtn', 'NI2TA', 'Cash', 'fxrate', 'tme', 'Sales2TA', 'CA', 'NI', 'BE'
+## 'stkrtn', 'NI2TA', 'Cash', 'fxrate', 'tmr', 'Sales2TA', 'CA', 'NI', 'BE'

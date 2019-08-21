@@ -13,15 +13,16 @@ function MacroPart(IncreTable, RatioM, LogRatioM, medianVtr; smeEcon = [1 3 9 10
     finalX = join(RatioM, LogRatioM, on = [:CompNo, :monthDate, :econID], kind = :left)
     finalX = join(finalX, IncreTable[:, [:CompNo, :monthDate, :rfr, :fxrate, :stkrtn, :DTD, :Sigma, :M2B, :industryID]],
                   on = [:CompNo, :monthDate], kind = :left)
-    # centralized rfr and fxrate
-    for iEcon = smeEcon
-        # global finalX
-        idx = finalX.econID .== iEcon
-        rfrmean = nanMean(finalX.rfr[idx, :])
-        finalX.rfr[idx, :] = (finalX.rfr[idx, :] .- rfrmean) ./ rfrmean
-        fxmean = nanMean(finalX.fxrate[idx, :])
-        finalX.fxrate[idx, :] = (finalX.fxrate[idx, :] .- fxmean) ./ fxmean
-    end
+    # # centralized rfr and fxrate
+    # # since rfr and fxrate can be of very different value for different econs
+    # for iEcon = smeEcon
+    #     # global finalX
+    #     idx = finalX.econID .== iEcon
+    #     rfrmean = nanMean(finalX.rfr[idx, :])
+    #     finalX.rfr[idx, :] = (finalX.rfr[idx, :] .- rfrmean) ./ rfrmean
+    #     fxmean = nanMean(finalX.fxrate[idx, :])
+    #     finalX.fxrate[idx, :] = (finalX.fxrate[idx, :] .- fxmean) ./ fxmean
+    # end
     # winsorizartion
     # for further change the regressor!!!!
     winprop = [:NI2TA, :Cash2TA, :CL2TL, :BE2CL, :LogTA2TL]
