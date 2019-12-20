@@ -1,11 +1,10 @@
 using Distributed
-addprocs(7)
 using Pkg, Printf, Statistics, MAT, JLD, DataFrames, GLMNet, GLM, StatsBase, Random,
-    LinearAlgebra, XLSX, CSV, Dates, Missings, ToolCK, ZipFile, PyCall, SharedArrays
-
-prePath = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdCode"
+    LinearAlgebra, XLSX, CSV, Dates, Missings, ZipFile, PyCall, ToolCK, SharedArrays
+addprocs(7)
+prePath = raw"\\unicorn6\TeamData\VT_DT\Validus\ProdCode"
 include("$prePath/validus_path_define.jl")
-Ycom = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdCode\Industry_Level\YX_Code"
+Ycom = raw"\\unicorn6\TeamData\VT_DT\Validus\ProdCode\Industry_Level\YX_Code"
 include(Ycom*"\\connectDB.jl")
 include(Ycom*"\\get_data_from_DMTdatabase.jl")
 include(Ycom*"\\highest_indexin.jl")
@@ -28,6 +27,7 @@ include("$prePath/Industry_Level/YX_Code/missing2NaN.jl")
 include("$prePath/Industry_Level/YX_Code/missing2real.jl")
 include("$prePath/Industry_Level/YX_Code/quantiledims.jl")
 include("$prePath/Industry_Level/YX_Code/searchdir.jl")
+include("$prePath/Industry_Level/YX_Code/read_jld.jl")
 include(prePath*"\\Firm_Level\\Step1\\data_preparation_main.jl")
 include(prePath*"\\Firm_Level\\Step1\\DTDinput.jl")
 include(prePath*"\\Firm_Level\\Step1\\forex.jl")
@@ -50,19 +50,28 @@ include(prePath*"\\Firm_Level\\Step2\\LassoRegression.jl")
 include(prePath*"\\Firm_Level\\Step2\\datacleanforRegression_main.jl")
 include(prePath*"\\Firm_Level\\Step2\\handlepdall.jl")
 include(prePath*"\\Firm_Level\\Step2\\compute_Var_quantile.jl")
-@everywhere using MAT, JLD
+try
+    @everywhere using MAT, JLD
+catch
+    @everywhere using Pkg
+    @everywhere Pkg.add("MAT")
+    @everywhere Pkg.add("JLD")
+    @everywhere using MAT, JLD
+end
+
 include(prePath*"\\Firm_Level\\Step2\\step2_II_PDpreparation.jl")
-include(prePath*"\\Firm_Level\\Step3\\read_fs_xls_V2.jl")
-include(prePath*"\\Firm_Level\\Step3\\fs2DTDinput_v3.jl")
-include(prePath*"\\Firm_Level\\Step3\\fs2DTDinput_v4.jl")
-include(prePath*"\\Firm_Level\\Step3\\fs2PDinput_v2.jl")
-include(prePath*"\\Firm_Level\\Step3\\compute_level_trend.jl")
-include(prePath*"\\Firm_Level\\Step3\\computePD_Validus.jl")
-include(prePath*"\\Firm_Level\\Step3\\Cal_CountryPD_v011.jl")
-include(prePath*"\\Firm_Level\\Step3\\global_quantile_to_cell.jl")
-include(prePath*"\\Firm_Level\\Step3\\compute_firm_quantile.jl")
-include(prePath*"\\Firm_Level\\Step3\\firm_quantile_to_cell.jl")
-include(prePath*"\\Firm_Level\\Step3\\step3_generate_report.jl")
+# include(prePath*"\\Firm_Level\\Step3\\read_fs_xls_V2.jl")
+# include(prePath*"\\Firm_Level\\Step3\\fs2DTDinput_v3.jl")
+# include(prePath*"\\Firm_Level\\Step3\\fs2DTDinput_v4.jl")
+# include(prePath*"\\Firm_Level\\Step3\\fs2PDinput_v2.jl")
+# include(prePath*"\\Firm_Level\\Step3\\compute_level_trend.jl")
+# include(prePath*"\\Firm_Level\\Step3\\computePD_Validus.jl")
+# include(prePath*"\\Firm_Level\\Step3\\computePD_Validus_exe.jl")
+# include(prePath*"\\Firm_Level\\Step3\\Cal_CountryPD_v011.jl")
+# include(prePath*"\\Firm_Level\\Step3\\global_quantile_to_cell.jl")
+# include(prePath*"\\Firm_Level\\Step3\\compute_firm_quantile.jl")
+# include(prePath*"\\Firm_Level\\Step3\\firm_quantile_to_cell.jl")
+# include(prePath*"\\Firm_Level\\Step3\\step3_generate_report.jl")
 
 function Firm_Level(DataDate, smeEcon = [1 3 9 10], PDEcon = 9)
     # DataDate = 20190630

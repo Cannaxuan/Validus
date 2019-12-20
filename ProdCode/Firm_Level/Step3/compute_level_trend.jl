@@ -17,52 +17,53 @@ function compute_level_trend(firmspecific, firmlist, countrycode)
     compNoVec = nanMean(firmspecific[:, 1, :], 1)
     startVar[:, 6] .= NaN
     for iFirm = 1:nfirm
+        # println("iFirm = $iFirm")
         ## Loop through each variable :
         ## 1. distance to default  2. net_income/total_asset  3. cash/total asset  4. size
         for iVar = 1:4
+            # println("iVar = $iVar")
             ## Find the start and end of the variable
             startT = findfirst(isfinite.(vrbl[:, iVar, iFirm]))
             endT = Int(firmlist[iFirm, 3])
-            if isempty(startT)
+            if startT == nothing
                 startVar[iFirm, iVar] = nob
             else
                 startVar[iFirm, iVar] = startT
-            end
+
             ##  Loop through dates (first 6 months)
-            for iDate = startT:min(endT, (startT+5))
-                ## observations
-                obs = vrbl[max(1, iDate-12+1):iDate, iVar, iFirm]
-                vrbl_mean[iDate, iVar, iFirm] = nanMean(obs)
-
-                ## Find last finite value in the observations
-                lastFinite = findlast(isfinite.(obs))
-                if lastFinite != nothing
-                #     vrbl_diff[iDate, iVar, iFirm] = NaN
-                # else
-                    vrbl_diff[iDate, iVar, iFirm] = obs[lastFinite] - vrbl_mean[iDate, iVar, iFirm]
-                end
-
-
-            end
-
-            ##  Loop through dates (7 months and beyond)
-            for iDate = (startT + 6):endT
-                ## observations
-                obs = vrbl[max(1, iDate-12+1):iDate, iVar, iFirm]
-
-                ## Check for 6 min points
-                if sum(isfinite.(obs)) > 5
+                for iDate = startT:min(endT, (startT+5))
+                    ## observations
+                    obs = vrbl[max(1, iDate-12+1):iDate, iVar, iFirm]
                     vrbl_mean[iDate, iVar, iFirm] = nanMean(obs)
-                else
-                    vrbl_mean[iDate, iVar, iFirm] = NaN
+
+                    ## Find last finite value in the observations
+                    lastFinite = findlast(isfinite.(obs))
+                    if lastFinite != nothing
+                    #     vrbl_diff[iDate, iVar, iFirm] = NaN
+                    # else
+                        vrbl_diff[iDate, iVar, iFirm] = obs[lastFinite] - vrbl_mean[iDate, iVar, iFirm]
+                    end
                 end
 
-                ## Find last finite value in the observations
-                lastFinite = findlast(isfinite.(obs))
-                if isempty(lastFinite)
-                    vrbl_diff[iDate, iVar, iFirm] = NaN
-                else
-                    vrbl_diff[iDate, iVar, iFirm] = obs[lastFinite] - vrbl_mean[iDate, iVar, iFirm]
+                ##  Loop through dates (7 months and beyond)
+                for iDate = (startT + 6):endT
+                    ## observations
+                    obs = vrbl[max(1, iDate-12+1):iDate, iVar, iFirm]
+
+                    ## Check for 6 min points
+                    if sum(isfinite.(obs)) > 5
+                        vrbl_mean[iDate, iVar, iFirm] = nanMean(obs)
+                    else
+                        vrbl_mean[iDate, iVar, iFirm] = NaN
+                    end
+
+                    ## Find last finite value in the observations
+                    lastFinite = findlast(isfinite.(obs))
+                    if lastFinite == nothing
+                        vrbl_diff[iDate, iVar, iFirm] = NaN
+                    else
+                        vrbl_diff[iDate, iVar, iFirm] = obs[lastFinite] - vrbl_mean[iDate, iVar, iFirm]
+                    end
                 end
             end
         end
@@ -72,7 +73,7 @@ function compute_level_trend(firmspecific, firmlist, countrycode)
     ##      6. DTD(AVG)      7. DTD(DIF)    8. CASH/TA(AVG)  9. CASH/TA(DIF)   10. NI/TA(AVG)
     ##      11. NI/TA(DIF)   12. SIZE(AVG)  13. SIZE(DIF)    14. M/B           15. SIGMA
     firmspecific = hcat(firmspecific[:, vcat(1:5, 8, 11), :], vrbl_mean, vrbl_diff)
-    vrbl_mean = nothing;    vrbl_diff = nothing
+    # vrbl_mean = nothing;    vrbl_diff = nothing
     firmspecific = firmspecific[:, vcat(1:3, 5, 4, 8, 12, 10, 14, 9, 13, 11, 15, 6, 7), :] ## change by SiDate???
 
     s =  @sprintf "# Elapsed time = %3.2f seconds." (time()-start)

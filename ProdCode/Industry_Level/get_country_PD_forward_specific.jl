@@ -10,12 +10,12 @@ function get_country_PD_forward_specific(countryCode, dataEndMth, folders, nHori
     loadPath = sourceFolder*"\\Processing\\M2_Pd\\"
     loadPath_para = sourceFolder*"\\Products\\M2_Pd\\"
 
-    firmList_withCompNum =
-       matread(loadPath*"FSTransformed\\firmList_withCompNum_"*string(countryCode)*".mat")["firmList_withCompNum"]
-    firmSpecific_final =
-       matread(loadPath*"FinalDataForCalibration\\firmSpecific_final_"*string(countryCode)*".mat")["firmSpecific_final"]
-    firmMonth =
-       matread(loadPath*"FinalDataForCalibration\\firmMonth_"*string(countryCode)*".mat")["firmMonth"]
+    firmList_withCompNum = read_jld(loadPath*"FSTransformed\\firmList_withCompNum_"*string(countryCode)*".jld")["firmList_withCompNum"]
+    ##   matread(loadPath*"FSTransformed\\firmList_withCompNum_"*string(countryCode)*".mat")["firmList_withCompNum"]
+    firmSpecific_final = read_jld(loadPath*"FinalDataForCalibration\\firmSpecific_final_"*string(countryCode)*".jld")["firmSpecific_final"]
+    ##   matread(loadPath*"FinalDataForCalibration\\firmSpecific_final_"*string(countryCode)*".mat")["firmSpecific_final"]
+    firmMonth = read_jld(loadPath*"FinalDataForCalibration\\firmMonth_"*string(countryCode)*".jld")["firmMonth"]
+    ##   matread(loadPath*"FinalDataForCalibration\\firmMonth_"*string(countryCode)*".mat")["firmMonth"]
 
     firmlist = firmList_withCompNum
     idx_finance = firmlist[:, 5] .== 10008
@@ -40,8 +40,11 @@ function get_country_PD_forward_specific(countryCode, dataEndMth, folders, nHori
         path = loadPath_para*"current_smc\\sb\\"*string(countryCode)*"\\"
         key = "para_both_smc_"*string(countryCode)
         # SBPara = searchdir(path, key)
-        SBPara = glob(key*"*.mat", path)
-        HorzinByCovByTime = matread(SBPara[1])
+        SBPara = glob(key*"*.jld", path)
+        if isempty(SBPara)
+            SBPara = glob(key*"*.mat", path)
+        end
+        HorzinByCovByTime = read_jld(SBPara[1])
         DefBeta_HorzinByCovByTime = HorzinByCovByTime["DefBeta_HorzinByCovByTime"]
         OthBeta_HorzinByCovByTime = HorzinByCovByTime["OthBeta_HorzinByCovByTime"]
         HorzinByCovByTime = nothing

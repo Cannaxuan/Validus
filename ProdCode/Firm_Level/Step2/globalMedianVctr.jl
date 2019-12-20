@@ -9,9 +9,10 @@ function globalMedianVctr(PathStruct, DataMonth; smeEcon = [1 3 9 10])
 
     for iMonth = 1: length(monthall)
         for iEcon = 1 : size(smeEcon, 2)
-            temp = DataFrame()
-            temp.monthDate = monthall[iMonth]
-            temp.econID = smeEcon[iEcon]
+            ## print("iEcon = $iEcon ; iMonth = $iMonth" )
+            temp = DataFrame(monthDate = monthall[iMonth], econID = smeEcon[iEcon])
+            # temp.monthDate = monthall[iMonth]
+            # temp.econID = smeEcon[iEcon]
             idx = (FS_Raw_Combined.monthDate .== temp.monthDate) .& (FS_Raw_Combined.econID .== temp.econID)
             temp.medianTA = nanMedian(FS_Raw_Combined.TA[idx,:])
             temp.medianBE = nanMedian(FS_Raw_Combined.TA[idx,:] .- FS_Raw_Combined.TL[idx,:])

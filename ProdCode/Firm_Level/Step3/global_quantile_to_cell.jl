@@ -1,6 +1,7 @@
 function  global_quantile_to_cell(Varresult, monthVctr, global_title, selEcons_title, category_title, PathStruct, filename)
 
-    idx = Int.(ismember_CK(monthVctr, Varresult["global"]["V05"][:, 1])[2])
+    # idx = Int.(ismember_CK(monthVctr, Varresult["global"]["V05"][:, 1])[2])
+    idx = Int.(indexin(monthVctr, Varresult["global"]["V05"][:, 1]))
     globalPDquantiles = hcat(fld.(monthVctr, 100), mod.(monthVctr, 100),
         Varresult["global"]["V05"][idx, 2],
         Varresult["global"]["V95"][idx, 2],

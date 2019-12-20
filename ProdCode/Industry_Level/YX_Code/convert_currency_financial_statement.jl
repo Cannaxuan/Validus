@@ -6,6 +6,8 @@ function convert_currency_financial_statement(fsData, fsCurrency, exchangeCurren
      indicates the currency index of each data in the data column.
      exchangeCurrency is the currency index of this exchange which is recorded in company information matrix.
     =#
+
+    ## USD_FX_ID = 1094
     if FsData["Period_End"] == 1
         nHeadCol = 1
     else

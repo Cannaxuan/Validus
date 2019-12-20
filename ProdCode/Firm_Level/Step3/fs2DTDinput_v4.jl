@@ -58,7 +58,7 @@ function fs2DTDinput_v4(firminfo, endmonth, firmindex, industrycode)
                     [firminfo[i, 8]/12 ./firminfo[i, 2]        ## 3:NI/TA
                     firminfo[i, 9]/12 ./firminfo[i, 2]         ## 4:sales/TA
                     firminfo[i, 4]./firminfo[i, 2]             ## 5:TL/TA
-                    log(firminfo[i, 3]./firminfo[i, 5])        ## 6:log(CA/CL)
+                    log(firminfo[i, 3]./firminfo[i, 5])        ## 6:log(CA/CL)  ##
                     firminfo[i, 7]./firminfo[i, 5]             ## 7:CASH/CL
                     firminfo[i, 5]./firminfo[i, 4]             ## 8:CL/TL
                     firminfo[i, 6]./firminfo[i, 4]             ## 9:LB/TL

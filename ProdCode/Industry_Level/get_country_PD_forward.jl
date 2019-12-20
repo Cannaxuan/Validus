@@ -12,12 +12,12 @@ function get_country_PD_forward(countryCode, dataEndMth, folders, facThresMths, 
      loadPath = sourceFolder*"\\Processing\\M2_Pd\\"
      loadPath_para = sourceFolder*"\\Products\\M2_Pd\\"
 
-     firmList_withCompNum =
-        MAT.matread(loadPath*"FSTransformed\\firmList_withCompNum_"*string(countryCode)*".mat")["firmList_withCompNum"]
-     firmSpecific_final =
-        MAT.matread(loadPath*"FinalDataForCalibration\\firmSpecific_final_"*string(countryCode)*".mat")["firmSpecific_final"]
-     firmMonth =
-        MAT.matread(loadPath*"FinalDataForCalibration\\firmMonth_"*string(countryCode)*".mat")["firmMonth"]
+     firmList_withCompNum = read_jld(loadPath*"FSTransformed\\firmList_withCompNum_"*string(countryCode)*".jld")["firmList_withCompNum"]
+    ##     MAT.matread(loadPath*"FSTransformed\\firmList_withCompNum_"*string(countryCode)*".mat")["firmList_withCompNum"]
+     firmSpecific_final = read_jld(loadPath*"FinalDataForCalibration\\firmSpecific_final_"*string(countryCode)*".jld")["firmSpecific_final"]
+    ##    MAT.matread(loadPath*"FinalDataForCalibration\\firmSpecific_final_"*string(countryCode)*".mat")["firmSpecific_final"]
+     firmMonth = read_jld(loadPath*"FinalDataForCalibration\\firmMonth_"*string(countryCode)*".jld")["firmMonth"]
+    ##    MAT.matread(loadPath*"FinalDataForCalibration\\firmMonth_"*string(countryCode)*".mat")["firmMonth"]
 
      firmlist = firmList_withCompNum
      idx_finance = firmlist[:, 5] .== 10008
@@ -41,10 +41,15 @@ function get_country_PD_forward(countryCode, dataEndMth, folders, facThresMths, 
          path = loadPath_para*"current_smc\\sb\\"*string(countryCode)*"\\"
          key = "para_both_smc_"*string(countryCode)
          # SBPara = searchdir(path, key)
-         SBPara = glob(key*"*.mat", path)
+         SBPara = Glob.glob(key*"*.jld", path)
+         if isempty(SBPara)
+             SBPara = Glob.glob(key*"*.mat", path)
+         end
+
          ## 2 is for .mat
          # HorzinByCovByTime = MAT.matread(path*SBPara[2])
-         HorzinByCovByTime = MAT.matread(SBPara[1])
+         HorzinByCovByTime = read_jld(SBPara[1])
+         ## MAT.matread(SBPara[1])
          # tt =  matread(raw"\\dirac\CRI3\OfficialTest_AggDTD_SBChinaNA\ProductionData\ModelCalibration\201906\Products\M2_Pd\current_smc\sb\2\para_both_smc_2_20190704.mat")
          DefBeta_HorzinByCovByTime = HorzinByCovByTime["DefBeta_HorzinByCovByTime"]
          OthBeta_HorzinByCovByTime = HorzinByCovByTime["OthBeta_HorzinByCovByTime"]

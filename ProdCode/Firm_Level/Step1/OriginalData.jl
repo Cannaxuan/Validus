@@ -5,9 +5,12 @@ function OriginalData(PathStruct, enddate, smeEcon, nyear, DataMonth)
     	Column info of tempdata: 'CompNo','monthDate','rfr','stkrtn','dtd_MLE','NI2TA','TA','TL','Cash'
     =#
     dataStart = fld(enddate, 100) - nyear * 100
-    demean = CSV.read(raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\ProdData\201906\CRI_Economy_InterestRate_Mean.csv")
+    demean = CSV.read(raw"\\unicorn6\TeamData\VT_DT\Validus\CRI_Economy_InterestRate_Mean.csv")
     for iEcon = smeEcon
-        FS_mat_flat = matread(PathStruct["OriginalPath"]*"OriginalData_"*string(iEcon)*".mat")["originalData"]
+        FS_mat_flat = ## matread(PathStruct["OriginalPath"]*"OriginalData_"*string(iEcon)*".mat")["originalData"]
+                      read_jld(PathStruct["OriginalPath"]*"OriginalData_"*string(iEcon)*".jld")["originalData"]
+
+
         FS_mat_flat[:, 4:14] = FS_mat_flat[:,3:13]
         FS_mat_flat = FS_mat_flat[FS_mat_flat[:, 2] .> dataStart, :]
 

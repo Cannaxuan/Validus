@@ -4,7 +4,7 @@ function validus_path_define(dataMonth, smeEcon = [1 3 9 10], PDEcon = 9)
     ## Define global PathStruct for Industry_Level and Firm_Level
     PathStruct = Dict()
     PathStruct["Official"] = raw"\\dirac\cri3\OfficialTest_AggDTD_SBChinaNA\Production"
-    PathStruct["PrePath"] = raw"C:\Users\e0375379\Downloads\DT\Validus\Validus\Prod"  ## SME Toolbox Production Code Prefix
+    PathStruct["PrePath"] = raw"\\unicorn6\TeamData\VT_DT\Validus\Prod"  ## SME Toolbox Production Code Prefix
     global GConst
     GConst = GConstdef()
 
@@ -39,10 +39,10 @@ function validus_path_define(dataMonth, smeEcon = [1 3 9 10], PDEcon = 9)
 
     ## Firm Part
     PathStruct["Firm_Data"] = PathStruct["PrePath"]*"Data\\"*string(dataMonth)* "\\Firm\\"
-    PathStruct["Firm_DTD_Regression_CriRiskFactor"] = PathStruct["Firm_Data"]*"Data\\"*"DTD_Regression\\Econs_"*strSmeEconCodes*"\\CriRiskFactor\\"
-    PathStruct["Firm_DTD_Regression_FS"] = PathStruct["Firm_Data"]*"Data\\"*"DTD_Regression\\Econs_"*strSmeEconCodes*"\\FS\\"
-    PathStruct["Firm_DTD_Regression_FxRate"] = PathStruct["Firm_Data"]*"Data\\"*"DTD_Regression\\Econs_"*strSmeEconCodes*"\\FxRate\\"
-    PathStruct["Firm_DTD_Regression_Parameter"] = PathStruct["Firm_Data"]*"Data\\"*"DTD_Regression\\Econs_"*strSmeEconCodes*"\\Parameter\\"
+    PathStruct["Firm_DTD_Regression_CriRiskFactor"] = PathStruct["Firm_Data"]*"DTD_Regression\\Econs_"*strSmeEconCodes*"\\CriRiskFactor\\"
+    PathStruct["Firm_DTD_Regression_FS"] = PathStruct["Firm_Data"]*"DTD_Regression\\Econs_"*strSmeEconCodes*"\\FS\\"
+    PathStruct["Firm_DTD_Regression_FxRate"] = PathStruct["Firm_Data"]*"DTD_Regression\\Econs_"*strSmeEconCodes*"\\FxRate\\"
+    PathStruct["Firm_DTD_Regression_Parameter"] = PathStruct["Firm_Data"]*"DTD_Regression\\Econs_"*strSmeEconCodes*"\\Parameter\\"
     PathStruct["FullPeriodPD"] = PathStruct["Firm_Data"]*"FullPeriodPD\\"
     PathStruct["CRI_Calibration_Parameter"] = PathStruct["Firm_Data"]*"SMEPD_Calculation_Econ"*string(PDEcon)*"\\CRI_Calibration_Parameter\\"
     PathStruct["SMEPD_Input"] = PathStruct["Firm_Data"]*"SMEPD_Calculation_Econ"*string(PDEcon)*"\\Input\\"

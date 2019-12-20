@@ -1,12 +1,13 @@
- function generate_data_PD(folders, econs, ipart, mths = [])
-    # folders, econs, dataEndMth, ipart = folders, econCodesInput, dataEndMth, ipart
-     #= This function is to generate the valid data matrices of PDs and POEs.
-         Inputs:
-                econs:       economy code(s) (could be a row vector)
-                dataEndMth:  the end month of data for all groups [yyyymm]
-                mths:        the month index(s)
-     =#
+function  generate_data_PD(folders, loadName, econCodesInput, ipart, mths = [])
 
+    ## This function is to generate the valid data matrices of PDs and POEs.
+    println("Generate Global CCI for Part "*string(ipart)*" ...")
+
+    fileidx = findfirst(".jld", loadName)
+    fileName = loadName[1:fileidx[1]-1]
+    loadFolder = folders["forwardPDFolder"]
+
+    ## MtrxPD, dateVctr, firmInfo = generate_data_PD(folders, loadName, econCodesInput, ipart)
     #### Generate the data
     PD_all_forward = []
     firmlist = []
@@ -14,35 +15,9 @@
     pdAllForward = []
     firmInfo = []
     dateVctr = []
-    loadFolder = folders["forwardPDFolder"]
-
-    ## Guarantee all Forward PD jld file have been created.
-    # for iEcon = econs
-    #      # mths = []
-    #      println("## Load the PD data for Economy $iEcon ...")
-    #      if !isfile(loadFolder*"firmlist_with_comp_num_"*string(Int(iEcon))*".jld")
-    #          println("-- No stored data for Econ $iEcon !  Generate the new data ..." )
-    #          firmlist, PD_all_forward_part, parts = get_country_PD_forward(iEcon, dataEndMth, folders)
-    #      end
-    #      #=
-    #      temp =
-    #         try
-    #              firmlist = load(loadFolder*"firmlist_with_comp_num_"*string(Int(iEcon))*".jld")["firmlist"]
-    #              # PD_all_forward_part = load(loadFolder*"PD_all_forward_"*string(Int(iEcon))*".jld")["PD_all_forward"]
-    #              firmlist, PD_all_forward_part
-    #         catch
-    #              println("-- No stored data for Econ $iEcon !  Generate the new data ..." )
-    #              firmlist, PD_all_forward_part = get_country_PD_forward(iEcon, dataEndMth, folders)
-    #              firmlist, PD_all_forward_part
-    #         end
-    #      firmlist, PD_all_forward_part = temp
-    #      parts = length(PD_all_forward_part)
-    #      temp = nothing ## could release memories?
-    #      =#
-    # end
 
     ## Generate Global CCI with seperate time observations.
-    for iEcon = econs
+    for iEcon = econCodesInput
          println("load all Forward PD for Econ $iEcon")
          PD_all_forward = load(loadFolder*"PD_all_forward_"*string(Int(iEcon))*"Part"*string(Int(ipart))*".jld")["PD_all_forward_Part$(Int(ipart))"]
          temp_year = nanMean(PD_all_forward[:, 2, :], 2)
@@ -68,7 +43,7 @@
 
          ## Sequentially construct data that include PDs from valid firms in groupArray at each month
 
-         if iEcon == econs[1]
+         if iEcon == econCodesInput[1]
              pdAllForward = econPDAll
              firmInfo = econFirmInfo
              dateVctr = dateVctrTmp
@@ -90,6 +65,20 @@
              dateVctr = nanMean(hcat(dateVctr, dateVctrTmp), 2)
          end
     end
-    GC.gc()
-    return pdAllForward, dateVctr, firmInfo
- end
+
+    ## MtrxPD = pdAllForward
+
+    ## test econCodesInput=[1 3]
+    # econCodes = econCodesInput
+    if ~isdir(loadFolder)
+        mkdir(loadFolder)
+    end
+    MtrxPD = permutedims(pdAllForward, [1, 3, 2])
+    # dataMtrxPD = ipart == 1 ? MtrxPD : cat(dataMtrxPD, MtrxPD, dims = 1)
+    # MtrxPD = PermutedDimsArray(MtrxPD, [1, 3, 2])
+
+    ## save PD_forward.jld files
+    save(loadFolder*fileName*".jld", "MtrxPD", MtrxPD, "dateVctr", dateVctr, "firmInfo", firmInfo, "econCodesInput", econCodesInput, compress = true)
+
+    return MtrxPD, dateVctr, firmInfo
+end

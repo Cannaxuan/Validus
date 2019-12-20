@@ -13,7 +13,7 @@ function generate_SME_info(smeEconCodes, dateStart, dataEndDate, smeDateVctr, op
      fwdPDFolder = folders["forwardPDFolder"]
      ##
      turnOverFolder = folders["SMEinfoFolder"]
-     CleanDataFolder = folders["dataSource"]*"\\IDMTData\\CleanData\\"
+     # CleanDataFolder = folders["dataSource"]*"\\IDMTData\\CleanData\\"
 
      mthObs = (fld(dataEndMth, 100)- fld(options["startMth"], 100)) *12 + mod(dataEndMth, 100) - mod(options["startMth"], 100) + 1
 

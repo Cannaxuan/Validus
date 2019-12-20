@@ -33,7 +33,8 @@ function sales(PathStruct, enddate, smeEcon, nyear)
                 complist = vcat(complist[1:subidx[1]], complist[(subidx[end]+1):end])
             end
         end
-        companyInformation = matread(PathStruct["SMEinfoFolder"]*"CompanyInformation_"*string(iEcon)*".mat")["companyInformation"]
+        companyInformation = load(PathStruct["SMEinfoFolder"]*"CompanyInformation_"*string(iEcon)*".jld")["Companyinformation"]["companyInformation"]
+        ## matread(PathStruct["SMEinfoFolder"]*"CompanyInformation_"*string(iEcon)*".mat")["companyInformation"]
         idxlist = in.(complist, [companyInformation[:, 1]])
         idxInfo = indexin(complist, companyInformation[:, 1])
         complist = hcat(complist, fill(NaN, length(complist), 1))

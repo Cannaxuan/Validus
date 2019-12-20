@@ -3,13 +3,19 @@ function retrieve_sales_rev_turn_raw(iEcon, dateStart, dateEnd, turnOverFolder, 
      global GConst
      temp =
      try
-         Companyinformation = matread(turnOverFolder*"CompanyInformation_"*string(iEcon)*".mat")
+         ## Companyinformation = matread(turnOverFolder*"CompanyInformation_"*string(iEcon)*".mat")
+         Companyinformation = read_jld(turnOverFolder*"CompanyInformation_"*string(iEcon)*".jld")["Companyinformation"]
          Companyinformation
      catch
          Companyinformation = matread(CleanDataFolder*"EconomicInformation\\CompanyInformation\\CompanyInformation_"*string(iEcon)*".mat")
-         matwrite(turnOverFolder*"CompanyInformation_"*string(iEcon)*".mat", Companyinformation)
-         ## julia to save mat file would be quite larger than matlab, later consider to use copy file
+         # matwrite(turnOverFolder*"CompanyInformation_"*string(iEcon)*".mat", Companyinformation)
+         # companyInformation, CompanyInformation = retrieve_company_information(iEcon)
+         # save(turnOverFolder*"CompanyInformation_"*string(iEcon)*".jld", "companyInformation", companyInformation,
+         #    "CompanyInformation", CompanyInformation, compress = true)
+         # Companyinformation = Dict("companyInformation" => companyInformation, "CompanyInformation" => CompanyInformation)
+         save(turnOverFolder*"CompanyInformation_"*string(iEcon)*".jld", "Companyinformation", Companyinformation, compress = true)
          Companyinformation
+
      end
      Companyinformation = temp
      companyInformation = Companyinformation["companyInformation"]

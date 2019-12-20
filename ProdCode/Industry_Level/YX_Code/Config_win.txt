@@ -7,4 +7,4 @@ DIR_PATH = "\\\\Dirac\\CRI3\\OfficialTest_AggDTD_SBChinaNA\\ProductionCode_JULIA
 
 # Please indicate the user name which might be obtained in julia-repl by > ENV["USER"]
 # In the future this can be expanded to an array of authorized users
-AUTHORIZED_USER = ["tiankai", "rmibox9","rmiyany", "rminith","e0303400","dc_user", "rmiwd","e0375379"]
+AUTHORIZED_USER = ["tiankai", "rmibox9","rmiyany", "rminith","e0303400","dc_user", "rmiwd","rmiyaox", "rmikk"]

@@ -7,9 +7,10 @@ function computePD_Validus(PathStruct, countrycode, firmspecific, firmlist, nhor
     nrows = size(firmspecificleveltrend, 1)
     nfirm = size(firmspecificleveltrend, 3)
     ## Add AggDTDmedian
-    fSpecific =
-        matread(PathStruct["Firm_Specific"]*"firmSpecific_afterNormalize_beforeAverDiff_"*
-                string(countrycode)*".mat")["firmSpecific_afterNormalize_beforeAverDiff"]
+    fSpecific = read_jld(PathStruct["Firm_Specific"]*"firmSpecific_afterNormalize_beforeAverDiff_"*
+            string(countrycode)*".jld")["firmSpecific_afterNormalize_beforeAverDiff"]
+    ##    matread(PathStruct["Firm_Specific"]*"firmSpecific_afterNormalize_beforeAverDiff_"*
+    ##            string(countrycode)*".mat")["firmSpecific_afterNormalize_beforeAverDiff"]
 
     firmspecific_date = nanMedian(fSpecific[:, 2:3, :], 3)
     firmspecific_date = firmspecific_date[:, 1]*100 + firmspecific_date[:, 2]
@@ -86,7 +87,7 @@ function computePD_Validus(PathStruct, countrycode, firmspecific, firmlist, nhor
         if firmlist[iFirm, 5] == 10008
         #= para_def_finance rows:
             1.  intercept 	 2. Stock_Index_Return   3. Three_Month_Rate_After_Demean
-            4.  DTD_Level    5. DTD_Trend   6. Cash_Over_TA_Level   7.  Cash_Over_TA_Trend
+            4.  DTD_Level    5. DTD_Trend   6. Cash_Over_TA_Level(liq_ave_fin)        7.  Cash_Over_TA_Trend(liq_dif_fin)
             8.  NI_Over_TA_Level	        9.  NI_Over_TA_Trend	10. Size_Level	  11. Size_Trend
             12. M_Over_B	 13. SIGMA      14. Aggregate_DTD_Fin   15. Aggregate_DTD_NonFin
         =#

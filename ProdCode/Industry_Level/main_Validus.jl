@@ -1,6 +1,6 @@
 
 function main_Validus(dataEndDate, PathStruct, smeEcon = [1 3 9 10])
-     # dataEndDate = DataDate
+    # dataEndDate = DataDate
 
      ## ------------------------------------------------------------------------
      ## Step0: Preparation1:  Define the nargins
@@ -52,7 +52,7 @@ function main_Validus(dataEndDate, PathStruct, smeEcon = [1 3 9 10])
             # generate_SME_info(smeEcon, options["startDate"], dataEndDate, facs["dateVctr"], options, PathStruct, parts)
             generate_SME_info(smeEcon, PathStruct["DATE_START_DATA"], dataEndDate, facs["dateVctr"], options, PathStruct)
          save(PathStruct["SMEinfoFolder"]*"smeInfo.jld", "smeInfo", smeInfo, "smeEcon", smeEcon, compress = true)
-         save(PathStruct["SMEinfoFolder"]*"ctyInfo.jld", "ctyInfo", ctyInfo, compress = true)
+         save(PathStruct["SMEinfoFolder"]*"ctyInfo.jld", "ctyInfo", ctyInfo, "smeEcon", smeEcon, compress = true)
      end
      #### ----------------------------------------------------------------------
      #### Step3: Load/Establish the factor model specific to the porfolio(according to size, industry)

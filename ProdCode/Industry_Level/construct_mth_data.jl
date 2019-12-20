@@ -7,8 +7,8 @@ function construct_mth_data(dataFlat, iEcon, dataEndDate, options, folders)
      #### Construct the data
      dataEndMth = fld(dataEndDate, 100)
      dataMthToLoad =  date_yyyymm_add(dataEndMth, 1)
-     firmList_withCompNum = matread(folders["Firm_Specific"]*"firmList_withCompNum_"*string(iEcon)*".mat")["firmList_withCompNum"]
-     firmMonth = matread(folders["FinalData"]*"firmMonth_"*string(iEcon)*".mat")["firmMonth"]
+     firmList_withCompNum = read_jld(folders["Firm_Specific"]*"firmList_withCompNum_"*string(iEcon)*".jld")["firmList_withCompNum"]
+     firmMonth = read_jld(folders["FinalData"]*"firmMonth_"*string(iEcon)*".jld")["firmMonth"]
      firmmonth = firmMonth
      firmlist = firmList_withCompNum
      # firmlist = load(folders["forwardPDFolder"]*"firmlist_with_comp_num_"*string(Int(iEcon))*".jld")["firmlist"]

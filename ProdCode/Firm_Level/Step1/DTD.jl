@@ -1,8 +1,10 @@
 function DTD(PathStruct, smeEcon, DataMonth)
     DTDlist = DataFrame()
     for iEcon = smeEcon
+        ## firmspecific =
+        ## matread(PathStruct["firmspecific_justBeforeMissingHandling"]*"firmSpecific_final_"*string(iEcon)*".mat")["firmSpecific_final"]
         firmspecific =
-        matread(PathStruct["firmspecific_justBeforeMissingHandling"]*"firmSpecific_final_"*string(iEcon)*".mat")["firmSpecific_final"]
+        read_jld(PathStruct["firmspecific_justBeforeMissingHandling"]*"firmSpecific_final_"*string(iEcon)*".jld")["firmSpecific_final"]
         # firmspecific index meaning:
         # 1: company code 2: year 3: month 6: DTD(level) 7: DTD trend 15: Sigma 14: M/B
         DTD_Source = firmspecific[:, [1, 2, 3, 6, 7, 15, 14], :]

@@ -90,13 +90,13 @@ function  step2_II_PDpreparation(PathStruct, DataMonth, smeEcon, countrycode = 9
     else
         pdAllForward = load(PathStruct["FullPeriodPD"]*"pdAllForwardwithfirminfo.jld")["pdAllForwardwithfirminfo"]
     end
-    firmInfo = pdAllForward[end-5:end, :]'
+    firmInfo = Float64.(pdAllForward[end-5:end, :]')
     pdAllForward = pdAllForward[1:end-6, :]
 
     ## the firm level data have been compared and confirmed to be identical
     dateVctr = PD_all_date
 
-    ## add one column for tag SME indicator
+    ## add one column to tag SME indicator
     pdAllForwardtemp = reshape(deepcopy(pdAllForward), size(pdAllForward, 1), 1, size(pdAllForward, 2))
     pdAllForwardtemp = hcat(pdAllForwardtemp, fill(NaN, size(pdAllForward, 1), 1, size(pdAllForward, 2)))
 

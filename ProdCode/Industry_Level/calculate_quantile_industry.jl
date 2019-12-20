@@ -2,6 +2,7 @@ function calculate_quantile_industry(dataEndDate, folders, smeEconCodes)
      # dataEndDate, folders, smeEconCodes = dataEndDate, PathStruct, smeEcon
 
      ## Read full period data
+     ## \\dirac\cri3\OfficialTest_AggDTD_SBChinaNA\ProductionData\FullPeriod\201906_withoutRevision\Monthly\Products\P2_Pd
      ## Julia cannot read large mat file, need to resave it by adding '-v7.3' through matlab.
      ## therefore, the read path is changed.
      IncrementalPD = matread(folders["Industry_Data"]*"pd60hUpToMostRecent_bk.mat")["dataUpToMostRecent"]

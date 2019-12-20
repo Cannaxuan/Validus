@@ -10,11 +10,11 @@ function fs2PDinput_v2(PathStruct, firminfo, DTDi, countrycode = 9)
         ## Col2:    yyyy
         ## col3:    mm
         ## col4:    rfr
-        ## col5:    index return
+        ## col5:    stock index return
         ## col6:    DTD
         ## col7:    NI/TA
         ## col8:    M/B
-        ## col9:    Cash/TA
+        ## col9:    log(Cash/TA)
         ## col10:   SIZE
         ## col11:   Sigma
     firmspecific_BeforeAverDiff = fill(NaN, (monthNumbers, 11))
@@ -25,7 +25,7 @@ function fs2PDinput_v2(PathStruct, firminfo, DTDi, countrycode = 9)
         ## 3:NI/TA
         ## 4:sales/TA
         ## 5:TL/TA
-        ## 6:CASH/TA
+        ## 6:log(CASH/TA)
         ## 7:cash/CL
         ## 8:CL/TL
         ## 9:LB/TL
@@ -33,7 +33,7 @@ function fs2PDinput_v2(PathStruct, firminfo, DTDi, countrycode = 9)
         ## 11:BE/CL
         ## 12:TA in million for log(TA/median TA )
         ## 13:TA/TL for log(TA/TL)
-    firmspecific_BeforeAverDiff[(end-l+1):end, [7, 9]] = [firminfo[:, 3] firminfo[:, 6]]    ## Col7:NI/TA, Col9:Cash/TA
+    firmspecific_BeforeAverDiff[(end-l+1):end, [7, 9]] = [firminfo[:, 3] firminfo[:, 6]]    ## Col7:NI/TA, Col9:log(Cash/TA)
     firmspecific =
         load(PathStruct["CRI_Calibration_Parameter"]*"firmspecific_BeforeAverDiff_"*string(countrycode)*".jld")["firmspecific"]
 

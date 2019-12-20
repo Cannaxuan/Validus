@@ -6,7 +6,9 @@ function OriginalData(PathStruct, enddate, smeEcon, nyear, DataMonth)
     =#
     dataStart = fld(enddate, 100) - nyear * 100
     for iEcon = smeEcon
-        FS_mat_flat = matread(PathStruct["OriginalPath"]*"OriginalData_"*string(iEcon)*".mat")["originalData"]
+        FS_mat_flat = ## matread(PathStruct["OriginalPath"]*"OriginalData_"*string(iEcon)*".mat")["originalData"]
+                      read_jld(PathStruct["OriginalPath"]*"OriginalData_"*string(iEcon)*".jld")["originalData"]
+
         FS_mat_flat[:, 4:14] = FS_mat_flat[:,3:13]
         FS_mat_flat = FS_mat_flat[FS_mat_flat[:, 2] .> dataStart, :]
 

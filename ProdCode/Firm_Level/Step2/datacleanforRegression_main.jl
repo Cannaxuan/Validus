@@ -117,14 +117,14 @@ function datacleanforRegression_main(PathStruct, DataMonth, smeEcon, PDEcon)
         CSV.write(PathStruct["SMEPD_Input"]*"DTDmedianMi.csv",DataFrame(DTDmedianMi))
 
     ## trans from mat to jld
-    firmlist =
-        matread(PathStruct["Firm_Specific"]*"firmList_withCompNum_"*string(PDEcon)*".mat")["firmList_withCompNum"]
+    firmlist = read_jld(PathStruct["Firm_Specific"]*"firmList_withCompNum_"*string(PDEcon)*".jld")["firmList_withCompNum"]
+    ##  matread(PathStruct["Firm_Specific"]*"firmList_withCompNum_"*string(PDEcon)*".mat")["firmList_withCompNum"]
 
     save(PathStruct["CRI_Calibration_Parameter"]*"firmList_with_comp_num_"*string(PDEcon)*".jld",
         "firmlist", firmlist, compress = true)
 
-    firmspecific =
-        matread(PathStruct["Firm_Specific"]*"firmSpecific_afterNormalize_beforeAverDiff_"*string(PDEcon)*".mat")["firmSpecific_afterNormalize_beforeAverDiff"]
+    firmspecific = read_jld(PathStruct["Firm_Specific"]*"firmSpecific_afterNormalize_beforeAverDiff_"*string(PDEcon)*".jld")["firmSpecific_afterNormalize_beforeAverDiff"]
+    ## matread(PathStruct["Firm_Specific"]*"firmSpecific_afterNormalize_beforeAverDiff_"*string(PDEcon)*".mat")["firmSpecific_afterNormalize_beforeAverDiff"]
 
     save(PathStruct["CRI_Calibration_Parameter"]*"firmspecific_BeforeAverDiff_"*string(PDEcon)*".jld",
         "firmlist", firmlist, "firmspecific", firmspecific)
@@ -134,7 +134,8 @@ function datacleanforRegression_main(PathStruct, DataMonth, smeEcon, PDEcon)
 
     ## find the parameter file in dirac and copy it to validus path
     files = searchdir(PathStruct["paramPath"]*"current_smc\\", "C"*string(PDEcon)*"_")
-    CALIBRATION_DATE = maximum(map(x->parse(Int, x[4:11]), files))
+    idx = maximum(findfirst.(isequal('_'), files))
+    CALIBRATION_DATE = maximum(map(x->parse(Int, x[idx+1:idx+8]), files))
 
     ## for further PD calculate by countrycode
     cp(PathStruct["paramPath"]*"current_smc\\C"*string(PDEcon)*"_"*string(CALIBRATION_DATE)*".csv",
