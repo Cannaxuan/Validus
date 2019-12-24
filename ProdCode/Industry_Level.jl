@@ -4,7 +4,7 @@ using Pkg, Printf, Statistics, MAT, JLD, DataFrames, GLMNet, GLM, StatsBase,
       Random, XLSX, CSV, Dates, ZipFile, Glob, LinearAlgebra, ToolCK
 
 addprocs(7)
-@everywhere push!(LOAD_PATH, raw"C:\Users\rmiyaox\.juliapro\JuliaPro_v1.0.4.1\packages")
+@everywhere push!(LOAD_PATH, raw"C:\Users\rmiyaox\.atom\packages")
 @everywhere using CSV, Glob, DataFrames, MAT, JLD
 
 @everywhere prePath = raw"\\unicorn6\TeamData\VT_DT\Validus\ProdCode\\"

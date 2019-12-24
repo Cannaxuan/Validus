@@ -9,8 +9,6 @@ function computePD_Validus(PathStruct, countrycode, firmspecific, firmlist, nhor
     ## Add AggDTDmedian
     fSpecific = read_jld(PathStruct["Firm_Specific"]*"firmSpecific_afterNormalize_beforeAverDiff_"*
             string(countrycode)*".jld")["firmSpecific_afterNormalize_beforeAverDiff"]
-    ##    matread(PathStruct["Firm_Specific"]*"firmSpecific_afterNormalize_beforeAverDiff_"*
-    ##            string(countrycode)*".mat")["firmSpecific_afterNormalize_beforeAverDiff"]
 
     firmspecific_date = nanMedian(fSpecific[:, 2:3, :], 3)
     firmspecific_date = firmspecific_date[:, 1]*100 + firmspecific_date[:, 2]

@@ -10,7 +10,7 @@ function read_fs_xls_V2(fxrate, path_to_input_file, countrycode = 9)
         fsnum = path_to_input_file[sheetname[i]][:]
         nfsclaim = fsnum[2, 2]
         fsnum = fsnum[3:13, 2:end]
-        idx = sum(ismissing.(fsnum), dims = 1) .!== 11
+        idx = .!all(ismissing.(fsnum), dims = 1)
         fsnum = fsnum[:, idx[:]]
         ## if FS data are missing, we set to 0.
         fsnum[ismissing.(fsnum)] .= 0
@@ -18,12 +18,15 @@ function read_fs_xls_V2(fxrate, path_to_input_file, countrycode = 9)
             error("The number of finaicial statements is inconsisitent with data provided. Please have a check!")
         end
 
-        # map(x -> replace(x, " " => ""), fsnum[1,:])
         fsdate = @view fsnum[1,:]
         for i = 1:length(fsdate)
-            # global fsdate
-            date, month, year = map(x -> parse(Int, x), split.(fsdate[i], "."))
-            fsdate[i] = year*10000 + month*100 + date
+            try
+                date, month, year = map(x -> parse(Int, x), split.(fsdate[i], "."))
+                fsdate[i] = year*10000 + month*100 + date
+            catch
+                date, month, year = map(x -> parse(Int, x), split.(fsdate[i], "/"))
+                fsdate[i] = year*10000 + month*100 + date
+            end
         end
 
         idx = findlast(fxrate[:, 1] .<= fsnum[1, 1])
@@ -48,9 +51,9 @@ function read_fs_xls_V2(fxrate, path_to_input_file, countrycode = 9)
         end
         num[i] = vcat([nfsclaim fill(NaN, 1, size(fsnum, 2)-1)], fsnum)
     end
-        VfirmInfo = zeros(m, 6)
-        VfirmInfo[:, [1, 4, 5]] = firmindex
-        VfirmInfo[:, 6] .= countrycode
+    VfirmInfo = zeros(m, 6)
+    VfirmInfo[:, [1, 4, 5]] = firmindex
+    VfirmInfo[:, 6] .= countrycode
 
     return num, sheetname, VfirmInfo
 end

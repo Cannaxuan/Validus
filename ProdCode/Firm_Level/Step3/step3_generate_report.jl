@@ -1,9 +1,9 @@
 using Pkg, Printf, Statistics, MAT, JLD, DataFrames, StatsBase,
-    LinearAlgebra, XLSX, CSV, Dates, Missings, ZipFile, ToolCK
+    LinearAlgebra, XLSX, CSV, Dates, Missings, ToolCK#, ZipFile
 
-include("$prePath/validus_path_define.jl")
 prePath = raw"\\unicorn6\TeamData\VT_DT\Validus\ProdCode"
 Ycom = raw"\\unicorn6\TeamData\VT_DT\Validus\ProdCode\Industry_Level\YX_Code"
+
 include(Ycom*"\\connectDB.jl")
 include(Ycom*"\\get_data_from_DMTdatabase.jl")
 include(Ycom*"\\highest_indexin.jl")
@@ -19,6 +19,7 @@ include(Ycom*"\\get_individual_first_use_time.jl")
 include(Ycom*"\\filter_financial_statement.jl")
 include(Ycom*"\\convert_currencyID_to_FXID.jl")
 include(Ycom*"\\GCdef.jl")
+include("$prePath/validus_path_define.jl")
 include("$prePath/Industry_Level/Adaptive lasso/nanSum.jl")
 include("$prePath/Industry_Level/Adaptive lasso/nanMean.jl")
 include("$prePath/Industry_Level/Adaptive lasso/nanMedian.jl")
@@ -33,7 +34,6 @@ include(prePath*"\\Firm_Level\\Step3\\fs2DTDinput_v4.jl")
 include(prePath*"\\Firm_Level\\Step3\\fs2PDinput_v2.jl")
 include(prePath*"\\Firm_Level\\Step3\\compute_level_trend.jl")
 include(prePath*"\\Firm_Level\\Step3\\computePD_Validus.jl")
-# include(prePath*"\\Firm_Level\\Step3\\computePD_Validus_exe.jl")
 include(prePath*"\\Firm_Level\\Step3\\Cal_CountryPD_v011.jl")
 include(prePath*"\\Firm_Level\\Step3\\global_quantile_to_cell.jl")
 include(prePath*"\\Firm_Level\\Step3\\compute_firm_quantile.jl")
@@ -70,8 +70,8 @@ function step3_generate_report(path_to_input_file, DataMonth, smeEcon = [1 3 9 1
     # error "invalid redefinition of constant DTD", for DTD is a defined function.
     # therefore, change variable name from DTD to DTDres
     DTDres = Vector{Vector}(undef, length(num))
-    DTDAll = Vector{Vector}(undef, 0)
-    firmpreDTDAll = Vector{Array}(undef, 0)
+    # DTDAll = Vector{Vector}(undef, 0)
+    # firmpreDTDAll = Vector{Array}(undef, 0)
     firmspecificAll = Vector{Array}(undef, 0)
     firmlistAll = Array{Float64, 2}[]
     firmspecific = Vector{Array}(undef, length(num))
@@ -115,8 +115,10 @@ function step3_generate_report(path_to_input_file, DataMonth, smeEcon = [1 3 9 1
 
         idf, idmedian =
             ismember_CK(hcat(firmpreDTD[i][:, 2], countrycode*ones(size(firmpreDTD[i], 1))), DTDmedian[:, 1:2], "rows")
-
-        firmpreDTD[i][:, 12] = firmpreDTD[i][:, 12] ./ DTDmedian[idmedian, 8]   ## TA/median TA
+        idf = Bool.(idf)
+        temp = fill(NaN, size(firmpreDTD[i],1))
+        temp[idf] = DTDmedian[idmedian[idf], 8]
+        firmpreDTD[i][:, 12] = firmpreDTD[i][:, 12] ./ temp   ## TA/median TA
         firmpreDTD[i][firmpreDTD[i][:, 12] .< eps(Float64), 12] .= eps(Float64)
         firmpreDTD[i][firmpreDTD[i][:, 13] .< eps(Float64), 13] .= eps(Float64)
 
@@ -125,11 +127,13 @@ function step3_generate_report(path_to_input_file, DataMonth, smeEcon = [1 3 9 1
 
         idf, idmacro =
             ismember_CK(hcat(firmpreDTD[i][:, 2], countrycode*ones(size(firmpreDTD[i], 1))), FirmIndex[:, 2:3], "rows")
-        firmpreDTD[i][BitArray(idf), 14:16] = SampleM[idmacro, 12:14] ## col 14: rfr; col 15: stock index return; col 16: forex rate
+        idf = Bool.(idf)
+        firmpreDTD[i][idf, 14:16] = SampleM[idmacro[idf], 12:14] ## col 14: rfr; col 15: stock index return; col 16: forex rate
 
         idf, idmedian =
             ismember_CK(hcat(firmpreDTD[i][:, 2], countrycode*ones(size(firmpreDTD[i], 1))), DTDmedian[:, 1:2], "rows")
-        firmpreDTD[i][BitArray(idf), 17:18] = DTDmedian[idmedian, 3:4]  ##   col 17: median DTD;   col 18: 1/sigma
+        idf = Bool.(idf)
+        firmpreDTD[i][idf, 17:18] = DTDmedian[idmedian[idf], 3:4]  ##   col 17: median DTD;   col 18: 1/sigma
 
         tempdata = @view firmpreDTD[i][:, [3, 6, 8, 11, 13]]    ## NI/TA, CASH/TA, CL/TL, BE/CL, log(TA/TL)
         lowerB   = repeat(lb, outer = size(tempdata, 1))
@@ -167,18 +171,15 @@ function step3_generate_report(path_to_input_file, DataMonth, smeEcon = [1 3 9 1
         VfirmInfo[i, 3] = monthNumbers
         VfirmInfo[i, 2] = findfirst(.!isnan.(firmspecific[i][:, 1]))
 
-        ## still not figure out what DTDAll and firmpreDTDAll are used for later...
-        DTDAll          = i == 1 ? [DTDres[i]]     : vcat(DTDAll, [DTDres[i]])
-        firmpreDTDAll   = i == 1 ? [firmpreDTD[i]] : vcat(firmpreDTDAll, [firmpreDTD[i]])
+        # ## still not figure out what DTDAll and firmpreDTDAll are used for later...
+        # DTDAll          = i == 1 ? [DTDres[i]]     : vcat(DTDAll, [DTDres[i]])
+        # firmpreDTDAll   = i == 1 ? [firmpreDTD[i]] : vcat(firmpreDTDAll, [firmpreDTD[i]])
 
         firmspecificAll = i == 1 ? firmspecific[i] : cat(firmspecificAll, firmspecific[i], dims = 3)
         firmlistAll     = i == 1 ? VfirmInfo[i,:]' : vcat(firmlistAll, VfirmInfo[i,:]')
     end
     println("Start to compute PD for all firms...")
-    # PD_all, firmspecificleveltrend = computePD_Validus_exe(PathStruct, countrycode, firmspecificAll, firmlistAll)
     PD_all, firmspecificleveltrend = computePD_Validus(PathStruct, countrycode, firmspecificAll, firmlistAll)
-    # CSV.write("a3.csv",DataFrame(firmspecificleveltrend[:,:,1]))
-    # CSV.write("a4.csv",DataFrame(firmspecificleveltrend[:,:,2]))
 
     println("Start to write global quantile data to output file.")
     Varresult      = load(PathStruct["SMEPD_Input"]*"Varresult.jld")["Varresult"]
@@ -188,7 +189,7 @@ function step3_generate_report(path_to_input_file, DataMonth, smeEcon = [1 3 9 1
     firm_title     = matread(PathStruct["SME_Titles"]*"firm_title.mat")["firm_title"]
 
     monthVctr = nanMean(PD_all[:,2:3,:], 3)
-    monthVctr = monthVctr[(.!isnan.(monthVctr[:, 1]) .& .!isnan.(monthVctr[:, 2])), :]
+    monthVctr = monthVctr[.!isnan.(monthVctr[:, 1]), :]
     monthVctr = monthVctr[:, 1]*100 + monthVctr[:, 2]
 
     global_quantile_to_cell(Varresult, monthVctr, global_title, selEcons_title, category_title, PathStruct, filename)

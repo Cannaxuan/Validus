@@ -1,4 +1,4 @@
-function compute_firm_quantile(PD_target, pdAllForwardtemp, dateVctr, firmInfo, CfirmInfo)
+function compute_firm_quantile(PD_target, pdAllForwardtemp, dateVctr, firmInfo, CfirmInfo, smeEcon = [1 3 9 10])
     # CfirmInfo = VfirmInfo[i,:]
     FirmInfo  = [CfirmInfo'; firmInfo]
     idxnnan   = .!isnan.(PD_target[:, 2])
@@ -51,11 +51,6 @@ function compute_firm_quantile(PD_target, pdAllForwardtemp, dateVctr, firmInfo, 
     PD_value = PD_value[end-288:end, 1]
     PD_value = PD_value[idxnnan]
 
-    # ratingInfo = [0.245853923394787,    0.203616617275811,    0.134897937679463,    0.0778971777030607,
-    #               0.0651299373754783,   0.0403539617005870,   0.0258017531755370,   0.0173956492215458,
-    #               0.0102996250234016,   0.00716071000166653,  0.00388485396068186,  0.00323634856450953,
-    #               0.00192376960708118,  0.00121947256433667,  0.000689363350530429, 0.000557634533024014,
-    #               0.000280450073188865, 0.000251008207546459, 0.000131855822973180, 8.51440735156198e-05, 0]
     ratingInfo = [0.241846595625212,    0.216913689282206,      0.142755407352768,      0.0906071846877179,
                   0.0601311477593212,   0.0427536630685202,     0.0242207667575655,     0.0194007161382579,
                   0.00969030341428040,  0.00817223023188932,    0.00474772847109520,    0.00275439987056690,
